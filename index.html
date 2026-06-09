@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azúcar Fest 2026 · Tickets</title>
+  <style>
+    :root {
+      --bg:#0e0202;--bg2:#1a0505;--bg3:#220808;
+      --red:#c0000a;--red2:#e00010;--red3:#8b0000;
+      --gold:#f5c518;--gold2:#ffd700;
+      --border:#3d1010;--muted:#9e7070;
+      --white:#fff;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#fff;min-height:100vh;}
+
+    /* HEADER */
+    .header{background:linear-gradient(135deg,#1a0000,#0e0202);border-bottom:4px solid var(--red);padding:16px;text-align:center;position:relative;overflow:hidden;}
+    .header::before{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;top:0;left:0;right:0;bottom:0;font-size:1.8em;color:rgba(200,30,30,.07);letter-spacing:8px;line-height:1.4;word-break:break-all;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;}
+    .logo{position:relative;z-index:1;}
+    .logo h1{font-size:2em;font-weight:900;letter-spacing:1px;line-height:1;}
+    .logo h1 .az{color:#fff;font-style:italic;}
+    .logo h1 .ucar{color:#fff;font-style:italic;}
+    .logo h1 .fest{color:var(--red);font-style:italic;}
+    .logo h1 .year{color:var(--gold);font-size:.65em;display:block;letter-spacing:4px;margin-top:2px;}
+    .logo p{color:var(--muted);font-size:0.72em;margin-top:4px;}
+    .stars{font-size:1.1em;color:var(--gold);letter-spacing:4px;margin-bottom:4px;}
+
+    /* FIREBASE BAR */
+    .firebase-bar{background:#150303;border-bottom:1px solid var(--border);padding:6px 14px;display:flex;align-items:center;gap:8px;font-size:0.75em;}
+    .fb-dot{width:8px;height:8px;border-radius:50%;background:#333;flex-shrink:0;transition:background .4s;}
+    .fb-dot.ok{background:#22763a;} .fb-dot.err{background:var(--red);} .fb-dot.loading{background:var(--gold);}
+    .fb-txt{color:var(--muted);flex:1;}
+
+    /* TABS */
+    .tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+    .tab{flex:1;padding:11px 3px;text-align:center;cursor:pointer;font-size:0.65em;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s;user-select:none;line-height:1.3;}
+    .tab.active{color:#fff;border-bottom-color:var(--red);background:var(--bg3);}
+    .tab:hover:not(.active){background:var(--bg3);color:#ccc;}
+
+    /* PAGES */
+    .page{display:none;padding:14px;max-width:780px;margin:0 auto;}
+    .page.active{display:block;}
+
+    /* CARDS & BOXES */
+    .info-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:0.8em;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+    .info-box strong{color:#ddd;}
+    .event-badge{display:inline-block;background:var(--red);color:#fff;font-size:0.7em;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px;letter-spacing:.5px;}
+    .event-badge.gold{background:var(--gold);color:#000;}
+
+    /* UPLOAD */
+    .upload-zone{border:2px dashed var(--border);border-radius:12px;padding:28px 14px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg2);margin-bottom:12px;}
+    .upload-zone:hover,.upload-zone.drag-over{border-color:var(--red);background:var(--bg3);}
+    .upload-zone .icon{font-size:2.2em;margin-bottom:6px;}
+    .upload-zone p{color:var(--muted);font-size:0.8em;}
+    .upload-zone p strong{color:#ddd;}
+    .divider{display:flex;align-items:center;gap:10px;margin:10px 0;color:var(--muted);font-size:0.78em;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* FORM FIELDS */
+    .field-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+    .field-group{display:flex;flex-direction:column;gap:4px;}
+    .field-group label{font-size:0.7em;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+    textarea,input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:#fff;padding:9px 11px;font-size:0.82em;font-family:inherit;}
+    textarea{min-height:90px;resize:vertical;}
+    input[type=text]:focus,textarea:focus{outline:none;border-color:var(--red);}
+    .manual-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:8px;}
+    .manual-grid label{font-size:0.7em;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px;}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:8px;border:none;cursor:pointer;font-size:0.82em;font-weight:700;transition:all .2s;font-family:inherit;}
+    .btn-red{background:var(--red);color:#fff;width:100%;justify-content:center;margin-top:8px;}
+    .btn-red:hover{background:var(--red2);}
+    .btn-gold{background:var(--gold);color:#000;width:100%;justify-content:center;margin-top:8px;}
+    .btn-gold:hover{background:var(--gold2);}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:#ccc;font-size:0.75em;padding:5px 10px;}
+    .btn-outline:hover{background:var(--bg3);}
+    .btn-outline.danger{border-color:var(--red3);color:#e07070;}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+    /* STATS */
+    .stats-row{display:flex;gap:7px;margin-bottom:12px;}
+    .stat-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 6px;text-align:center;}
+    .stat-card .num{font-size:1.5em;font-weight:700;}
+    .stat-card .lbl{color:var(--muted);font-size:0.65em;margin-top:2px;}
+    .stat-card.w .num{color:#fff;} .stat-card.g .num{color:#22763a;}
+    .stat-card.r .num{color:var(--red);} .stat-card.y .num{color:var(--gold);}
+    .counter-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;margin:10px 0;}
+    .counter-box .num{font-size:2em;font-weight:700;color:var(--gold);}
+    .counter-box p{color:var(--muted);font-size:0.78em;}
+
+    /* LIST */
+    .actions-row{display:flex;gap:7px;margin-bottom:10px;}
+    .actions-row .btn{flex:1;justify-content:center;}
+    .search-wrap{margin-bottom:8px;}
+    .attendee-list{display:flex;flex-direction:column;gap:5px;}
+    .attendee-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .attendee-card.in{border-color:#22763a;background:#0a1a0d;}
+    .a-info{flex:1;min-width:0;}
+    .a-name{font-weight:700;font-size:0.86em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .a-meta{color:var(--muted);font-size:0.68em;margin-top:2px;}
+    .a-actions{display:flex;gap:4px;align-items:center;flex-shrink:0;}
+    .badge{font-size:0.62em;padding:3px 7px;border-radius:20px;font-weight:700;}
+    .badge-ok{background:#22763a;color:#fff;} .badge-pend{background:var(--border);color:var(--muted);}
+    .empty-msg{color:var(--muted);text-align:center;padding:24px 10px;font-size:0.82em;}
+
+    /* PROGRESS */
+    .progress-wrap{display:none;margin-bottom:10px;}
+    .progress-wrap p{font-size:0.74em;color:var(--muted);margin-bottom:4px;}
+    .progress{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+    .progress-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));transition:width .3s;width:0%;}
+
+    /* SCANNER */
+    .scanner-wrap{max-width:420px;margin:0 auto;}
+    .cam-box{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:1;}
+    #qr-video{width:100%;height:100%;object-fit:cover;display:block;}
+    #qr-canvas{display:none;}
+    .scan-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+    .scan-frame{width:58%;aspect-ratio:1;border:3px solid rgba(255,255,255,.9);border-radius:14px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);}
+    .scan-line{position:absolute;left:21%;right:21%;height:2px;background:var(--red);animation:scanAnim 2s ease-in-out infinite;border-radius:2px;}
+    @keyframes scanAnim{0%,100%{top:21%}50%{top:79%}}
+    .scan-result{border-radius:12px;padding:16px;text-align:center;margin-top:12px;display:none;}
+    .scan-result.show{display:block;}
+    .scan-result.valid{background:#0a1f0d;border:2px solid #22763a;}
+    .scan-result.dup{background:#1f1a0a;border:2px solid var(--gold);}
+    .scan-result.invalid{background:#1f0a0a;border:2px solid var(--red);}
+    .scan-result .s-icon{font-size:2.4em;}
+    .scan-result .s-name{font-size:1.1em;font-weight:700;margin-top:4px;}
+    .scan-result .s-sub{color:var(--gold);font-size:0.78em;margin-top:2px;}
+    .scan-result .s-msg{color:var(--muted);font-size:0.78em;margin-top:3px;}
+    .start-cam-btn{width:100%;padding:15px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:.9em;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
+    .start-cam-btn:hover{background:var(--red2);}
+    .recent-section{margin-top:14px;}
+    .recent-section h3{color:var(--muted);font-size:0.7em;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+    .recent-item{background:var(--bg2);border-radius:6px;padding:7px 10px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;font-size:0.78em;}
+    .ri-right{color:var(--muted);font-size:0.8em;text-align:right;}
+
+    /* DASHBOARD */
+    .dash-table-wrap{overflow-x:auto;margin-top:10px;}
+    table{width:100%;border-collapse:collapse;font-size:0.78em;}
+    th{background:var(--bg3);color:var(--muted);padding:7px 9px;text-align:left;font-weight:600;font-size:0.72em;text-transform:uppercase;letter-spacing:.5px;}
+    td{padding:7px 9px;border-bottom:1px solid var(--border);}
+    tr:hover td{background:var(--bg3);}
+    .tag-in{color:#22763a;font-weight:700;}
+    .ev-tag{font-size:0.7em;padding:2px 6px;border-radius:10px;font-weight:700;}
+    .ev-tag.d1{background:var(--red);color:#fff;}
+    .ev-tag.d2{background:var(--gold);color:#000;}
+
+    /* EVENT SELECTOR */
+    .ev-selector{display:flex;gap:8px;margin-bottom:14px;}
+    .ev-btn{flex:1;padding:10px;border-radius:8px;border:2px solid var(--border);background:var(--bg2);color:var(--muted);font-size:0.78em;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;}
+    .ev-btn.active{border-color:var(--red);color:#fff;background:var(--bg3);}
+    .ev-btn .ev-date{font-size:1.1em;color:var(--gold);}
+    .ev-btn .ev-venue{font-size:0.75em;color:var(--muted);margin-top:2px;}
+
+    @media(max-width:480px){
+      .logo h1{font-size:1.5em;}
+      .tab{font-size:0.58em;padding:9px 2px;}
+      .field-row,.manual-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="stars">★ ★ ★</div>
+    <h1><span class="az">AZ</span><span class="ucar">ÚCAR</span><span class="fest">FEST</span><span class="year">2026</span></h1>
+    <p>Sistema de Tickets · info@azucardancestudio.com · 55 6607 7277</p>
+  </div>
+</div>
+
+<div class="firebase-bar">
+  <div class="fb-dot loading" id="fb-dot"></div>
+  <span class="fb-txt" id="fb-txt">Conectando a la nube…</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active"  onclick="showTab('dia1')">🗓️ 1 Ago<br>Foro SR</div>
+  <div class="tab"         onclick="showTab('dia2')">🗓️ 2 Ago<br>Mambo</div>
+  <div class="tab"         onclick="showTab('scanner')">📷<br>Escáner</div>
+  <div class="tab"         onclick="showTab('dashboard')">📊<br>Dashboard</div>
+</div>
+
+<!-- ══════ DÍA 1 ══════ -->
+<div id="tab-dia1" class="page active">
+  <span class="event-badge">SÁBADO 1 DE AGOSTO · 20:00 HRS · FORO SAN RAFAEL</span>
+  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Vendedor, Mesa — o cárgalos manualmente abajo.</div>
+
+  <div class="upload-zone" id="uz1" onclick="document.getElementById('fi1').click()">
+    <div class="icon">📂</div>
+    <p><strong>Clic para subir Excel o CSV</strong></p>
+    <p style="margin-top:3px">Columnas: Nombre · Vendedor · Mesa</p>
+  </div>
+  <input type="file" id="fi1" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia1')">
+
+  <div class="divider">o agrega manualmente</div>
+  <div class="manual-grid">
+    <div><label>Nombre</label><input type="text" id="m1-nombre" placeholder="Juan Pérez"></div>
+    <div><label>Vendedor</label><input type="text" id="m1-vendedor" placeholder="Ana"></div>
+    <div><label>Mesa</label><input type="text" id="m1-mesa" placeholder="5"></div>
+  </div>
+  <button class="btn btn-red" onclick="addManual('dia1')">➕ Agregar Asistente</button>
+
+  <div id="result-dia1" style="display:none;margin-top:12px;">
+    <div class="counter-box">
+      <div class="num" id="cnt1">0</div><p>asistentes registrados — Día 1</p>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;">
+    <div class="stats-row">
+      <div class="stat-card w"><div class="num" id="d1-total">0</div><div class="lbl">Total</div></div>
+      <div class="stat-card g"><div class="num" id="d1-in">0</div><div class="lbl">Ingresaron</div></div>
+      <div class="stat-card r"><div class="num" id="d1-pend">0</div><div class="lbl">Pendientes</div></div>
+    </div>
+    <div class="actions-row">
+      <button class="btn btn-outline" onclick="downloadAll('dia1')">📥 ZIP Tickets</button>
+      <button class="btn btn-outline danger" onclick="clearEvent('dia1')">🗑️ Limpiar</button>
+    </div>
+    <div class="progress-wrap" id="pw1"><p id="pt1">Generando…</p><div class="progress"><div class="progress-bar" id="pb1"></div></div></div>
+    <div class="search-wrap"><input type="text" id="sb1" placeholder="🔍 Buscar…" oninput="renderList('dia1')"></div>
+    <div class="attendee-list" id="list-dia1"><p class="empty-msg">Sin asistentes aún.</p></div>
+  </div>
+</div>
+
+<!-- ══════ DÍA 2 ══════ -->
+<div id="tab-dia2" class="page">
+  <span class="event-badge gold">DOMINGO 2 DE AGOSTO · 18:00 HRS · MAMBO CAFÉ INSURGENTES</span>
+  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Vendedor, Mesa — o cárgalos manualmente abajo.</div>
+
+  <div class="upload-zone" id="uz2" onclick="document.getElementById('fi2').click()">
+    <div class="icon">📂</div>
+    <p><strong>Clic para subir Excel o CSV</strong></p>
+    <p style="margin-top:3px">Columnas: Nombre · Vendedor · Mesa</p>
+  </div>
+  <input type="file" id="fi2" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia2')">
+
+  <div class="divider">o agrega manualmente</div>
+  <div class="manual-grid">
+    <div><label>Nombre</label><input type="text" id="m2-nombre" placeholder="María García"></div>
+    <div><label>Vendedor</label><input type="text" id="m2-vendedor" placeholder="Pedro"></div>
+    <div><label>Mesa</label><input type="text" id="m2-mesa" placeholder="3"></div>
+  </div>
+  <button class="btn btn-gold" onclick="addManual('dia2')">➕ Agregar Asistente</button>
+
+  <div id="result-dia2" style="display:none;margin-top:12px;">
+    <div class="counter-box">
+      <div class="num" id="cnt2">0</div><p>asistentes registrados — Día 2</p>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;">
+    <div class="stats-row">
+      <div class="stat-card w"><div class="num" id="d2-total">0</div><div class="lbl">Total</div></div>
+      <div class="stat-card g"><div class="num" id="d2-in">0</div><div class="lbl">Ingresaron</div></div>
+      <div class="stat-card r"><div class="num" id="d2-pend">0</div><div class="lbl">Pendientes</div></div>
+    </div>
+    <div class="actions-row">
+      <button class="btn btn-outline" onclick="downloadAll('dia2')">📥 ZIP Tickets</button>
+      <button class="btn btn-outline danger" onclick="clearEvent('dia2')">🗑️ Limpiar</button>
+    </div>
+    <div class="progress-wrap" id="pw2"><p id="pt2">Generando…</p><div class="progress"><div class="progress-bar" id="pb2"></div></div></div>
+    <div class="search-wrap"><input type="text" id="sb2" placeholder="🔍 Buscar…" oninput="renderList('dia2')"></div>
+    <div class="attendee-list" id="list-dia2"><p class="empty-msg">Sin asistentes aún.</p></div>
+  </div>
+</div>
+
+<!-- ══════ ESCÁNER ══════ -->
+<div id="tab-scanner" class="page">
+  <div class="scanner-wrap">
+    <div class="info-box"><strong>📱 Funciona para ambos días.</strong> El sistema detecta automáticamente a qué evento pertenece el QR y lo valida.</div>
+    <div id="scan-start-view">
+      <button class="start-cam-btn" onclick="startScanner()">📷 Iniciar Cámara</button>
+    </div>
+    <div id="scan-active-view" style="display:none;">
+      <div class="cam-box">
+        <video id="qr-video" playsinline muted autoplay></video>
+        <canvas id="qr-canvas"></canvas>
+        <div class="scan-overlay"><div class="scan-frame"></div><div class="scan-line"></div></div>
+      </div>
+      <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:7px;" onclick="stopScanner()">⏹️ Detener</button>
+      <div id="scan-status" style="text-align:center;font-size:0.74em;color:var(--muted);padding:5px 0;">🔍 Apunta al código QR…</div>
+      <div class="scan-result" id="scan-result">
+        <div class="s-icon" id="s-icon"></div>
+        <div class="s-name" id="s-name"></div>
+        <div class="s-sub"  id="s-sub"></div>
+        <div class="s-msg"  id="s-msg"></div>
+      </div>
+      <div class="recent-section">
+        <h3>Últimos registros</h3>
+        <div id="recent-list"><p class="empty-msg" style="padding:8px;">Sin registros aún.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ DASHBOARD ══════ -->
+<div id="tab-dashboard" class="page">
+  <div class="stats-row">
+    <div class="stat-card w"><div class="num" id="dsh-total">0</div><div class="lbl">Total</div></div>
+    <div class="stat-card r"><div class="num" id="dsh-d1">0</div><div class="lbl">Día 1</div></div>
+    <div class="stat-card y"><div class="num" id="dsh-d2">0</div><div class="lbl">Día 2</div></div>
+    <div class="stat-card g"><div class="num" id="dsh-pct">0%</div><div class="lbl">Asistencia</div></div>
+  </div>
+  <div class="actions-row">
+    <button class="btn btn-outline" style="flex:1;justify-content:center;" onclick="exportDashboard()">📊 Exportar Excel</button>
+    <button class="btn btn-outline danger" onclick="clearHistory()">🗑️</button>
+  </div>
+  <div class="search-wrap"><input type="text" id="dsh-search" placeholder="🔍 Buscar en historial…" oninput="renderDashboard()"></div>
+  <div class="dash-table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Nombre</th><th>Vendedor</th><th>Mesa</th><th>Día</th><th>Hora</th></tr></thead>
+      <tbody id="dsh-body"><tr><td colspan="6" class="empty-msg">Sin registros aún.</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════ SCRIPTS ══════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+// ══════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey:      "AIzaSyDaobKuGdh00nQMw0KgiLl4j2Qedi2GBvg",
+  databaseURL: "https://timbachata-d3287-default-rtdb.firebaseio.com",
+  projectId:   "timbachata-d3287"
+};
+
+const EVENT_KEY = 'AZUCAR_FEST_2026';
+const FB_ROOT   = 'azucar-fest-2026';
+
+const EVENTS = {
+  dia1: {
+    label:   'Día 1 · Foro San Rafael',
+    day:     'SÁBADO',
+    date:    '1 DE AGOSTO,',
+    time:    '20:00 HRS.',
+    venue:   'Foro San Rafael',
+    addr:    'C. Francisco Pimentel 7B, San Rafael, Cuauhtémoc, CDMX',
+    color:   [192,0,10],
+    tagCls:  'd1'
+  },
+  dia2: {
+    label:   'Día 2 · Mambo Café Insurgentes',
+    day:     'DOMINGO',
+    date:    '2 DE AGOSTO,',
+    time:    '18:00 HRS.',
+    venue:   'Mambo Café Insurgentes',
+    addr:    'Av. de los Insurgentes Sur 644, Col. Del Valle Centro, CDMX',
+    color:   [180,120,0],
+    tagCls:  'd2'
+  }
+};
+
+// Data stores per event
+const data = { dia1: [], dia2: [] };
+let history = [];
+let db = null;
+let scanStream = null, scanning = false;
+let lastScanId = null, lastScanTime = 0;
+let barcodeDetector = null;
+
+// ══════════════════════════════════════════════
+// FIREBASE
+// ══════════════════════════════════════════════
+function initFirebase() {
+  try {
+    const app = firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.database(app);
+    db.ref('.info/connected').on('value', snap => {
+      if (snap.val()) {
+        setFB('ok', '🟢 Conectado — datos sincronizados en todos los dispositivos');
+        startListeners();
+      } else {
+        setFB('err', '🔴 Sin conexión — verifica internet');
+      }
+    });
+  } catch(e) { setFB('err', 'Error Firebase: ' + e.message); }
+}
+
+function startListeners() {
+  ['dia1','dia2'].forEach(ev => {
+    db.ref(FB_ROOT+'/'+ev+'/attendees').on('value', snap => {
+      const d = snap.val();
+      data[ev] = d ? Object.values(d) : [];
+      saveLocal(ev);
+      renderList(ev);
+    });
+  });
+  db.ref(FB_ROOT+'/checkins').on('value', snap => {
+    const d = snap.val();
+    history = d ? Object.values(d).sort((a,b)=>b.checkInTime-a.checkInTime) : [];
+    saveHistory();
+    renderDashboard();
+    renderRecent();
+  });
+}
+
+function setFB(type, msg) {
+  document.getElementById('fb-dot').className = 'fb-dot ' + type;
+  document.getElementById('fb-txt').textContent = msg;
+}
+
+// ══════════════════════════════════════════════
+// LOCAL STORAGE
+// ══════════════════════════════════════════════
+function saveLocal(ev)  { try { localStorage.setItem('af26_'+ev, JSON.stringify(data[ev])); } catch{} }
+function saveHistory()  { try { localStorage.setItem('af26_history', JSON.stringify(history)); } catch{} }
+function loadLocal() {
+  try {
+    ['dia1','dia2'].forEach(ev => {
+      const d = localStorage.getItem('af26_'+ev);
+      if(d) data[ev] = JSON.parse(d);
+    });
+    const h = localStorage.getItem('af26_history');
+    if(h) history = JSON.parse(h);
+  } catch{}
+}
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function genId(ev, name, idx) {
+  const str = EVENT_KEY+'|'+ev+'|'+idx+'|'+name;
+  let h = 0x811c9dc5;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=(h*0x01000193)>>>0;}
+  return h.toString(36).toUpperCase().padStart(7,'0');
+}
+function qrPayload(ev, a) { return EVENT_KEY+'|'+ev+'|'+a.id+'|'+a.nombre; }
+function parseQR(txt) {
+  const p = txt.split('|');
+  if(p.length>=4 && p[0]===EVENT_KEY && (p[1]==='dia1'||p[1]==='dia2'))
+    return {ok:true, ev:p[1], id:p[2], nombre:p.slice(3).join('|')};
+  return {ok:false};
+}
+function fmtTime(ts)  { return ts ? new Date(ts).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}) : ''; }
+function fmtDate(ts)  { return ts ? new Date(ts).toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'}) : ''; }
+function escH(s)      { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ══════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════
+function showTab(id) {
+  ['dia1','dia2','scanner','dashboard'].forEach((t,i)=>{
+    document.querySelectorAll('.tab')[i].classList.toggle('active', t===id);
+  });
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='dia1')      renderList('dia1');
+  if(id==='dia2')      renderList('dia2');
+  if(id==='dashboard') renderDashboard();
+  if(id==='scanner')   renderRecent();
+  if(id!=='scanner')   stopScanner();
+}
+
+// ══════════════════════════════════════════════
+// CARGAR DATOS
+// ══════════════════════════════════════════════
+function handleFile(e, ev) {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = evt => {
+    const raw = evt.target.result;
+    let rows = [];
+    if(f.name.match(/\.(csv|txt)$/i)) {
+      const lines = new TextDecoder().decode(raw).split(/\r?\n/);
+      rows = lines.map(l => l.split(',').map(c=>c.replace(/["']/g,'').trim()));
+    } else {
+      const wb = XLSX.read(raw,{type:'array'});
+      rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});
+    }
+    // Detectar header
+    const first = rows[0] ? rows[0].map(c=>String(c).toLowerCase()) : [];
+    const hasHeader = first.some(c=>c.includes('nombre')||c.includes('vendedor')||c.includes('mesa')||c.includes('name'));
+    const start = hasHeader ? 1 : 0;
+    // Detectar columnas
+    let iNombre=0, iVendedor=1, iMesa=2;
+    if(hasHeader){
+      first.forEach((c,i)=>{
+        if(c.includes('nombre')||c.includes('name')) iNombre=i;
+        else if(c.includes('vendedor')||c.includes('seller')) iVendedor=i;
+        else if(c.includes('mesa')||c.includes('table')) iMesa=i;
+      });
+    }
+    const records = rows.slice(start)
+      .map(r=>({nombre:String(r[iNombre]||'').trim(), vendedor:String(r[iVendedor]||'').trim(), mesa:String(r[iMesa]||'').trim()}))
+      .filter(r=>r.nombre);
+    if(!records.length){alert('No se encontraron datos válidos.');return;}
+    processRecords(ev, records);
+  };
+  r.readAsArrayBuffer(f);
+  e.target.value='';
+}
+
+function addManual(ev) {
+  const n = document.getElementById('m'+ev.slice(-1)+'-nombre').value.trim();
+  const v = document.getElementById('m'+ev.slice(-1)+'-vendedor').value.trim();
+  const m = document.getElementById('m'+ev.slice(-1)+'-mesa').value.trim();
+  if(!n){alert('El nombre es obligatorio.');return;}
+  processRecords(ev,[{nombre:n,vendedor:v,mesa:m}]);
+  document.getElementById('m'+ev.slice(-1)+'-nombre').value='';
+  document.getElementById('m'+ev.slice(-1)+'-vendedor').value='';
+  document.getElementById('m'+ev.slice(-1)+'-mesa').value='';
+}
+
+function processRecords(ev, records) {
+  const existingNames = new Set(data[ev].map(a=>a.nombre.toLowerCase().trim()));
+  const startIdx = data[ev].length;
+  const newOnes = [];
+  records.forEach((rec, i) => {
+    if(existingNames.has(rec.nombre.toLowerCase().trim())) return;
+    existingNames.add(rec.nombre.toLowerCase().trim());
+    const globalIdx = startIdx + newOnes.length;
+    const id = genId(ev, rec.nombre, globalIdx);
+    newOnes.push({id, folio:String(globalIdx+1).padStart(4,'0'), nombre:rec.nombre, vendedor:rec.vendedor||'—', mesa:rec.mesa||'—', checkedIn:false, checkInTime:null});
+  });
+  if(!newOnes.length){alert('Todos los nombres ya están en la lista.');return;}
+  data[ev] = [...data[ev], ...newOnes];
+  saveLocal(ev);
+  if(db){
+    const fbData={};
+    newOnes.forEach(a=>{fbData[a.id]=a;});
+    db.ref(FB_ROOT+'/'+ev+'/attendees').update(fbData).catch(e=>console.warn(e));
+  }
+  const n = ev.slice(-1);
+  document.getElementById('cnt'+n).textContent = data[ev].length;
+  document.getElementById('result-'+ev).style.display='block';
+  if(newOnes.length < records.length)
+    alert(`✅ ${newOnes.length} agregado(s). ${records.length-newOnes.length} ya estaban en la lista.`);
+  renderList(ev);
+}
+
+// ══════════════════════════════════════════════
+// RENDER LISTA
+// ══════════════════════════════════════════════
+function renderList(ev) {
+  const n = ev.slice(-1);
+  const q = (document.getElementById('sb'+n)?.value||'').toLowerCase();
+  const arr = data[ev];
+  const checked = arr.filter(a=>a.checkedIn).length;
+  document.getElementById('d'+n+'-total').textContent = arr.length;
+  document.getElementById('d'+n+'-in').textContent    = checked;
+  document.getElementById('d'+n+'-pend').textContent  = arr.length-checked;
+  const cnt = document.getElementById('cnt'+n);
+  if(cnt) cnt.textContent = arr.length;
+  if(arr.length) document.getElementById('result-'+ev).style.display='block';
+  const filtered = arr.filter(a=>a.nombre.toLowerCase().includes(q)||a.vendedor.toLowerCase().includes(q)||a.mesa.toLowerCase().includes(q));
+  const el = document.getElementById('list-'+ev);
+  if(!filtered.length){el.innerHTML=`<p class="empty-msg">${arr.length?'Sin resultados.':'Sin asistentes aún.'}</p>`;return;}
+  el.innerHTML = filtered.map(a=>`
+    <div class="attendee-card ${a.checkedIn?'in':''}">
+      <div class="a-info">
+        <div class="a-name">${escH(a.nombre)}</div>
+        <div class="a-meta">Folio #${a.folio} · Vendedor: ${escH(a.vendedor)} · Mesa: ${escH(a.mesa)}${a.checkedIn?' · Ingresó '+fmtTime(a.checkInTime):''}</div>
+      </div>
+      <div class="a-actions">
+        <span class="badge ${a.checkedIn?'badge-ok':'badge-pend'}">${a.checkedIn?'✓ OK':'Pend.'}</span>
+        <button class="btn btn-outline" onclick="downloadOne('${ev}','${a.id}',this)">⬇️</button>
+        <button class="btn btn-outline danger" onclick="deleteOne('${ev}','${a.id}','${escH(a.nombre)}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteOne(ev, id, nombre) {
+  if(!confirm(`¿Eliminar a "${nombre}" de la lista?`)) return;
+  data[ev] = data[ev].filter(a=>a.id!==id);
+  saveLocal(ev);
+  if(db) db.ref(FB_ROOT+'/'+ev+'/attendees/'+id).remove();
+  renderList(ev);
+}
+
+function clearEvent(ev) {
+  if(!confirm(`¿Borrar toda la lista del ${ev==='dia1'?'Día 1':'Día 2'}?`)) return;
+  data[ev]=[];saveLocal(ev);
+  if(db) db.ref(FB_ROOT+'/'+ev+'/attendees').remove();
+  renderList(ev);
+  document.getElementById('result-'+ev).style.display='none';
+}
+
+// ══════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════
+function renderDashboard() {
+  const total = data.dia1.length + data.dia2.length;
+  const inD1  = history.filter(h=>h.ev==='dia1').length;
+  const inD2  = history.filter(h=>h.ev==='dia2').length;
+  const pct   = total ? Math.round((inD1+inD2)/total*100) : 0;
+  document.getElementById('dsh-total').textContent = total;
+  document.getElementById('dsh-d1').textContent    = inD1;
+  document.getElementById('dsh-d2').textContent    = inD2;
+  document.getElementById('dsh-pct').textContent   = pct+'%';
+  const q = (document.getElementById('dsh-search')?.value||'').toLowerCase();
+  const filtered = history.filter(h=>h.nombre.toLowerCase().includes(q)||h.vendedor.toLowerCase().includes(q)||(h.mesa||'').toLowerCase().includes(q));
+  const tb = document.getElementById('dsh-body');
+  if(!filtered.length){tb.innerHTML='<tr><td colspan="6" class="empty-msg">Sin registros aún.</td></tr>';return;}
+  tb.innerHTML = filtered.map((h,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td class="tag-in">${escH(h.nombre)}</td>
+      <td>${escH(h.vendedor||'—')}</td>
+      <td>${escH(h.mesa||'—')}</td>
+      <td><span class="ev-tag ${h.ev==='dia1'?'d1':'d2'}">${h.ev==='dia1'?'Ago 1':'Ago 2'}</span></td>
+      <td>${fmtTime(h.checkInTime)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderRecent() {
+  const el = document.getElementById('recent-list');
+  const recent = history.slice(0,15);
+  if(!recent.length){el.innerHTML='<p class="empty-msg" style="padding:8px;">Sin registros aún.</p>';return;}
+  el.innerHTML = recent.map(h=>`
+    <div class="recent-item">
+      <span>${escH(h.nombre)}</span>
+      <div class="ri-right">
+        <span class="ev-tag ${h.ev==='dia1'?'d1':'d2'}" style="font-size:0.65em">${h.ev==='dia1'?'Ago 1':'Ago 2'}</span><br>
+        ${fmtTime(h.checkInTime)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function exportDashboard() {
+  if(!history.length){alert('Sin registros.');return;}
+  const wb=XLSX.utils.book_new();
+  const rows=[['#','Nombre','Vendedor','Mesa','Evento','Fecha','Hora']];
+  [...history].sort((a,b)=>a.checkInTime-b.checkInTime).forEach((h,i)=>{
+    rows.push([i+1,h.nombre,h.vendedor||'—',h.mesa||'—',h.ev==='dia1'?'1 Ago · Foro SR':'2 Ago · Mambo Café',fmtDate(h.checkInTime),fmtTime(h.checkInTime)]);
+  });
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols']=[{wch:4},{wch:28},{wch:16},{wch:8},{wch:20},{wch:12},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,ws,'Entradas');
+  XLSX.writeFile(wb,'Dashboard_AzucarFest_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+function clearHistory() {
+  if(!confirm('¿Borrar todo el historial de entradas?')) return;
+  history=[];saveHistory();
+  if(db) db.ref(FB_ROOT+'/checkins').remove();
+  renderDashboard();renderRecent();
+}
+
+// ══════════════════════════════════════════════
+// QR GENERATION
+// ══════════════════════════════════════════════
+async function makeQRDataURL(text) {
+  return new Promise((res,rej)=>{
+    try{
+      const div=document.createElement('div');
+      div.style.cssText='position:fixed;left:-9999px;top:-9999px;width:256px;height:256px;';
+      document.body.appendChild(div);
+      new QRCode(div,{text,width:256,height:256,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+      setTimeout(()=>{
+        const c=div.querySelector('canvas'),img=div.querySelector('img');
+        let url=null;
+        if(c) url=c.toDataURL('image/png');
+        else if(img&&img.src.startsWith('data:')) url=img.src;
+        document.body.removeChild(div);
+        res(url);
+      },300);
+    }catch(e){rej(e);}
+  });
+}
+
+// ══════════════════════════════════════════════
+// BUILD TICKET PDF — Estilo Azúcar Fest
+// ══════════════════════════════════════════════
+async function buildTicketPDF(ev, attendee) {
+  const jsPDF = (window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
+  const pdf = new jsPDF({orientation:'landscape',unit:'mm',format:[216,89]});
+  const W=216, H=89;
+  const evInfo = EVENTS[ev];
+
+  // Fondo general oscuro marrón-rojo
+  pdf.setFillColor(14,2,2); pdf.rect(0,0,W,H,'F');
+  // Gradiente simulado: capas
+  pdf.setFillColor(20,4,4); pdf.rect(0,0,W,H/2,'F');
+  pdf.setFillColor(16,3,3); pdf.rect(0,H/2,W,H/2,'F');
+
+  // Estrellas de fondo decorativas (tenues)
+  pdf.setTextColor(40,10,10); pdf.setFontSize(18);
+  pdf.setFont('helvetica','bold');
+  const starPositions=[[10,15],[30,40],[55,20],[80,60],[110,25],[130,55],[160,15],[185,45],[200,70],[25,75],[70,80],[140,78],[170,30]];
+  starPositions.forEach(([x,y])=>{ try{pdf.text('★',x,y);}catch{} });
+
+  // Línea de perforación
+  const perf = 140;
+  pdf.setDrawColor(80,20,20); pdf.setLineWidth(0.4);
+  pdf.setLineDashPattern([2,2],0); pdf.line(perf,0,perf,H); pdf.setLineDashPattern([],0);
+
+  // ─── SECCIÓN IZQUIERDA (0 → perf) ───
+
+  // Estrellas doradas decorativas top-left
+  pdf.setTextColor(245,197,24); pdf.setFontSize(10);
+  pdf.text('★ ★ ★',8,12);
+
+  // PREVENTA / DÍA EVENTO
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(8.5); pdf.setTextColor(245,197,24);
+  pdf.text('PREVENTA $250',8,22);
+  pdf.setFontSize(7.5); pdf.setTextColor(220,180,20);
+  pdf.text('DÍA EVENTO $350',8,28);
+
+  // AZÚCARFEST 2026 en top-right del stub
+  pdf.setFontSize(9); pdf.setFont('helvetica','bold'); pdf.setTextColor(255,255,255);
+  pdf.text('AZÚCAR',80,11);
+  pdf.setTextColor(192,0,10);
+  const tw=pdf.getTextWidth('AZÚCAR'); pdf.text('FEST',80+tw+1,11);
+  pdf.setFontSize(16); pdf.setTextColor(192,0,10);
+  pdf.text('2026',80,21);
+
+  // ── Campo FOLIO ──
+  const fieldX=8, fieldW=perf-16, fieldH=11, fieldR=3;
+  let fy=36;
+  // Label FOLIO
+  pdf.setFillColor(170,0,8); pdf.roundedRect(fieldX,fy,fieldW,fieldH,fieldR,fieldR,'F');
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
+  pdf.text('FOLIO',fieldX+3,fy+4);
+  pdf.setFontSize(8); pdf.setTextColor(255,255,255);
+  pdf.text('#'+attendee.folio,fieldX+3,fy+9);
+
+  // ── Campo VENDEDOR ──
+  fy+=13;
+  pdf.setFillColor(170,0,8); pdf.roundedRect(fieldX,fy,fieldW,fieldH,fieldR,fieldR,'F');
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
+  pdf.text('VENDEDOR',fieldX+3,fy+4);
+  pdf.setFontSize(7.5); pdf.setTextColor(255,255,255);
+  const vend=pdf.splitTextToSize(attendee.vendedor||'—',fieldW-6);
+  pdf.text(vend[0],fieldX+3,fy+9);
+
+  // ── Campo MESA ──
+  fy+=13;
+  pdf.setFillColor(170,0,8); pdf.roundedRect(fieldX,fy,fieldW,fieldH,fieldR,fieldR,'F');
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
+  pdf.text('MESA',fieldX+3,fy+4);
+  pdf.setFontSize(8); pdf.setTextColor(255,255,255);
+  pdf.text(attendee.mesa||'—',fieldX+3,fy+9);
+
+  // ── Info evento (derecha del stub) ──
+  const infoX = perf - 52;
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(10); pdf.setTextColor(245,197,24);
+  pdf.text(evInfo.day, infoX, 36);
+  pdf.setFontSize(8.5); pdf.setTextColor(245,197,24);
+  pdf.text(evInfo.date, infoX, 44);
+  pdf.text(evInfo.time, infoX, 51);
+  pdf.setFont('helvetica','normal'); pdf.setFontSize(7.5); pdf.setTextColor(255,255,255);
+  pdf.text(evInfo.venue, infoX, 58);
+  const addrLines = pdf.splitTextToSize(evInfo.addr, 50);
+  pdf.setFontSize(6.5); pdf.setTextColor(200,200,200);
+  pdf.text(addrLines, infoX, 64);
+
+  // Bottom izq
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(6); pdf.setTextColor(245,197,24);
+  pdf.text('CUPO LIMITADO.',8,83);
+  pdf.setFont('helvetica','normal'); pdf.setFontSize(5.5); pdf.setTextColor(160,160,160);
+  pdf.text('info@azucardancestudio.com · 55 6607 7277',8,87);
+
+  // ─── SECCIÓN DERECHA (perf → W) ─── QR stub
+  const stubX = perf+3, stubW = W-perf-3;
+
+  // Estrellas
+  pdf.setTextColor(245,197,24); pdf.setFontSize(7);
+  pdf.text('★ ★',stubX,10);
+
+  // Nombre del asistente arriba del QR
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(7); pdf.setTextColor(255,255,255);
+  const nameLines=pdf.splitTextToSize(attendee.nombre.toUpperCase(),stubW-2);
+  pdf.text(nameLines.slice(0,2), stubX, 17);
+
+  // QR code
+  const qrUrl = await makeQRDataURL(qrPayload(ev,attendee));
+  if(qrUrl){
+    pdf.setFillColor(255,255,255); pdf.roundedRect(stubX,22,stubW-2,stubW-2,2,2,'F');
+    pdf.addImage(qrUrl,'PNG',stubX+1,23,stubW-4,stubW-4);
+  }
+
+  // "ESCANEAR EN LA ENTRADA"
+  const qrBottom = 22+stubW-2+3;
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(5); pdf.setTextColor(200,200,200);
+  const scanLbl='ESCANEAR EN ENTRADA';
+  pdf.text(scanLbl, stubX+(stubW/2)-pdf.getTextWidth(scanLbl)/2, qrBottom);
+
+  // Día en el stub
+  pdf.setFontSize(5.5); pdf.setTextColor(evInfo.color[0],evInfo.color[1],evInfo.color[2]);
+  const dayLbl = ev==='dia1'?'DÍA 1 · 1 AGO':'DÍA 2 · 2 AGO';
+  pdf.text(dayLbl, stubX+(stubW/2)-pdf.getTextWidth(dayLbl)/2, qrBottom+5);
+
+  return pdf;
+}
+
+async function downloadOne(ev, id, btn) {
+  const a=data[ev].find(x=>x.id===id); if(!a) return;
+  const orig=btn.textContent; btn.textContent='⏳'; btn.disabled=true;
+  try{const pdf=await buildTicketPDF(ev,a);pdf.save(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${a.nombre.replace(/\s+/g,'_')}.pdf`);}
+  catch(e){alert('Error: '+e.message);}
+  btn.textContent=orig; btn.disabled=false;
+}
+
+async function downloadAll(ev) {
+  const arr=data[ev];
+  if(!arr.length){alert('No hay asistentes.');return;}
+  const n=ev.slice(-1);
+  const pw=document.getElementById('pw'+n);
+  const pb=document.getElementById('pb'+n);
+  const pt=document.getElementById('pt'+n);
+  pw.style.display='block';
+  const zip=new JSZip();
+  for(let i=0;i<arr.length;i++){
+    const a=arr[i];
+    pt.textContent=`Generando ${i+1}/${arr.length}: ${a.nombre}`;
+    pb.style.width=((i+1)/arr.length*100)+'%';
+    try{
+      const pdf=await buildTicketPDF(ev,a);
+      zip.file(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${a.nombre.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_')}.pdf`,pdf.output('blob'));
+    }catch(e){console.warn(a.nombre,e);}
+    await new Promise(r=>setTimeout(r,30));
+  }
+  pt.textContent='Creando ZIP…';
+  const blob=await zip.generateAsync({type:'blob'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');link.href=url;link.download=`AzucarFest_${ev==='dia1'?'Dia1':'Dia2'}_Tickets.zip`;link.click();
+  URL.revokeObjectURL(url);
+  pw.style.display='none';pb.style.width='0%';
+}
+
+// ══════════════════════════════════════════════
+// ESCÁNER
+// ══════════════════════════════════════════════
+async function startScanner() {
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});
+    scanStream=stream;scanning=true;
+    document.getElementById('scan-start-view').style.display='none';
+    document.getElementById('scan-active-view').style.display='block';
+    const vid=document.getElementById('qr-video');
+    vid.srcObject=stream;await vid.play();
+    if('BarcodeDetector' in window){
+      try{barcodeDetector=new BarcodeDetector({formats:['qr_code']});setScanStatus('✅ Detector nativo — apunta al QR');nativeScanLoop();return;}
+      catch{barcodeDetector=null;}
+    }
+    setScanStatus('🔍 Apunta al código QR del ticket…');
+    requestAnimationFrame(jsqrLoop);
+  }catch(e){alert('No se pudo acceder a la cámara.\nAsegúrate de dar permiso y estar en HTTPS.');}
+}
+
+function setScanStatus(t){const el=document.getElementById('scan-status');if(el)el.textContent=t;}
+function stopScanner(){
+  scanning=false;
+  if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
+  document.getElementById('scan-start-view').style.display='block';
+  document.getElementById('scan-active-view').style.display='none';
+}
+
+async function nativeScanLoop(){
+  if(!scanning||!barcodeDetector) return;
+  const vid=document.getElementById('qr-video');
+  try{
+    if(vid.readyState===vid.HAVE_ENOUGH_DATA){
+      const codes=await barcodeDetector.detect(vid);
+      if(codes.length){const raw=codes[0].rawValue,now=Date.now();if(raw!==lastScanId||now-lastScanTime>3500){lastScanId=raw;lastScanTime=now;handleScan(raw);}}
+    }
+  }catch{}
+  if(scanning) setTimeout(nativeScanLoop,150);
+}
+
+function jsqrLoop(){
+  if(!scanning) return;
+  const vid=document.getElementById('qr-video'),can=document.getElementById('qr-canvas');
+  try{
+    if(vid.readyState===vid.HAVE_ENOUGH_DATA){
+      can.width=vid.videoWidth;can.height=vid.videoHeight;
+      const ctx=can.getContext('2d',{willReadFrequently:true});
+      ctx.drawImage(vid,0,0,can.width,can.height);
+      const img=ctx.getImageData(0,0,can.width,can.height);
+      const code=jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
+      if(code){const now=Date.now();if(code.data!==lastScanId||now-lastScanTime>3500){lastScanId=code.data;lastScanTime=now;handleScan(code.data);}}
+    }
+  }catch(e){console.warn(e);}
+  if(scanning) requestAnimationFrame(jsqrLoop);
+}
+
+function handleScan(raw){
+  const res=parseQR(raw);
+  const rEl=document.getElementById('scan-result');
+  const icon=document.getElementById('s-icon');
+  const sName=document.getElementById('s-name');
+  const sSub=document.getElementById('s-sub');
+  const sMsg=document.getElementById('s-msg');
+  rEl.className='scan-result show';
+
+  if(!res.ok){
+    rEl.classList.add('invalid');
+    icon.textContent='❌';sName.textContent='QR inválido';sSub.textContent='';
+    sMsg.textContent='Este código no corresponde a Azúcar Fest 2026.';return;
+  }
+
+  const evInfo = EVENTS[res.ev];
+  const yaEntro = history.find(h=>h.id===res.id);
+  if(yaEntro){
+    rEl.classList.add('dup');
+    icon.textContent='⚠️';sName.textContent=res.nombre;
+    sSub.textContent=evInfo.label;
+    sMsg.textContent='Ya ingresó a las '+fmtTime(yaEntro.checkInTime);return;
+  }
+
+  const att=data[res.ev].find(a=>a.id===res.id);
+  if(!att && data[res.ev].length>0){
+    rEl.classList.add('invalid');
+    icon.textContent='❌';sName.textContent=res.nombre||'Desconocido';sSub.textContent='';
+    sMsg.textContent='Ticket no encontrado en la lista del '+evInfo.label;return;
+  }
+
+  // ✅ VÁLIDO
+  const entry={
+    id:res.id, ev:res.ev,
+    nombre:   att?att.nombre:res.nombre,
+    vendedor: att?att.vendedor:'—',
+    mesa:     att?att.mesa:'—',
+    folio:    att?att.folio:'—',
+    checkInTime: Date.now()
+  };
+
+  if(db){
+    if(att) db.ref(FB_ROOT+'/'+res.ev+'/attendees/'+att.id).update({checkedIn:true,checkInTime:entry.checkInTime});
+    db.ref(FB_ROOT+'/checkins').push(entry);
+  } else {
+    if(att){att.checkedIn=true;att.checkInTime=entry.checkInTime;saveLocal(res.ev);}
+    history.unshift(entry);saveHistory();renderDashboard();renderRecent();
+  }
+
+  rEl.classList.add('valid');
+  icon.textContent='✅';sName.textContent=entry.nombre;
+  sSub.textContent=evInfo.label+' · Mesa '+entry.mesa;
+  sMsg.textContent='¡Bienvenido/a! — Folio #'+entry.folio;
+  if(navigator.vibrate) navigator.vibrate([80,40,80]);
+}
+
+// ══════════════════════════════════════════════
+// DRAG & DROP
+// ══════════════════════════════════════════════
+['uz1','uz2'].forEach((zid,i)=>{
+  const ev=['dia1','dia2'][i];
+  const zone=document.getElementById(zid);
+  const fi=document.getElementById('fi'+(i+1));
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('drag-over');
+    const f=e.dataTransfer.files[0];if(!f)return;
+    try{const dt=new DataTransfer();dt.items.add(f);fi.files=dt.files;}catch{}
+    fi.dispatchEvent(new Event('change'));
+  });
+});
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+loadLocal();
+renderList('dia1');
+renderList('dia2');
+renderDashboard();
+initFirebase();
+</script>
+</body>
+</html>
