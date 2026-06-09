@@ -674,6 +674,22 @@ async function makeQRDataURL(text) {
 }
 
 // ══════════════════════════════════════════════
+// DIBUJAR ESTRELLA (evita el bug de ★ → &)
+// ══════════════════════════════════════════════
+function drawStar(pdf, cx, cy, r, rgb) {
+  pdf.setFillColor(rgb[0], rgb[1], rgb[2]);
+  pdf.setDrawColor(rgb[0], rgb[1], rgb[2]);
+  const pts = [];
+  for(let i=0; i<10; i++){
+    const angle = (i*Math.PI/5) - Math.PI/2;
+    const rad   = i%2===0 ? r : r*0.38;
+    pts.push([cx + rad*Math.cos(angle), cy + rad*Math.sin(angle)]);
+  }
+  const lines = pts.slice(1).map((p,i)=>[p[0]-pts[i][0], p[1]-pts[i][1]]);
+  pdf.lines(lines, pts[0][0], pts[0][1], [1,1], 'F', true);
+}
+
+// ══════════════════════════════════════════════
 // BUILD TICKET PDF — Estilo Azúcar Fest
 // ══════════════════════════════════════════════
 async function buildTicketPDF(ev, attendee) {
@@ -681,119 +697,146 @@ async function buildTicketPDF(ev, attendee) {
   const pdf = new jsPDF({orientation:'landscape',unit:'mm',format:[216,89]});
   const W=216, H=89;
   const evInfo = EVENTS[ev];
+  const perf = 148; // línea de perforación
 
-  // Fondo general oscuro marrón-rojo
-  pdf.setFillColor(14,2,2); pdf.rect(0,0,W,H,'F');
-  // Gradiente simulado: capas
-  pdf.setFillColor(20,4,4); pdf.rect(0,0,W,H/2,'F');
-  pdf.setFillColor(16,3,3); pdf.rect(0,H/2,W,H/2,'F');
+  // ── Fondo oscuro marrón-rojo ──
+  pdf.setFillColor(12,2,2); pdf.rect(0,0,W,H,'F');
+  // Tono ligeramente más claro en mitad superior
+  pdf.setFillColor(18,4,4); pdf.rect(0,0,W,H*0.55,'F');
 
-  // Estrellas de fondo decorativas (tenues)
-  pdf.setTextColor(40,10,10); pdf.setFontSize(18);
-  pdf.setFont('helvetica','bold');
-  const starPositions=[[10,15],[30,40],[55,20],[80,60],[110,25],[130,55],[160,15],[185,45],[200,70],[25,75],[70,80],[140,78],[170,30]];
-  starPositions.forEach(([x,y])=>{ try{pdf.text('★',x,y);}catch{} });
+  // ── Estrellas de fondo decorativas (muy tenues) ──
+  const bgStarPos=[[18,18,2.5],[45,12,2],[70,30,1.8],[100,18,2.2],[125,40,1.8],[32,55,2],[60,68,1.5],[90,52,2],[118,65,2],[38,80,1.8],[80,78,1.5],[112,80,2],[155,15,2],[172,40,2],[195,20,1.8],[160,60,2],[185,72,1.5],[205,50,2]];
+  bgStarPos.forEach(([x,y,r])=>drawStar(pdf,x,y,r,[35,8,8]));
 
-  // Línea de perforación
-  const perf = 140;
-  pdf.setDrawColor(80,20,20); pdf.setLineWidth(0.4);
+  // ── Línea de perforación ──
+  pdf.setDrawColor(70,18,18); pdf.setLineWidth(0.3);
   pdf.setLineDashPattern([2,2],0); pdf.line(perf,0,perf,H); pdf.setLineDashPattern([],0);
 
-  // ─── SECCIÓN IZQUIERDA (0 → perf) ───
+  // ════════════════════════════════
+  // SECCIÓN PRINCIPAL (izquierda)
+  // ════════════════════════════════
+  const mainW = perf;
+  // Dividir en dos columnas dentro de la sección principal:
+  // Col izq (campos): x=8 a x=76   (68mm)
+  // Col der (logo+info): x=80 a perf-4
 
-  // Estrellas doradas decorativas top-left
-  pdf.setTextColor(245,197,24); pdf.setFontSize(10);
-  pdf.text('★ ★ ★',8,12);
+  // ── Col izquierda: ESTRELLAS + PRECIOS ──
+  drawStar(pdf, 12, 11, 3, [245,197,24]);
+  drawStar(pdf, 20, 11, 3, [245,197,24]);
+  drawStar(pdf, 28, 11, 3, [245,197,24]);
 
-  // PREVENTA / DÍA EVENTO
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(8.5); pdf.setTextColor(245,197,24);
-  pdf.text('PREVENTA $250',8,22);
-  pdf.setFontSize(7.5); pdf.setTextColor(220,180,20);
-  pdf.text('DÍA EVENTO $350',8,28);
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(8); pdf.setTextColor(245,197,24);
+  pdf.text('PREVENTA $250', 8, 21);
+  pdf.setFont('helvetica','normal'); pdf.setFontSize(7); pdf.setTextColor(210,165,15);
+  pdf.text('DÍA EVENTO $350', 8, 27);
 
-  // AZÚCARFEST 2026 en top-right del stub
-  pdf.setFontSize(9); pdf.setFont('helvetica','bold'); pdf.setTextColor(255,255,255);
-  pdf.text('AZÚCAR',80,11);
-  pdf.setTextColor(192,0,10);
-  const tw=pdf.getTextWidth('AZÚCAR'); pdf.text('FEST',80+tw+1,11);
-  pdf.setFontSize(16); pdf.setTextColor(192,0,10);
-  pdf.text('2026',80,21);
+  // ── CAMPOS FOLIO / VENDEDOR / MESA ──
+  const fX=8, fW=68, fH=12.5, fR=3.5;
+  let fy=32;
 
-  // ── Campo FOLIO ──
-  const fieldX=8, fieldW=perf-16, fieldH=11, fieldR=3;
-  let fy=36;
-  // Label FOLIO
-  pdf.setFillColor(170,0,8); pdf.roundedRect(fieldX,fy,fieldW,fieldH,fieldR,fieldR,'F');
+  // FOLIO
+  pdf.setFillColor(160,0,8); pdf.roundedRect(fX,fy,fW,fH,fR,fR,'F');
+  pdf.setFillColor(185,0,10); pdf.roundedRect(fX,fy,fW,fH*0.45,fR,fR,'F');
   pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
-  pdf.text('FOLIO',fieldX+3,fy+4);
-  pdf.setFontSize(8); pdf.setTextColor(255,255,255);
-  pdf.text('#'+attendee.folio,fieldX+3,fy+9);
+  pdf.text('FOLIO', fX+4, fy+4.5);
+  pdf.setFontSize(9); pdf.setTextColor(255,255,255);
+  pdf.text('#'+attendee.folio, fX+4, fy+11);
 
-  // ── Campo VENDEDOR ──
-  fy+=13;
-  pdf.setFillColor(170,0,8); pdf.roundedRect(fieldX,fy,fieldW,fieldH,fieldR,fieldR,'F');
+  // VENDEDOR
+  fy+=15;
+  pdf.setFillColor(160,0,8); pdf.roundedRect(fX,fy,fW,fH,fR,fR,'F');
+  pdf.setFillColor(185,0,10); pdf.roundedRect(fX,fy,fW,fH*0.45,fR,fR,'F');
   pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
-  pdf.text('VENDEDOR',fieldX+3,fy+4);
-  pdf.setFontSize(7.5); pdf.setTextColor(255,255,255);
-  const vend=pdf.splitTextToSize(attendee.vendedor||'—',fieldW-6);
-  pdf.text(vend[0],fieldX+3,fy+9);
+  pdf.text('VENDEDOR', fX+4, fy+4.5);
+  pdf.setFontSize(8.5); pdf.setTextColor(255,255,255);
+  const vendTxt=pdf.splitTextToSize(String(attendee.vendedor||'—').toUpperCase(), fW-8);
+  pdf.text(vendTxt[0], fX+4, fy+11);
 
-  // ── Campo MESA ──
-  fy+=13;
-  pdf.setFillColor(170,0,8); pdf.roundedRect(fieldX,fy,fieldW,fieldH,fieldR,fieldR,'F');
+  // MESA
+  fy+=15;
+  pdf.setFillColor(160,0,8); pdf.roundedRect(fX,fy,fW,fH,fR,fR,'F');
+  pdf.setFillColor(185,0,10); pdf.roundedRect(fX,fy,fW,fH*0.45,fR,fR,'F');
   pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
-  pdf.text('MESA',fieldX+3,fy+4);
-  pdf.setFontSize(8); pdf.setTextColor(255,255,255);
-  pdf.text(attendee.mesa||'—',fieldX+3,fy+9);
+  pdf.text('MESA', fX+4, fy+4.5);
+  pdf.setFontSize(9); pdf.setTextColor(255,255,255);
+  pdf.text(String(attendee.mesa||'—').toUpperCase(), fX+4, fy+11);
 
-  // ── Info evento (derecha del stub) ──
-  const infoX = perf - 52;
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(10); pdf.setTextColor(245,197,24);
-  pdf.text(evInfo.day, infoX, 36);
-  pdf.setFontSize(8.5); pdf.setTextColor(245,197,24);
-  pdf.text(evInfo.date, infoX, 44);
-  pdf.text(evInfo.time, infoX, 51);
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(7.5); pdf.setTextColor(255,255,255);
-  pdf.text(evInfo.venue, infoX, 58);
-  const addrLines = pdf.splitTextToSize(evInfo.addr, 50);
-  pdf.setFontSize(6.5); pdf.setTextColor(200,200,200);
-  pdf.text(addrLines, infoX, 64);
-
-  // Bottom izq
+  // ── Bottom izquierda ──
   pdf.setFont('helvetica','bold'); pdf.setFontSize(6); pdf.setTextColor(245,197,24);
-  pdf.text('CUPO LIMITADO.',8,83);
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(5.5); pdf.setTextColor(160,160,160);
-  pdf.text('info@azucardancestudio.com · 55 6607 7277',8,87);
+  pdf.text('CUPO LIMITADO.', 8, 82);
+  pdf.setFont('helvetica','normal'); pdf.setFontSize(5.5); pdf.setTextColor(150,150,150);
+  pdf.text('info@azucardancestudio.com · 55 6607 7277', 8, 87);
 
-  // ─── SECCIÓN DERECHA (perf → W) ─── QR stub
-  const stubX = perf+3, stubW = W-perf-3;
+  // ── Col derecha: LOGO + INFO EVENTO ──
+  const lX = 82; // inicio columna derecha dentro de sección principal
 
-  // Estrellas
-  pdf.setTextColor(245,197,24); pdf.setFontSize(7);
-  pdf.text('★ ★',stubX,10);
+  // AZÚCAR FEST logo
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(11.5); pdf.setTextColor(255,255,255);
+  pdf.text('AZ', lX, 11);
+  const wAZ = pdf.getTextWidth('AZ');
+  pdf.setTextColor(245,197,24);
+  pdf.text('ÚCAR', lX+wAZ, 11);
+  const wAZUCAR = pdf.getTextWidth('AZÚCAR');
+  pdf.setTextColor(192,0,10);
+  pdf.text(' FEST', lX+wAZUCAR, 11);
 
-  // Nombre del asistente arriba del QR
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(7); pdf.setTextColor(255,255,255);
-  const nameLines=pdf.splitTextToSize(attendee.nombre.toUpperCase(),stubW-2);
-  pdf.text(nameLines.slice(0,2), stubX, 17);
+  // 2026
+  pdf.setFontSize(22); pdf.setTextColor(192,0,10);
+  pdf.text('2026', lX, 25);
+
+  // Separador
+  pdf.setDrawColor(100,10,10); pdf.setLineWidth(0.5);
+  pdf.line(lX, 28, perf-5, 28);
+
+  // Día y hora
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(11); pdf.setTextColor(245,197,24);
+  pdf.text(evInfo.day, lX, 37);
+  pdf.setFontSize(9); pdf.setTextColor(245,197,24);
+  pdf.text(evInfo.date, lX, 45);
+  pdf.text(evInfo.time, lX, 52);
+
+  // Venue
+  pdf.setFont('helvetica','normal'); pdf.setFontSize(8); pdf.setTextColor(255,255,255);
+  pdf.text(evInfo.venue, lX, 59);
+
+  // Dirección
+  const addrLines = pdf.splitTextToSize(evInfo.addr, perf-lX-6);
+  pdf.setFontSize(6.5); pdf.setTextColor(185,185,185);
+  pdf.text(addrLines, lX, 65);
+
+  // ════════════════════════════════
+  // SECCIÓN QR (derecha del perf)
+  // ════════════════════════════════
+  const sX = perf+4, sW = W-perf-5;
+
+  // Estrellas pequeñas en stub
+  drawStar(pdf, sX+2,   9, 2.2, [245,197,24]);
+  drawStar(pdf, sX+8,   9, 2.2, [245,197,24]);
+
+  // Nombre del asistente
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(6.5); pdf.setTextColor(255,255,255);
+  const nameLines = pdf.splitTextToSize(attendee.nombre.toUpperCase(), sW-2);
+  pdf.text(nameLines.slice(0,2), sX, 17);
 
   // QR code
-  const qrUrl = await makeQRDataURL(qrPayload(ev,attendee));
+  const qrUrl = await makeQRDataURL(qrPayload(ev, attendee));
+  const qrSize = sW - 2;
   if(qrUrl){
-    pdf.setFillColor(255,255,255); pdf.roundedRect(stubX,22,stubW-2,stubW-2,2,2,'F');
-    pdf.addImage(qrUrl,'PNG',stubX+1,23,stubW-4,stubW-4);
+    pdf.setFillColor(255,255,255);
+    pdf.roundedRect(sX-1, 21, qrSize+2, qrSize+2, 2, 2, 'F');
+    pdf.addImage(qrUrl, 'PNG', sX, 22, qrSize, qrSize);
   }
 
-  // "ESCANEAR EN LA ENTRADA"
-  const qrBottom = 22+stubW-2+3;
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(5); pdf.setTextColor(200,200,200);
-  const scanLbl='ESCANEAR EN ENTRADA';
-  pdf.text(scanLbl, stubX+(stubW/2)-pdf.getTextWidth(scanLbl)/2, qrBottom);
+  const qrB = 21 + qrSize + 3;
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(4.8); pdf.setTextColor(190,190,190);
+  const scanLbl = 'ESCANEAR EN ENTRADA';
+  pdf.text(scanLbl, sX + sW/2 - pdf.getTextWidth(scanLbl)/2, qrB+1);
 
-  // Día en el stub
-  pdf.setFontSize(5.5); pdf.setTextColor(evInfo.color[0],evInfo.color[1],evInfo.color[2]);
-  const dayLbl = ev==='dia1'?'DÍA 1 · 1 AGO':'DÍA 2 · 2 AGO';
-  pdf.text(dayLbl, stubX+(stubW/2)-pdf.getTextWidth(dayLbl)/2, qrBottom+5);
+  // Etiqueta día
+  const [rc,gc,bc] = evInfo.color;
+  pdf.setFontSize(5.2); pdf.setTextColor(rc,gc,bc);
+  const dayLbl = ev==='dia1'?'DIA 1 · 1 AGO':'DIA 2 · 2 AGO';
+  pdf.text(dayLbl, sX + sW/2 - pdf.getTextWidth(dayLbl)/2, qrB+6);
 
   return pdf;
 }
