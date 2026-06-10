@@ -5,70 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Azúcar Fest 2026 · Tickets</title>
   <style>
-    :root {
-      --bg:#0e0202;--bg2:#1a0505;--bg3:#220808;
-      --red:#c0000a;--red2:#e00010;--red3:#8b0000;
-      --gold:#f5c518;--gold2:#ffd700;
-      --border:#3d1010;--muted:#9e7070;
-      --white:#fff;
-    }
+    :root{--bg:#0e0202;--bg2:#1a0505;--bg3:#220808;--red:#c0000a;--red2:#e00010;--red3:#8b0000;--gold:#f5c518;--gold2:#ffd700;--border:#3d1010;--muted:#9e7070;--white:#fff;}
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#fff;min-height:100vh;}
-
-    /* HEADER */
     .header{background:linear-gradient(135deg,#1a0000,#0e0202);border-bottom:4px solid var(--red);padding:16px;text-align:center;position:relative;overflow:hidden;}
     .header::before{content:'★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';position:absolute;top:0;left:0;right:0;bottom:0;font-size:1.8em;color:rgba(200,30,30,.07);letter-spacing:8px;line-height:1.4;word-break:break-all;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;}
     .logo{position:relative;z-index:1;}
     .logo h1{font-size:2em;font-weight:900;letter-spacing:1px;line-height:1;}
-    .logo h1 .az{color:#fff;font-style:italic;}
-    .logo h1 .ucar{color:#fff;font-style:italic;}
     .logo h1 .fest{color:var(--red);font-style:italic;}
     .logo h1 .year{color:var(--gold);font-size:.65em;display:block;letter-spacing:4px;margin-top:2px;}
     .logo p{color:var(--muted);font-size:0.72em;margin-top:4px;}
     .stars{font-size:1.1em;color:var(--gold);letter-spacing:4px;margin-bottom:4px;}
-
-    /* FIREBASE BAR */
     .firebase-bar{background:#150303;border-bottom:1px solid var(--border);padding:6px 14px;display:flex;align-items:center;gap:8px;font-size:0.75em;}
     .fb-dot{width:8px;height:8px;border-radius:50%;background:#333;flex-shrink:0;transition:background .4s;}
-    .fb-dot.ok{background:#22763a;} .fb-dot.err{background:var(--red);} .fb-dot.loading{background:var(--gold);}
+    .fb-dot.ok{background:#22763a;}.fb-dot.err{background:var(--red);}.fb-dot.loading{background:var(--gold);}
     .fb-txt{color:var(--muted);flex:1;}
-
-    /* TABS */
     .tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
-    .tab{flex:1;padding:11px 3px;text-align:center;cursor:pointer;font-size:0.65em;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s;user-select:none;line-height:1.3;}
+    .tab{flex:1;padding:10px 2px;text-align:center;cursor:pointer;font-size:0.6em;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s;user-select:none;line-height:1.3;}
     .tab.active{color:#fff;border-bottom-color:var(--red);background:var(--bg3);}
     .tab:hover:not(.active){background:var(--bg3);color:#ccc;}
-
-    /* PAGES */
-    .page{display:none;padding:14px;max-width:780px;margin:0 auto;}
+    .page{display:none;padding:14px;max-width:820px;margin:0 auto;}
     .page.active{display:block;}
-
-    /* CARDS & BOXES */
     .info-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:0.8em;color:var(--muted);margin-bottom:12px;line-height:1.5;}
     .info-box strong{color:#ddd;}
     .event-badge{display:inline-block;background:var(--red);color:#fff;font-size:0.7em;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px;letter-spacing:.5px;}
     .event-badge.gold{background:var(--gold);color:#000;}
-
-    /* UPLOAD */
-    .upload-zone{border:2px dashed var(--border);border-radius:12px;padding:28px 14px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg2);margin-bottom:12px;}
+    .upload-zone{border:2px dashed var(--border);border-radius:12px;padding:24px 14px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg2);margin-bottom:10px;}
     .upload-zone:hover,.upload-zone.drag-over{border-color:var(--red);background:var(--bg3);}
-    .upload-zone .icon{font-size:2.2em;margin-bottom:6px;}
-    .upload-zone p{color:var(--muted);font-size:0.8em;}
+    .upload-zone .icon{font-size:2em;margin-bottom:5px;}
+    .upload-zone p{color:var(--muted);font-size:0.78em;}
     .upload-zone p strong{color:#ddd;}
     .divider{display:flex;align-items:center;gap:10px;margin:10px 0;color:var(--muted);font-size:0.78em;}
     .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
-
-    /* FORM FIELDS */
-    .field-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+    .field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
+    .field-row-1{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px;}
     .field-group{display:flex;flex-direction:column;gap:4px;}
     .field-group label{font-size:0.7em;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-    textarea,input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:#fff;padding:9px 11px;font-size:0.82em;font-family:inherit;}
-    textarea{min-height:90px;resize:vertical;}
-    input[type=text]:focus,textarea:focus{outline:none;border-color:var(--red);}
-    .manual-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:8px;}
-    .manual-grid label{font-size:0.7em;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px;}
-
-    /* BUTTONS */
+    textarea,input[type=text],select.inp{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:#fff;padding:9px 11px;font-size:0.82em;font-family:inherit;}
+    textarea{min-height:80px;resize:vertical;}
+    input[type=text]:focus,textarea:focus,select.inp:focus{outline:none;border-color:var(--red);}
+    select.inp option{background:#1a0505;}
     .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:8px;border:none;cursor:pointer;font-size:0.82em;font-weight:700;transition:all .2s;font-family:inherit;}
     .btn-red{background:var(--red);color:#fff;width:100%;justify-content:center;margin-top:8px;}
     .btn-red:hover{background:var(--red2);}
@@ -77,40 +54,36 @@
     .btn-outline{background:transparent;border:1px solid var(--border);color:#ccc;font-size:0.75em;padding:5px 10px;}
     .btn-outline:hover{background:var(--bg3);}
     .btn-outline.danger{border-color:var(--red3);color:#e07070;}
+    .btn-outline.success{border-color:#22763a;color:#5ec87a;}
     .btn:disabled{opacity:.5;cursor:not-allowed;}
-
-    /* STATS */
     .stats-row{display:flex;gap:7px;margin-bottom:12px;}
     .stat-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 6px;text-align:center;}
     .stat-card .num{font-size:1.5em;font-weight:700;}
     .stat-card .lbl{color:var(--muted);font-size:0.65em;margin-top:2px;}
-    .stat-card.w .num{color:#fff;} .stat-card.g .num{color:#22763a;}
-    .stat-card.r .num{color:var(--red);} .stat-card.y .num{color:var(--gold);}
+    .stat-card.w .num{color:#fff;}.stat-card.g .num{color:#22763a;}.stat-card.r .num{color:var(--red);}.stat-card.y .num{color:var(--gold);}
     .counter-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;margin:10px 0;}
     .counter-box .num{font-size:2em;font-weight:700;color:var(--gold);}
     .counter-box p{color:var(--muted);font-size:0.78em;}
-
-    /* LIST */
     .actions-row{display:flex;gap:7px;margin-bottom:10px;}
     .actions-row .btn{flex:1;justify-content:center;}
+    .filter-row{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;align-items:flex-end;}
+    .filter-row select.inp{flex:1;min-width:100px;margin-top:0;}
+    .filter-row input[type=text]{flex:2;min-width:120px;}
     .search-wrap{margin-bottom:8px;}
     .attendee-list{display:flex;flex-direction:column;gap:5px;}
     .attendee-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
     .attendee-card.in{border-color:#22763a;background:#0a1a0d;}
     .a-info{flex:1;min-width:0;}
     .a-name{font-weight:700;font-size:0.86em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .a-meta{color:var(--muted);font-size:0.68em;margin-top:2px;}
+    .a-meta{color:var(--muted);font-size:0.68em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .a-actions{display:flex;gap:4px;align-items:center;flex-shrink:0;}
     .badge{font-size:0.62em;padding:3px 7px;border-radius:20px;font-weight:700;}
-    .badge-ok{background:#22763a;color:#fff;} .badge-pend{background:var(--border);color:var(--muted);}
+    .badge-ok{background:#22763a;color:#fff;}.badge-pend{background:var(--border);color:var(--muted);}
     .empty-msg{color:var(--muted);text-align:center;padding:24px 10px;font-size:0.82em;}
-
-    /* PROGRESS */
     .progress-wrap{display:none;margin-bottom:10px;}
     .progress-wrap p{font-size:0.74em;color:var(--muted);margin-bottom:4px;}
     .progress{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
     .progress-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));transition:width .3s;width:0%;}
-
     /* SCANNER */
     .scanner-wrap{max-width:420px;margin:0 auto;}
     .cam-box{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:1;}
@@ -135,7 +108,6 @@
     .recent-section h3{color:var(--muted);font-size:0.7em;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
     .recent-item{background:var(--bg2);border-radius:6px;padding:7px 10px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;font-size:0.78em;}
     .ri-right{color:var(--muted);font-size:0.8em;text-align:right;}
-
     /* DASHBOARD */
     .dash-table-wrap{overflow-x:auto;margin-top:10px;}
     table{width:100%;border-collapse:collapse;font-size:0.78em;}
@@ -144,20 +116,29 @@
     tr:hover td{background:var(--bg3);}
     .tag-in{color:#22763a;font-weight:700;}
     .ev-tag{font-size:0.7em;padding:2px 6px;border-radius:10px;font-weight:700;}
-    .ev-tag.d1{background:var(--red);color:#fff;}
-    .ev-tag.d2{background:var(--gold);color:#000;}
-
-    /* EVENT SELECTOR */
+    .ev-tag.d1{background:var(--red);color:#fff;}.ev-tag.d2{background:var(--gold);color:#000;}
+    /* MAP */
+    .map-controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+    .floor-btn{flex:1;padding:10px;border-radius:8px;border:2px solid var(--border);background:var(--bg2);color:var(--muted);font-size:0.8em;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;}
+    .floor-btn.active{border-color:var(--gold);color:var(--gold);background:var(--bg3);}
+    .day-btn{padding:8px 14px;border-radius:8px;border:2px solid var(--border);background:var(--bg2);color:var(--muted);font-size:0.78em;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+    .day-btn.active{border-color:var(--red);color:#fff;background:var(--bg3);}
+    .map-svg-wrap{overflow-x:auto;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px;}
+    .map-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;font-size:0.72em;}
+    .legend-item{display:flex;align-items:center;gap:5px;color:var(--muted);}
+    .legend-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+    .map-table-modal{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:12px;display:none;}
+    .map-table-modal.show{display:block;}
+    .map-table-modal h3{color:var(--gold);font-size:0.9em;margin-bottom:8px;}
+    .table-att-list{display:flex;flex-direction:column;gap:4px;}
+    .table-att-item{font-size:0.78em;padding:5px 8px;background:var(--bg2);border-radius:6px;display:flex;justify-content:space-between;}
     .ev-selector{display:flex;gap:8px;margin-bottom:14px;}
     .ev-btn{flex:1;padding:10px;border-radius:8px;border:2px solid var(--border);background:var(--bg2);color:var(--muted);font-size:0.78em;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;}
     .ev-btn.active{border-color:var(--red);color:#fff;background:var(--bg3);}
-    .ev-btn .ev-date{font-size:1.1em;color:var(--gold);}
-    .ev-btn .ev-venue{font-size:0.75em;color:var(--muted);margin-top:2px;}
-
     @media(max-width:480px){
       .logo h1{font-size:1.5em;}
-      .tab{font-size:0.58em;padding:9px 2px;}
-      .field-row,.manual-grid{grid-template-columns:1fr;}
+      .tab{font-size:0.54em;padding:8px 1px;}
+      .field-row,.field-row-3{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -166,7 +147,7 @@
 <div class="header">
   <div class="logo">
     <div class="stars">★ ★ ★</div>
-    <h1><span class="az">AZ</span><span class="ucar">ÚCAR</span><span class="fest">FEST</span><span class="year">2026</span></h1>
+    <h1><span style="color:#fff;font-style:italic;">AZ</span><span style="color:#fff;font-style:italic;">ÚCAR</span><span class="fest"> FEST</span><span class="year">2026</span></h1>
     <p>Sistema de Tickets · info@azucardancestudio.com · 55 6607 7277</p>
   </div>
 </div>
@@ -180,33 +161,38 @@
   <div class="tab active"  onclick="showTab('dia1')">🗓️ 1 Ago<br>Foro SR</div>
   <div class="tab"         onclick="showTab('dia2')">🗓️ 2 Ago<br>Mambo</div>
   <div class="tab"         onclick="showTab('scanner')">📷<br>Escáner</div>
+  <div class="tab"         onclick="showTab('mapa')">🗺️<br>Mapa</div>
   <div class="tab"         onclick="showTab('dashboard')">📊<br>Dashboard</div>
 </div>
 
 <!-- ══════ DÍA 1 ══════ -->
 <div id="tab-dia1" class="page active">
   <span class="event-badge">SÁBADO 1 DE AGOSTO · 20:00 HRS · FORO SAN RAFAEL</span>
-  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Vendedor, Mesa — o cárgalos manualmente abajo.</div>
+  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Academia, Vendedor, Mesa, Planta — o cárgalos manualmente. <button class="btn btn-outline" style="margin-left:8px;" onclick="downloadTemplate()">⬇️ Plantilla Excel</button></div>
 
   <div class="upload-zone" id="uz1" onclick="document.getElementById('fi1').click()">
     <div class="icon">📂</div>
     <p><strong>Clic para subir Excel o CSV</strong></p>
-    <p style="margin-top:3px">Columnas: Nombre · Vendedor · Mesa</p>
+    <p style="margin-top:3px">Columnas: Nombre · Academia · Vendedor · Mesa · Planta</p>
   </div>
-  <input type="file" id="fi1" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia1')">
+  <input type="file" id="fi1" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia1')" style="display:none">
 
   <div class="divider">o agrega manualmente</div>
-  <div class="manual-grid">
-    <div><label>Nombre</label><input type="text" id="m1-nombre" placeholder="Juan Pérez"></div>
-    <div><label>Vendedor</label><input type="text" id="m1-vendedor" placeholder="Ana"></div>
-    <div><label>Mesa</label><input type="text" id="m1-mesa" placeholder="5"></div>
+  <div class="field-row">
+    <div class="field-group"><label>Nombre</label><input type="text" id="m1-nombre" placeholder="Juan Pérez"></div>
+    <div class="field-group"><label>Academia</label><input type="text" id="m1-academia" placeholder="Academia XYZ"></div>
+  </div>
+  <div class="field-row-3">
+    <div class="field-group"><label>Vendedor</label><input type="text" id="m1-vendedor" placeholder="Ana"></div>
+    <div class="field-group"><label>Mesa</label><input type="text" id="m1-mesa" placeholder="40"></div>
+    <div class="field-group"><label>Planta</label>
+      <select class="inp" id="m1-planta"><option value="">-- Seleccionar --</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
+    </div>
   </div>
   <button class="btn btn-red" onclick="addManual('dia1')">➕ Agregar Asistente</button>
 
   <div id="result-dia1" style="display:none;margin-top:12px;">
-    <div class="counter-box">
-      <div class="num" id="cnt1">0</div><p>asistentes registrados — Día 1</p>
-    </div>
+    <div class="counter-box"><div class="num" id="cnt1">0</div><p>asistentes registrados — Día 1</p></div>
   </div>
 
   <div style="margin-top:14px;">
@@ -216,11 +202,17 @@
       <div class="stat-card r"><div class="num" id="d1-pend">0</div><div class="lbl">Pendientes</div></div>
     </div>
     <div class="actions-row">
-      <button class="btn btn-outline" onclick="downloadAll('dia1')">📥 ZIP Tickets</button>
+      <button class="btn btn-outline" onclick="downloadAll('dia1')">📥 ZIP Todos</button>
+      <button class="btn btn-outline success" onclick="downloadFiltered('dia1')">📥 ZIP Filtrado</button>
       <button class="btn btn-outline danger" onclick="clearEvent('dia1')">🗑️ Limpiar</button>
     </div>
+    <div class="filter-row">
+      <select class="inp" id="f1-planta" onchange="renderList('dia1')"><option value="">Todas las plantas</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
+      <select class="inp" id="f1-academia" onchange="renderList('dia1')"><option value="">Todas las academias</option></select>
+      <select class="inp" id="f1-vendedor" onchange="renderList('dia1')"><option value="">Todos los vendedores</option></select>
+      <input type="text" id="sb1" placeholder="🔍 Buscar nombre…" oninput="renderList('dia1')">
+    </div>
     <div class="progress-wrap" id="pw1"><p id="pt1">Generando…</p><div class="progress"><div class="progress-bar" id="pb1"></div></div></div>
-    <div class="search-wrap"><input type="text" id="sb1" placeholder="🔍 Buscar…" oninput="renderList('dia1')"></div>
     <div class="attendee-list" id="list-dia1"><p class="empty-msg">Sin asistentes aún.</p></div>
   </div>
 </div>
@@ -228,27 +220,31 @@
 <!-- ══════ DÍA 2 ══════ -->
 <div id="tab-dia2" class="page">
   <span class="event-badge gold">DOMINGO 2 DE AGOSTO · 18:00 HRS · MAMBO CAFÉ INSURGENTES</span>
-  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Vendedor, Mesa — o cárgalos manualmente abajo.</div>
+  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Academia, Vendedor, Mesa, Planta — o cárgalos manualmente. <button class="btn btn-outline" style="margin-left:8px;" onclick="downloadTemplate()">⬇️ Plantilla Excel</button></div>
 
   <div class="upload-zone" id="uz2" onclick="document.getElementById('fi2').click()">
     <div class="icon">📂</div>
     <p><strong>Clic para subir Excel o CSV</strong></p>
-    <p style="margin-top:3px">Columnas: Nombre · Vendedor · Mesa</p>
+    <p style="margin-top:3px">Columnas: Nombre · Academia · Vendedor · Mesa · Planta</p>
   </div>
-  <input type="file" id="fi2" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia2')">
+  <input type="file" id="fi2" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia2')" style="display:none">
 
   <div class="divider">o agrega manualmente</div>
-  <div class="manual-grid">
-    <div><label>Nombre</label><input type="text" id="m2-nombre" placeholder="María García"></div>
-    <div><label>Vendedor</label><input type="text" id="m2-vendedor" placeholder="Pedro"></div>
-    <div><label>Mesa</label><input type="text" id="m2-mesa" placeholder="3"></div>
+  <div class="field-row">
+    <div class="field-group"><label>Nombre</label><input type="text" id="m2-nombre" placeholder="María García"></div>
+    <div class="field-group"><label>Academia</label><input type="text" id="m2-academia" placeholder="Academia XYZ"></div>
+  </div>
+  <div class="field-row-3">
+    <div class="field-group"><label>Vendedor</label><input type="text" id="m2-vendedor" placeholder="Pedro"></div>
+    <div class="field-group"><label>Mesa</label><input type="text" id="m2-mesa" placeholder="40"></div>
+    <div class="field-group"><label>Planta</label>
+      <select class="inp" id="m2-planta"><option value="">-- Seleccionar --</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
+    </div>
   </div>
   <button class="btn btn-gold" onclick="addManual('dia2')">➕ Agregar Asistente</button>
 
   <div id="result-dia2" style="display:none;margin-top:12px;">
-    <div class="counter-box">
-      <div class="num" id="cnt2">0</div><p>asistentes registrados — Día 2</p>
-    </div>
+    <div class="counter-box"><div class="num" id="cnt2">0</div><p>asistentes registrados — Día 2</p></div>
   </div>
 
   <div style="margin-top:14px;">
@@ -258,11 +254,17 @@
       <div class="stat-card r"><div class="num" id="d2-pend">0</div><div class="lbl">Pendientes</div></div>
     </div>
     <div class="actions-row">
-      <button class="btn btn-outline" onclick="downloadAll('dia2')">📥 ZIP Tickets</button>
+      <button class="btn btn-outline" onclick="downloadAll('dia2')">📥 ZIP Todos</button>
+      <button class="btn btn-outline success" onclick="downloadFiltered('dia2')">📥 ZIP Filtrado</button>
       <button class="btn btn-outline danger" onclick="clearEvent('dia2')">🗑️ Limpiar</button>
     </div>
+    <div class="filter-row">
+      <select class="inp" id="f2-planta" onchange="renderList('dia2')"><option value="">Todas las plantas</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
+      <select class="inp" id="f2-academia" onchange="renderList('dia2')"><option value="">Todas las academias</option></select>
+      <select class="inp" id="f2-vendedor" onchange="renderList('dia2')"><option value="">Todos los vendedores</option></select>
+      <input type="text" id="sb2" placeholder="🔍 Buscar nombre…" oninput="renderList('dia2')">
+    </div>
     <div class="progress-wrap" id="pw2"><p id="pt2">Generando…</p><div class="progress"><div class="progress-bar" id="pb2"></div></div></div>
-    <div class="search-wrap"><input type="text" id="sb2" placeholder="🔍 Buscar…" oninput="renderList('dia2')"></div>
     <div class="attendee-list" id="list-dia2"><p class="empty-msg">Sin asistentes aún.</p></div>
   </div>
 </div>
@@ -270,7 +272,7 @@
 <!-- ══════ ESCÁNER ══════ -->
 <div id="tab-scanner" class="page">
   <div class="scanner-wrap">
-    <div class="info-box"><strong>📱 Funciona para ambos días.</strong> El sistema detecta automáticamente a qué evento pertenece el QR y lo valida.</div>
+    <div class="info-box"><strong>📱 Funciona para ambos días.</strong> El sistema detecta automáticamente a qué evento pertenece el QR.</div>
     <div id="scan-start-view">
       <button class="start-cam-btn" onclick="startScanner()">📷 Iniciar Cámara</button>
     </div>
@@ -296,6 +298,30 @@
   </div>
 </div>
 
+<!-- ══════ MAPA ══════ -->
+<div id="tab-mapa" class="page">
+  <div class="map-controls">
+    <button class="floor-btn active" id="btn-baja" onclick="setFloor('baja')">🏠 Planta Baja</button>
+    <button class="floor-btn" id="btn-alta" onclick="setFloor('alta')">🏢 Planta Alta</button>
+    <button class="day-btn active" id="btn-map-d1" onclick="setMapDay('dia1')">Día 1</button>
+    <button class="day-btn" id="btn-map-d2" onclick="setMapDay('dia2')">Día 2</button>
+    <button class="day-btn" id="btn-map-all" onclick="setMapDay('all')">Ambos</button>
+  </div>
+  <div class="map-legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#2a2a2a;border:1px solid #555;"></div>Sin asistentes</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0d3d1a;border:1px solid #22763a;"></div>1–3 personas</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3d3000;border:1px solid var(--gold);"></div>4–7 personas</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3d0000;border:1px solid var(--red);"></div>8+ personas</div>
+  </div>
+  <div class="map-svg-wrap">
+    <svg id="map-svg" width="100%" preserveAspectRatio="xMinYMin meet" style="min-width:380px;cursor:pointer;"></svg>
+  </div>
+  <div class="map-table-modal" id="map-modal">
+    <h3 id="modal-title">Mesa —</h3>
+    <div class="table-att-list" id="modal-list"></div>
+  </div>
+</div>
+
 <!-- ══════ DASHBOARD ══════ -->
 <div id="tab-dashboard" class="page">
   <div class="stats-row">
@@ -311,8 +337,8 @@
   <div class="search-wrap"><input type="text" id="dsh-search" placeholder="🔍 Buscar en historial…" oninput="renderDashboard()"></div>
   <div class="dash-table-wrap">
     <table>
-      <thead><tr><th>#</th><th>Nombre</th><th>Vendedor</th><th>Mesa</th><th>Día</th><th>Hora</th></tr></thead>
-      <tbody id="dsh-body"><tr><td colspan="6" class="empty-msg">Sin registros aún.</td></tr></tbody>
+      <thead><tr><th>#</th><th>Nombre</th><th>Academia</th><th>Vendedor</th><th>Mesa</th><th>Planta</th><th>Día</th><th>Hora</th></tr></thead>
+      <tbody id="dsh-body"><tr><td colspan="8" class="empty-msg">Sin registros aún.</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -335,292 +361,391 @@ const FIREBASE_CONFIG = {
   databaseURL: "https://timbachata-d3287-default-rtdb.firebaseio.com",
   projectId:   "timbachata-d3287"
 };
-
 const EVENT_KEY = 'AZUCAR_FEST_2026';
 const FB_ROOT   = 'azucar-fest-2026';
-
 const EVENTS = {
-  dia1: {
-    label:   'Día 1 · Foro San Rafael',
-    day:     'SÁBADO',
-    date:    '1 DE AGOSTO,',
-    time:    '20:00 HRS.',
-    venue:   'Foro San Rafael',
-    addr:    'C. Francisco Pimentel 7B, San Rafael, Cuauhtémoc, CDMX',
-    color:   [192,0,10],
-    tagCls:  'd1'
-  },
-  dia2: {
-    label:   'Día 2 · Mambo Café Insurgentes',
-    day:     'DOMINGO',
-    date:    '2 DE AGOSTO,',
-    time:    '18:00 HRS.',
-    venue:   'Mambo Café Insurgentes',
-    addr:    'Av. de los Insurgentes Sur 644, Col. Del Valle Centro, CDMX',
-    color:   [180,120,0],
-    tagCls:  'd2'
-  }
+  dia1:{label:'Día 1 · Foro San Rafael',day:'SÁBADO',date:'1 DE AGOSTO,',time:'20:00 HRS.',venue:'Foro San Rafael',addr:'C. Francisco Pimentel 7B, San Rafael, Cuauhtémoc, CDMX',color:[192,0,10],tagCls:'d1'},
+  dia2:{label:'Día 2 · Mambo Café Insurgentes',day:'DOMINGO',date:'2 DE AGOSTO,',time:'18:00 HRS.',venue:'Mambo Café Insurgentes',addr:'Av. de los Insurgentes Sur 644, Col. Del Valle Centro, CDMX',color:[180,120,0],tagCls:'d2'}
 };
 
-// Data stores per event
-const data = { dia1: [], dia2: [] };
+// ══════════════════════════════════════════════
+// FLOOR MAP TABLE POSITIONS
+// ══════════════════════════════════════════════
+// Planta Baja — viewBox 0 0 600 390
+const MAPA_BAJA = [
+  // Fila superior 20-29
+  {n:'20',x:8,y:8,w:50,h:26},{n:'21',x:62,y:8,w:50,h:26},{n:'22',x:116,y:8,w:50,h:26},
+  {n:'23',x:170,y:8,w:50,h:26},{n:'24',x:224,y:8,w:50,h:26},{n:'25',x:278,y:8,w:50,h:26},
+  {n:'26',x:332,y:8,w:50,h:26},{n:'27',x:386,y:8,w:50,h:26},{n:'28',x:440,y:8,w:50,h:26},
+  {n:'29',x:494,y:8,w:98,h:26},
+  // Zona VIP 40-56 (izquierda)
+  {n:'40',x:8,y:48,w:56,h:26},{n:'41',x:70,y:48,w:56,h:26},{n:'42',x:132,y:48,w:56,h:26},
+  {n:'43',x:8,y:80,w:56,h:26},{n:'44',x:70,y:80,w:56,h:26},{n:'45',x:132,y:80,w:56,h:26},
+  {n:'46',x:8,y:112,w:56,h:26},{n:'47',x:70,y:112,w:56,h:26},{n:'48',x:132,y:112,w:56,h:26},
+  {n:'49',x:8,y:144,w:56,h:26},{n:'50',x:70,y:144,w:56,h:26},{n:'51',x:132,y:144,w:56,h:26},
+  {n:'52',x:8,y:176,w:56,h:26},{n:'53',x:70,y:176,w:56,h:26},{n:'54',x:132,y:176,w:56,h:26},
+  {n:'55',x:8,y:208,w:56,h:26},{n:'56',x:70,y:208,w:56,h:26},
+  // Zona centro 60-74
+  {n:'60',x:210,y:48,w:52,h:26},{n:'61',x:210,y:80,w:52,h:26},{n:'62',x:210,y:112,w:52,h:26},
+  {n:'63',x:210,y:144,w:52,h:26},{n:'64',x:210,y:176,w:52,h:26},
+  {n:'65',x:268,y:48,w:52,h:26},{n:'66',x:268,y:80,w:52,h:26},{n:'67',x:268,y:112,w:52,h:26},
+  {n:'68',x:268,y:144,w:52,h:26},{n:'69',x:268,y:176,w:52,h:26},
+  {n:'70',x:326,y:48,w:52,h:26},{n:'71',x:326,y:80,w:52,h:26},{n:'72',x:326,y:112,w:52,h:26},
+  {n:'73',x:326,y:144,w:52,h:26},{n:'74',x:326,y:176,w:52,h:26},
+  // Zona derecha 80-85
+  {n:'80',x:400,y:48,w:52,h:26},{n:'81',x:458,y:48,w:52,h:26},{n:'82',x:516,y:48,w:76,h:26},
+  {n:'83',x:400,y:80,w:52,h:26},{n:'84',x:458,y:80,w:52,h:26},{n:'85',x:516,y:80,w:76,h:26},
+  // Zona B 90-102 (derecha abajo)
+  {n:'90',x:400,y:120,w:52,h:26},{n:'91',x:458,y:120,w:52,h:26},{n:'92',x:516,y:120,w:76,h:26},
+  {n:'93',x:400,y:152,w:52,h:26},{n:'94',x:458,y:152,w:52,h:26},{n:'95',x:516,y:152,w:76,h:26},
+  {n:'96',x:400,y:184,w:52,h:26},{n:'97',x:458,y:184,w:52,h:26},{n:'98',x:516,y:184,w:76,h:26},
+  {n:'99',x:400,y:216,w:52,h:26},{n:'100',x:458,y:216,w:52,h:26},{n:'101',x:516,y:216,w:76,h:26},
+  {n:'102',x:400,y:248,w:52,h:26},
+  // Fila inferior 10-15
+  {n:'10',x:8,y:270,w:56,h:34},{n:'11',x:70,y:270,w:56,h:34},{n:'12',x:132,y:270,w:56,h:34},
+  {n:'14',x:194,y:270,w:56,h:34},{n:'15',x:256,y:270,w:56,h:34},
+];
+
+// Planta Alta — viewBox 0 0 600 320
+const MAPA_ALTA = [
+  // Zona lateral izq 204-209
+  {n:'204',x:8,y:8,w:56,h:26},{n:'207',x:70,y:8,w:56,h:26},
+  {n:'205',x:8,y:40,w:56,h:26},{n:'208',x:70,y:40,w:56,h:26},
+  {n:'206',x:8,y:72,w:56,h:26},{n:'209',x:70,y:72,w:56,h:26},
+  // Zona 300-305 (cabina DJ)
+  {n:'300',x:155,y:8,w:56,h:26},{n:'303',x:217,y:8,w:56,h:26},
+  {n:'301',x:155,y:40,w:56,h:26},{n:'304',x:217,y:40,w:56,h:26},
+  {n:'302',x:155,y:72,w:56,h:26},{n:'305',x:217,y:72,w:56,h:26},
+  // Zona 400-409
+  {n:'400',x:295,y:8,w:56,h:26},{n:'401',x:357,y:8,w:56,h:26},
+  {n:'402',x:295,y:40,w:56,h:26},{n:'403',x:357,y:40,w:56,h:26},
+  {n:'404',x:295,y:72,w:56,h:26},{n:'405',x:357,y:72,w:56,h:26},
+  {n:'406',x:295,y:104,w:56,h:26},{n:'407',x:357,y:104,w:56,h:26},
+  {n:'408',x:295,y:136,w:56,h:26},{n:'409',x:357,y:136,w:56,h:26},
+  // Zona 500-512
+  {n:'500',x:435,y:8,w:56,h:26},{n:'501',x:497,y:8,w:95,h:26},
+  {n:'502',x:435,y:40,w:56,h:26},{n:'503',x:497,y:40,w:95,h:26},
+  {n:'504',x:435,y:72,w:56,h:26},{n:'505',x:497,y:72,w:95,h:26},
+  {n:'506',x:435,y:104,w:56,h:26},{n:'507',x:497,y:104,w:95,h:26},
+  {n:'508',x:435,y:136,w:56,h:26},{n:'509',x:497,y:136,w:95,h:26},
+  {n:'510',x:435,y:168,w:56,h:26},{n:'511',x:497,y:168,w:95,h:26},
+  {n:'512',x:435,y:200,w:56,h:26},
+  // Zona 200-203 (grandes, fondo)
+  {n:'200',x:8,y:240,w:72,h:40},{n:'201',x:86,y:240,w:72,h:40},
+  {n:'202',x:164,y:240,w:72,h:40},{n:'203',x:242,y:240,w:72,h:40},
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const data = {dia1:[],dia2:[]};
 let history = [];
 let db = null;
-let scanStream = null, scanning = false;
-let lastScanId = null, lastScanTime = 0;
-let barcodeDetector = null;
+let scanStream=null, scanning=false;
+let lastScanId=null, lastScanTime=0;
+let barcodeDetector=null;
+let mapFloor='baja', mapDay='dia1';
 
 // ══════════════════════════════════════════════
 // FIREBASE
 // ══════════════════════════════════════════════
-function initFirebase() {
-  try {
-    const app = firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.database(app);
-    db.ref('.info/connected').on('value', snap => {
-      if (snap.val()) {
-        setFB('ok', '🟢 Conectado — datos sincronizados en todos los dispositivos');
-        startListeners();
-      } else {
-        setFB('err', '🔴 Sin conexión — verifica internet');
-      }
+function initFirebase(){
+  try{
+    const app=firebase.apps.length?firebase.apps[0]:firebase.initializeApp(FIREBASE_CONFIG);
+    db=firebase.database(app);
+    db.ref('.info/connected').on('value',snap=>{
+      if(snap.val()){setFB('ok','🟢 Conectado — datos sincronizados en todos los dispositivos');startListeners();}
+      else setFB('err','🔴 Sin conexión — verifica internet');
     });
-  } catch(e) { setFB('err', 'Error Firebase: ' + e.message); }
+  }catch(e){setFB('err','Error Firebase: '+e.message);}
 }
-
-function startListeners() {
-  ['dia1','dia2'].forEach(ev => {
-    db.ref(FB_ROOT+'/'+ev+'/attendees').on('value', snap => {
-      const d = snap.val();
-      data[ev] = d ? Object.values(d) : [];
-      saveLocal(ev);
-      renderList(ev);
+function startListeners(){
+  ['dia1','dia2'].forEach(ev=>{
+    db.ref(FB_ROOT+'/'+ev+'/attendees').on('value',snap=>{
+      const d=snap.val();
+      data[ev]=d?Object.values(d):[];
+      saveLocal(ev);renderList(ev);populateFilters(ev);
     });
   });
-  db.ref(FB_ROOT+'/checkins').on('value', snap => {
-    const d = snap.val();
-    history = d ? Object.values(d).sort((a,b)=>b.checkInTime-a.checkInTime) : [];
-    saveHistory();
-    renderDashboard();
-    renderRecent();
+  db.ref(FB_ROOT+'/checkins').on('value',snap=>{
+    const d=snap.val();
+    history=d?Object.values(d).sort((a,b)=>b.checkInTime-a.checkInTime):[];
+    saveHistory();renderDashboard();renderRecent();
   });
 }
-
-function setFB(type, msg) {
-  document.getElementById('fb-dot').className = 'fb-dot ' + type;
-  document.getElementById('fb-txt').textContent = msg;
+function setFB(type,msg){
+  document.getElementById('fb-dot').className='fb-dot '+type;
+  document.getElementById('fb-txt').textContent=msg;
 }
 
 // ══════════════════════════════════════════════
 // LOCAL STORAGE
 // ══════════════════════════════════════════════
-function saveLocal(ev)  { try { localStorage.setItem('af26_'+ev, JSON.stringify(data[ev])); } catch{} }
-function saveHistory()  { try { localStorage.setItem('af26_history', JSON.stringify(history)); } catch{} }
-function loadLocal() {
-  try {
-    ['dia1','dia2'].forEach(ev => {
-      const d = localStorage.getItem('af26_'+ev);
-      if(d) data[ev] = JSON.parse(d);
-    });
-    const h = localStorage.getItem('af26_history');
-    if(h) history = JSON.parse(h);
-  } catch{}
+function saveLocal(ev){try{localStorage.setItem('af26_'+ev,JSON.stringify(data[ev]));}catch{}}
+function saveHistory(){try{localStorage.setItem('af26_history',JSON.stringify(history));}catch{}}
+function loadLocal(){
+  try{
+    ['dia1','dia2'].forEach(ev=>{const d=localStorage.getItem('af26_'+ev);if(d)data[ev]=JSON.parse(d);});
+    const h=localStorage.getItem('af26_history');if(h)history=JSON.parse(h);
+  }catch{}
 }
 
 // ══════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════
-function genId(ev, name, idx) {
-  const str = EVENT_KEY+'|'+ev+'|'+idx+'|'+name;
-  let h = 0x811c9dc5;
+function genId(ev,name,idx){
+  const str=EVENT_KEY+'|'+ev+'|'+idx+'|'+name;
+  let h=0x811c9dc5;
   for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=(h*0x01000193)>>>0;}
   return h.toString(36).toUpperCase().padStart(7,'0');
 }
-function qrPayload(ev, a) { return EVENT_KEY+'|'+ev+'|'+a.id+'|'+a.nombre; }
-function parseQR(txt) {
-  const p = txt.split('|');
-  if(p.length>=4 && p[0]===EVENT_KEY && (p[1]==='dia1'||p[1]==='dia2'))
-    return {ok:true, ev:p[1], id:p[2], nombre:p.slice(3).join('|')};
-  return {ok:false};
+function qrPayload(ev,a){return EVENT_KEY+'|'+ev+'|'+a.id+'|'+a.nombre;}
+function parseQR(txt){
+  const p=txt.split('|');
+  if(p.length>=4&&p[0]===EVENT_KEY&&(p[1]==='dia1'||p[1]==='dia2'))
+    return{ok:true,ev:p[1],id:p[2],nombre:p.slice(3).join('|')};
+  return{ok:false};
 }
-function fmtTime(ts)  { return ts ? new Date(ts).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}) : ''; }
-function fmtDate(ts)  { return ts ? new Date(ts).toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'}) : ''; }
-function escH(s)      { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtTime(ts){return ts?new Date(ts).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):''}
+function fmtDate(ts){return ts?new Date(ts).toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'}):''}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 // ══════════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════════
-function showTab(id) {
-  ['dia1','dia2','scanner','dashboard'].forEach((t,i)=>{
-    document.querySelectorAll('.tab')[i].classList.toggle('active', t===id);
+function showTab(id){
+  const tabs=['dia1','dia2','scanner','mapa','dashboard'];
+  tabs.forEach((t,i)=>{
+    document.querySelectorAll('.tab')[i].classList.toggle('active',t===id);
   });
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  if(id==='dia1')      renderList('dia1');
-  if(id==='dia2')      renderList('dia2');
-  if(id==='dashboard') renderDashboard();
-  if(id==='scanner')   renderRecent();
-  if(id!=='scanner')   stopScanner();
+  if(id==='dia1'){renderList('dia1');}
+  if(id==='dia2'){renderList('dia2');}
+  if(id==='dashboard'){renderDashboard();}
+  if(id==='scanner'){renderRecent();}
+  if(id==='mapa'){renderMap();}
+  if(id!=='scanner'){stopScanner();}
+}
+
+// ══════════════════════════════════════════════
+// PLANTILLA EXCEL
+// ══════════════════════════════════════════════
+function downloadTemplate(){
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet([
+    ['NOMBRE','ACADEMIA','VENDEDOR','MESA','PLANTA'],
+    ['Juan Pérez','Academia XYZ','Ana','40','Baja'],
+    ['María García','Studio ABC','Pedro','201','Alta'],
+  ]);
+  ws['!cols']=[{wch:25},{wch:20},{wch:15},{wch:8},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,ws,'Asistentes');
+  XLSX.writeFile(wb,'Plantilla_AzucarFest.xlsx');
 }
 
 // ══════════════════════════════════════════════
 // CARGAR DATOS
 // ══════════════════════════════════════════════
-function handleFile(e, ev) {
-  const f = e.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = evt => {
-    const raw = evt.target.result;
-    let rows = [];
-    if(f.name.match(/\.(csv|txt)$/i)) {
-      const lines = new TextDecoder().decode(raw).split(/\r?\n/);
-      rows = lines.map(l => l.split(',').map(c=>c.replace(/["']/g,'').trim()));
-    } else {
-      const wb = XLSX.read(raw,{type:'array'});
-      rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});
+function handleFile(e,ev){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=evt=>{
+    const raw=evt.target.result;
+    let rows=[];
+    if(f.name.match(/\.(csv|txt)$/i)){
+      const lines=new TextDecoder().decode(raw).split(/\r?\n/);
+      rows=lines.map(l=>l.split(',').map(c=>c.replace(/["']/g,'').trim()));
+    }else{
+      const wb=XLSX.read(raw,{type:'array'});
+      rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});
     }
-    // Detectar header
-    const first = rows[0] ? rows[0].map(c=>String(c).toLowerCase()) : [];
-    const hasHeader = first.some(c=>c.includes('nombre')||c.includes('vendedor')||c.includes('mesa')||c.includes('name'));
-    const start = hasHeader ? 1 : 0;
-    // Detectar columnas
-    let iNombre=0, iVendedor=1, iMesa=2;
+    const first=rows[0]?rows[0].map(c=>String(c).toLowerCase()):[];
+    const hasHeader=first.some(c=>c.includes('nombre')||c.includes('vendedor')||c.includes('mesa')||c.includes('academia'));
+    const start=hasHeader?1:0;
+    let iNombre=0,iAcademia=1,iVendedor=2,iMesa=3,iPlanta=4;
     if(hasHeader){
       first.forEach((c,i)=>{
-        if(c.includes('nombre')||c.includes('name')) iNombre=i;
-        else if(c.includes('vendedor')||c.includes('seller')) iVendedor=i;
-        else if(c.includes('mesa')||c.includes('table')) iMesa=i;
+        if(c.includes('nombre')||c.includes('name'))iNombre=i;
+        else if(c.includes('academia'))iAcademia=i;
+        else if(c.includes('vendedor')||c.includes('seller'))iVendedor=i;
+        else if(c.includes('mesa')||c.includes('table'))iMesa=i;
+        else if(c.includes('planta')||c.includes('floor'))iPlanta=i;
       });
     }
-    const records = rows.slice(start)
-      .map(r=>({nombre:String(r[iNombre]||'').trim(), vendedor:String(r[iVendedor]||'').trim(), mesa:String(r[iMesa]||'').trim()}))
+    const records=rows.slice(start)
+      .map(r=>({
+        nombre:String(r[iNombre]||'').trim(),
+        academia:String(r[iAcademia]||'').trim(),
+        vendedor:String(r[iVendedor]||'').trim(),
+        mesa:String(r[iMesa]||'').trim(),
+        planta:String(r[iPlanta]||'').trim()
+      }))
       .filter(r=>r.nombre);
     if(!records.length){alert('No se encontraron datos válidos.');return;}
-    processRecords(ev, records);
+    processRecords(ev,records);
   };
   r.readAsArrayBuffer(f);
   e.target.value='';
 }
 
-function addManual(ev) {
-  const n = document.getElementById('m'+ev.slice(-1)+'-nombre').value.trim();
-  const v = document.getElementById('m'+ev.slice(-1)+'-vendedor').value.trim();
-  const m = document.getElementById('m'+ev.slice(-1)+'-mesa').value.trim();
-  if(!n){alert('El nombre es obligatorio.');return;}
-  processRecords(ev,[{nombre:n,vendedor:v,mesa:m}]);
-  document.getElementById('m'+ev.slice(-1)+'-nombre').value='';
-  document.getElementById('m'+ev.slice(-1)+'-vendedor').value='';
-  document.getElementById('m'+ev.slice(-1)+'-mesa').value='';
+function addManual(ev){
+  const n=ev.slice(-1);
+  const nombre=document.getElementById('m'+n+'-nombre').value.trim();
+  const academia=document.getElementById('m'+n+'-academia').value.trim();
+  const vendedor=document.getElementById('m'+n+'-vendedor').value.trim();
+  const mesa=document.getElementById('m'+n+'-mesa').value.trim();
+  const planta=document.getElementById('m'+n+'-planta').value.trim();
+  if(!nombre){alert('El nombre es obligatorio.');return;}
+  processRecords(ev,[{nombre,academia,vendedor,mesa,planta}]);
+  ['nombre','academia','vendedor','mesa'].forEach(f=>document.getElementById('m'+n+'-'+f).value='');
+  document.getElementById('m'+n+'-planta').value='';
 }
 
-function processRecords(ev, records) {
-  const existingNames = new Set(data[ev].map(a=>a.nombre.toLowerCase().trim()));
-  const startIdx = data[ev].length;
-  const newOnes = [];
-  records.forEach((rec, i) => {
-    if(existingNames.has(rec.nombre.toLowerCase().trim())) return;
+function processRecords(ev,records){
+  const existingNames=new Set(data[ev].map(a=>a.nombre.toLowerCase().trim()));
+  const startIdx=data[ev].length;
+  const newOnes=[];
+  records.forEach((rec,i)=>{
+    if(existingNames.has(rec.nombre.toLowerCase().trim()))return;
     existingNames.add(rec.nombre.toLowerCase().trim());
-    const globalIdx = startIdx + newOnes.length;
-    const id = genId(ev, rec.nombre, globalIdx);
-    newOnes.push({id, folio:String(globalIdx+1).padStart(4,'0'), nombre:rec.nombre, vendedor:rec.vendedor||'—', mesa:rec.mesa||'—', checkedIn:false, checkInTime:null});
+    const globalIdx=startIdx+newOnes.length;
+    const id=genId(ev,rec.nombre,globalIdx);
+    newOnes.push({
+      id,folio:String(globalIdx+1).padStart(4,'0'),
+      nombre:rec.nombre,academia:rec.academia||'—',
+      vendedor:rec.vendedor||'—',mesa:rec.mesa||'—',
+      planta:rec.planta||'—',checkedIn:false,checkInTime:null
+    });
   });
   if(!newOnes.length){alert('Todos los nombres ya están en la lista.');return;}
-  data[ev] = [...data[ev], ...newOnes];
+  data[ev]=[...data[ev],...newOnes];
   saveLocal(ev);
-  if(db){
-    const fbData={};
-    newOnes.forEach(a=>{fbData[a.id]=a;});
-    db.ref(FB_ROOT+'/'+ev+'/attendees').update(fbData).catch(e=>console.warn(e));
-  }
-  const n = ev.slice(-1);
-  document.getElementById('cnt'+n).textContent = data[ev].length;
+  if(db){const fbData={};newOnes.forEach(a=>{fbData[a.id]=a;});db.ref(FB_ROOT+'/'+ev+'/attendees').update(fbData).catch(e=>console.warn(e));}
+  const n=ev.slice(-1);
+  document.getElementById('cnt'+n).textContent=data[ev].length;
   document.getElementById('result-'+ev).style.display='block';
-  if(newOnes.length < records.length)
-    alert(`✅ ${newOnes.length} agregado(s). ${records.length-newOnes.length} ya estaban en la lista.`);
+  if(newOnes.length<records.length)alert(`✅ ${newOnes.length} agregado(s). ${records.length-newOnes.length} ya estaban en la lista.`);
+  populateFilters(ev);
   renderList(ev);
+}
+
+// ══════════════════════════════════════════════
+// FILTROS
+// ══════════════════════════════════════════════
+function populateFilters(ev){
+  const n=ev.slice(-1);
+  const arr=data[ev];
+  const academias=[...new Set(arr.map(a=>a.academia||'—').filter(a=>a&&a!=='—'))].sort();
+  const vendedores=[...new Set(arr.map(a=>a.vendedor||'—').filter(v=>v&&v!=='—'))].sort();
+  const selA=document.getElementById('f'+n+'-academia');
+  const selV=document.getElementById('f'+n+'-vendedor');
+  const curA=selA.value, curV=selV.value;
+  selA.innerHTML='<option value="">Todas las academias</option>'+academias.map(a=>`<option value="${escH(a)}">${escH(a)}</option>`).join('');
+  selV.innerHTML='<option value="">Todos los vendedores</option>'+vendedores.map(v=>`<option value="${escH(v)}">${escH(v)}</option>`).join('');
+  if(curA)selA.value=curA;
+  if(curV)selV.value=curV;
+}
+
+function getFilteredData(ev){
+  const n=ev.slice(-1);
+  const q=(document.getElementById('sb'+n)?.value||'').toLowerCase();
+  const fPlanta=(document.getElementById('f'+n+'-planta')?.value||'');
+  const fAcademia=(document.getElementById('f'+n+'-academia')?.value||'');
+  const fVendedor=(document.getElementById('f'+n+'-vendedor')?.value||'');
+  return data[ev].filter(a=>{
+    if(fPlanta&&(a.planta||'')!==fPlanta)return false;
+    if(fAcademia&&(a.academia||'—')!==fAcademia)return false;
+    if(fVendedor&&(a.vendedor||'—')!==fVendedor)return false;
+    if(q&&!a.nombre.toLowerCase().includes(q)&&!(a.vendedor||'').toLowerCase().includes(q)&&!(a.mesa||'').toLowerCase().includes(q))return false;
+    return true;
+  });
 }
 
 // ══════════════════════════════════════════════
 // RENDER LISTA
 // ══════════════════════════════════════════════
-function renderList(ev) {
-  const n = ev.slice(-1);
-  const q = (document.getElementById('sb'+n)?.value||'').toLowerCase();
-  const arr = data[ev];
-  const checked = arr.filter(a=>a.checkedIn).length;
-  document.getElementById('d'+n+'-total').textContent = arr.length;
-  document.getElementById('d'+n+'-in').textContent    = checked;
-  document.getElementById('d'+n+'-pend').textContent  = arr.length-checked;
-  const cnt = document.getElementById('cnt'+n);
-  if(cnt) cnt.textContent = arr.length;
-  if(arr.length) document.getElementById('result-'+ev).style.display='block';
-  const filtered = arr.filter(a=>a.nombre.toLowerCase().includes(q)||a.vendedor.toLowerCase().includes(q)||a.mesa.toLowerCase().includes(q));
-  const el = document.getElementById('list-'+ev);
-  if(!filtered.length){el.innerHTML=`<p class="empty-msg">${arr.length?'Sin resultados.':'Sin asistentes aún.'}</p>`;return;}
-  el.innerHTML = filtered.map(a=>`
+function renderList(ev){
+  const n=ev.slice(-1);
+  const arr=data[ev];
+  const checked=arr.filter(a=>a.checkedIn).length;
+  document.getElementById('d'+n+'-total').textContent=arr.length;
+  document.getElementById('d'+n+'-in').textContent=checked;
+  document.getElementById('d'+n+'-pend').textContent=arr.length-checked;
+  const cnt=document.getElementById('cnt'+n);
+  if(cnt)cnt.textContent=arr.length;
+  if(arr.length)document.getElementById('result-'+ev).style.display='block';
+  const filtered=getFilteredData(ev);
+  const el=document.getElementById('list-'+ev);
+  if(!filtered.length){el.innerHTML=`<p class="empty-msg">${arr.length?'Sin resultados para esos filtros.':'Sin asistentes aún.'}</p>`;return;}
+  el.innerHTML=filtered.map(a=>`
     <div class="attendee-card ${a.checkedIn?'in':''}">
       <div class="a-info">
         <div class="a-name">${escH(a.nombre)}</div>
-        <div class="a-meta">Folio #${a.folio} · Vendedor: ${escH(a.vendedor)} · Mesa: ${escH(a.mesa)}${a.checkedIn?' · Ingresó '+fmtTime(a.checkInTime):''}</div>
+        <div class="a-meta">Folio #${a.folio} · ${escH(a.academia||'—')} · ${escH(a.vendedor||'—')} · Mesa ${escH(a.mesa||'—')} · Planta ${escH(a.planta||'—')}${a.checkedIn?' · ✅ '+fmtTime(a.checkInTime):''}</div>
       </div>
       <div class="a-actions">
         <span class="badge ${a.checkedIn?'badge-ok':'badge-pend'}">${a.checkedIn?'✓ OK':'Pend.'}</span>
         <button class="btn btn-outline" onclick="downloadOne('${ev}','${a.id}',this)">⬇️</button>
-        <button class="btn btn-outline danger" onclick="deleteOne('${ev}','${a.id}','${escH(a.nombre)}')">🗑️</button>
+        <button class="btn btn-outline danger" onclick="deleteOne('${ev}','${a.id}','${escH(a.nombre).replace(/'/g,"\\'")}')">🗑️</button>
       </div>
     </div>
   `).join('');
 }
 
-function deleteOne(ev, id, nombre) {
-  if(!confirm(`¿Eliminar a "${nombre}" de la lista?`)) return;
-  data[ev] = data[ev].filter(a=>a.id!==id);
+function deleteOne(ev,id,nombre){
+  if(!confirm(`¿Eliminar a "${nombre}" de la lista?`))return;
+  data[ev]=data[ev].filter(a=>a.id!==id);
   saveLocal(ev);
-  if(db) db.ref(FB_ROOT+'/'+ev+'/attendees/'+id).remove();
-  renderList(ev);
+  if(db)db.ref(FB_ROOT+'/'+ev+'/attendees/'+id).remove();
+  populateFilters(ev);renderList(ev);
 }
-
-function clearEvent(ev) {
-  if(!confirm(`¿Borrar toda la lista del ${ev==='dia1'?'Día 1':'Día 2'}?`)) return;
+function clearEvent(ev){
+  if(!confirm(`¿Borrar toda la lista del ${ev==='dia1'?'Día 1':'Día 2'}?`))return;
   data[ev]=[];saveLocal(ev);
-  if(db) db.ref(FB_ROOT+'/'+ev+'/attendees').remove();
-  renderList(ev);
+  if(db)db.ref(FB_ROOT+'/'+ev+'/attendees').remove();
+  populateFilters(ev);renderList(ev);
   document.getElementById('result-'+ev).style.display='none';
 }
 
 // ══════════════════════════════════════════════
 // DASHBOARD
 // ══════════════════════════════════════════════
-function renderDashboard() {
-  const total = data.dia1.length + data.dia2.length;
-  const inD1  = history.filter(h=>h.ev==='dia1').length;
-  const inD2  = history.filter(h=>h.ev==='dia2').length;
-  const pct   = total ? Math.round((inD1+inD2)/total*100) : 0;
-  document.getElementById('dsh-total').textContent = total;
-  document.getElementById('dsh-d1').textContent    = inD1;
-  document.getElementById('dsh-d2').textContent    = inD2;
-  document.getElementById('dsh-pct').textContent   = pct+'%';
-  const q = (document.getElementById('dsh-search')?.value||'').toLowerCase();
-  const filtered = history.filter(h=>h.nombre.toLowerCase().includes(q)||h.vendedor.toLowerCase().includes(q)||(h.mesa||'').toLowerCase().includes(q));
-  const tb = document.getElementById('dsh-body');
-  if(!filtered.length){tb.innerHTML='<tr><td colspan="6" class="empty-msg">Sin registros aún.</td></tr>';return;}
-  tb.innerHTML = filtered.map((h,i)=>`
+function renderDashboard(){
+  const total=data.dia1.length+data.dia2.length;
+  const inD1=history.filter(h=>h.ev==='dia1').length;
+  const inD2=history.filter(h=>h.ev==='dia2').length;
+  const pct=total?Math.round((inD1+inD2)/total*100):0;
+  document.getElementById('dsh-total').textContent=total;
+  document.getElementById('dsh-d1').textContent=inD1;
+  document.getElementById('dsh-d2').textContent=inD2;
+  document.getElementById('dsh-pct').textContent=pct+'%';
+  const q=(document.getElementById('dsh-search')?.value||'').toLowerCase();
+  const filtered=history.filter(h=>
+    h.nombre.toLowerCase().includes(q)||
+    (h.vendedor||'').toLowerCase().includes(q)||
+    (h.academia||'').toLowerCase().includes(q)||
+    (h.mesa||'').toLowerCase().includes(q)
+  );
+  const tb=document.getElementById('dsh-body');
+  if(!filtered.length){tb.innerHTML='<tr><td colspan="8" class="empty-msg">Sin registros aún.</td></tr>';return;}
+  tb.innerHTML=filtered.map((h,i)=>`
     <tr>
       <td>${i+1}</td>
       <td class="tag-in">${escH(h.nombre)}</td>
+      <td>${escH(h.academia||'—')}</td>
       <td>${escH(h.vendedor||'—')}</td>
       <td>${escH(h.mesa||'—')}</td>
+      <td>${escH(h.planta||'—')}</td>
       <td><span class="ev-tag ${h.ev==='dia1'?'d1':'d2'}">${h.ev==='dia1'?'Ago 1':'Ago 2'}</span></td>
       <td>${fmtTime(h.checkInTime)}</td>
     </tr>
   `).join('');
 }
-
-function renderRecent() {
-  const el = document.getElementById('recent-list');
-  const recent = history.slice(0,15);
+function renderRecent(){
+  const el=document.getElementById('recent-list');
+  const recent=history.slice(0,15);
   if(!recent.length){el.innerHTML='<p class="empty-msg" style="padding:8px;">Sin registros aún.</p>';return;}
-  el.innerHTML = recent.map(h=>`
+  el.innerHTML=recent.map(h=>`
     <div class="recent-item">
       <span>${escH(h.nombre)}</span>
       <div class="ri-right">
@@ -630,228 +755,361 @@ function renderRecent() {
     </div>
   `).join('');
 }
-
-function exportDashboard() {
+function exportDashboard(){
   if(!history.length){alert('Sin registros.');return;}
   const wb=XLSX.utils.book_new();
-  const rows=[['#','Nombre','Vendedor','Mesa','Evento','Fecha','Hora']];
+  const rows=[['#','Nombre','Academia','Vendedor','Mesa','Planta','Evento','Fecha','Hora']];
   [...history].sort((a,b)=>a.checkInTime-b.checkInTime).forEach((h,i)=>{
-    rows.push([i+1,h.nombre,h.vendedor||'—',h.mesa||'—',h.ev==='dia1'?'1 Ago · Foro SR':'2 Ago · Mambo Café',fmtDate(h.checkInTime),fmtTime(h.checkInTime)]);
+    rows.push([i+1,h.nombre,h.academia||'—',h.vendedor||'—',h.mesa||'—',h.planta||'—',h.ev==='dia1'?'1 Ago · Foro SR':'2 Ago · Mambo Café',fmtDate(h.checkInTime),fmtTime(h.checkInTime)]);
   });
   const ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[{wch:4},{wch:28},{wch:16},{wch:8},{wch:20},{wch:12},{wch:8}];
+  ws['!cols']=[{wch:4},{wch:28},{wch:20},{wch:16},{wch:8},{wch:8},{wch:20},{wch:12},{wch:8}];
   XLSX.utils.book_append_sheet(wb,ws,'Entradas');
   XLSX.writeFile(wb,'Dashboard_AzucarFest_'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
-
-function clearHistory() {
-  if(!confirm('¿Borrar todo el historial de entradas?')) return;
+function clearHistory(){
+  if(!confirm('¿Borrar todo el historial de entradas?'))return;
   history=[];saveHistory();
-  if(db) db.ref(FB_ROOT+'/checkins').remove();
+  if(db)db.ref(FB_ROOT+'/checkins').remove();
   renderDashboard();renderRecent();
+}
+
+// ══════════════════════════════════════════════
+// MAPA INTERACTIVO
+// ══════════════════════════════════════════════
+function setFloor(f){
+  mapFloor=f;
+  document.getElementById('btn-baja').classList.toggle('active',f==='baja');
+  document.getElementById('btn-alta').classList.toggle('active',f==='alta');
+  renderMap();
+}
+function setMapDay(d){
+  mapDay=d;
+  ['dia1','dia2','all'].forEach(k=>{
+    document.getElementById('btn-map-'+k.replace('dia','d').replace('all','all')).classList.toggle('active',k===d);
+  });
+  renderMap();
+}
+
+function getTableCount(tableNum){
+  const evs=mapDay==='all'?['dia1','dia2']:mapDay==='dia1'?['dia1']:['dia2'];
+  let count=0;
+  evs.forEach(ev=>{
+    data[ev].forEach(a=>{
+      if(String(a.mesa||'').trim()===String(tableNum))count++;
+    });
+  });
+  return count;
+}
+function getTableAttendees(tableNum){
+  const evs=mapDay==='all'?['dia1','dia2']:mapDay==='dia1'?['dia1']:['dia2'];
+  const list=[];
+  evs.forEach(ev=>{
+    data[ev].forEach(a=>{
+      if(String(a.mesa||'').trim()===String(tableNum))list.push({...a,ev});
+    });
+  });
+  return list;
+}
+
+function tableColor(count){
+  if(count===0)return{fill:'#2a2a2a',stroke:'#555',text:'#888'};
+  if(count<=3) return{fill:'#0d3d1a',stroke:'#22763a',text:'#5ec87a'};
+  if(count<=7) return{fill:'#3d3000',stroke:'#c8a000',text:'#f5c518'};
+  return{fill:'#3d0000',stroke:'#c0000a',text:'#ff4444'};
+}
+
+function renderMap(){
+  const tables=mapFloor==='baja'?MAPA_BAJA:MAPA_ALTA;
+  const vbW=600, vbH=mapFloor==='baja'?320:290;
+  const svg=document.getElementById('map-svg');
+  svg.setAttribute('viewBox',`0 0 ${vbW} ${vbH}`);
+  svg.innerHTML='';
+
+  const ns='http://www.w3.org/2000/svg';
+
+  // Background grid lines (subtle)
+  const gridG=document.createElementNS(ns,'g');
+  gridG.setAttribute('opacity','0.07');
+  for(let x=0;x<vbW;x+=30){const l=document.createElementNS(ns,'line');l.setAttribute('x1',x);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',vbH);l.setAttribute('stroke','#888');gridG.appendChild(l);}
+  for(let y=0;y<vbH;y+=30){const l=document.createElementNS(ns,'line');l.setAttribute('x1',0);l.setAttribute('y1',y);l.setAttribute('x2',vbW);l.setAttribute('y2',y);l.setAttribute('stroke','#888');gridG.appendChild(l);}
+  svg.appendChild(gridG);
+
+  // Floor label
+  const lbl=document.createElementNS(ns,'text');
+  lbl.setAttribute('x',vbW-6);lbl.setAttribute('y',vbH-6);
+  lbl.setAttribute('text-anchor','end');lbl.setAttribute('font-size','10');
+  lbl.setAttribute('fill','#444');lbl.textContent=mapFloor==='baja'?'PLANTA BAJA':'PLANTA ALTA';
+  svg.appendChild(lbl);
+
+  // DJ booth label for Alta
+  if(mapFloor==='alta'){
+    const dj=document.createElementNS(ns,'rect');
+    dj.setAttribute('x',295-10);dj.setAttribute('y',120);dj.setAttribute('width',280);dj.setAttribute('height',106);
+    dj.setAttribute('fill','rgba(90,10,10,0.15)');dj.setAttribute('stroke','rgba(150,20,20,0.3)');dj.setAttribute('stroke-dasharray','4,3');dj.setAttribute('rx','4');
+    svg.appendChild(dj);
+    const djt=document.createElementNS(ns,'text');djt.setAttribute('x',435);djt.setAttribute('y',235);
+    djt.setAttribute('text-anchor','middle');djt.setAttribute('font-size','9');djt.setAttribute('fill','rgba(200,50,50,0.5)');djt.textContent='ZONA 400-500';
+    svg.appendChild(djt);
+  }
+
+  // Tables
+  tables.forEach(t=>{
+    const count=getTableCount(t.n);
+    const col=tableColor(count);
+    const g=document.createElementNS(ns,'g');
+    g.style.cursor='pointer';
+
+    const rect=document.createElementNS(ns,'rect');
+    rect.setAttribute('x',t.x);rect.setAttribute('y',t.y);
+    rect.setAttribute('width',t.w);rect.setAttribute('height',t.h);
+    rect.setAttribute('rx','4');rect.setAttribute('fill',col.fill);
+    rect.setAttribute('stroke',col.stroke);rect.setAttribute('stroke-width','1.5');
+    g.appendChild(rect);
+
+    // Table number
+    const numT=document.createElementNS(ns,'text');
+    numT.setAttribute('x',t.x+t.w/2);numT.setAttribute('y',t.y+t.h*0.48);
+    numT.setAttribute('text-anchor','middle');numT.setAttribute('dominant-baseline','middle');
+    numT.setAttribute('font-size',t.w>60?'9':'8');numT.setAttribute('font-weight','bold');
+    numT.setAttribute('fill',col.text);numT.textContent=t.n;
+    g.appendChild(numT);
+
+    // Count badge
+    if(count>0){
+      const cx=t.x+t.w-6,cy=t.y+6;
+      const circ=document.createElementNS(ns,'circle');
+      circ.setAttribute('cx',cx);circ.setAttribute('cy',cy);circ.setAttribute('r','7');
+      circ.setAttribute('fill',col.stroke);g.appendChild(circ);
+      const ct=document.createElementNS(ns,'text');
+      ct.setAttribute('x',cx);ct.setAttribute('y',cy);
+      ct.setAttribute('text-anchor','middle');ct.setAttribute('dominant-baseline','middle');
+      ct.setAttribute('font-size','7');ct.setAttribute('font-weight','bold');
+      ct.setAttribute('fill','#fff');ct.textContent=count>9?'9+':count;
+      g.appendChild(ct);
+    }
+
+    g.addEventListener('click',()=>showTableModal(t.n));
+    svg.appendChild(g);
+  });
+}
+
+function showTableModal(tableNum){
+  const modal=document.getElementById('map-modal');
+  const title=document.getElementById('modal-title');
+  const list=document.getElementById('modal-list');
+  const attendees=getTableAttendees(tableNum);
+  title.textContent=`Mesa ${tableNum} · ${attendees.length} persona(s) asignada(s)`;
+  if(!attendees.length){
+    list.innerHTML='<div style="color:var(--muted);font-size:0.8em;padding:8px;">Sin asistentes asignados a esta mesa.</div>';
+  }else{
+    list.innerHTML=attendees.map(a=>`
+      <div class="table-att-item">
+        <span>${escH(a.nombre)} <span style="color:var(--muted);font-size:0.85em;">· ${escH(a.academia||'—')}</span></span>
+        <span style="color:var(--muted);">${escH(a.planta||'—')} · <span class="ev-tag ${a.ev==='dia1'?'d1':'d2'}">${a.ev==='dia1'?'Día 1':'Día 2'}</span></span>
+      </div>
+    `).join('');
+  }
+  modal.classList.add('show');
+  modal.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 // ══════════════════════════════════════════════
 // QR GENERATION
 // ══════════════════════════════════════════════
-async function makeQRDataURL(text) {
+async function makeQRDataURL(text){
   return new Promise((res,rej)=>{
     try{
       const div=document.createElement('div');
       div.style.cssText='position:fixed;left:-9999px;top:-9999px;width:256px;height:256px;';
       document.body.appendChild(div);
-      new QRCode(div,{text,width:256,height:256,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+      new QRCode(div,{text,width:256,height:256,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.L});
       setTimeout(()=>{
         const c=div.querySelector('canvas'),img=div.querySelector('img');
         let url=null;
-        if(c) url=c.toDataURL('image/png');
-        else if(img&&img.src.startsWith('data:')) url=img.src;
-        document.body.removeChild(div);
-        res(url);
+        if(c)url=c.toDataURL('image/png');
+        else if(img&&img.src.startsWith('data:'))url=img.src;
+        document.body.removeChild(div);res(url);
       },300);
     }catch(e){rej(e);}
   });
 }
 
 // ══════════════════════════════════════════════
-// DIBUJAR ESTRELLA (evita el bug de ★ → &)
+// CANVAS HELPERS
 // ══════════════════════════════════════════════
-function drawStar(pdf, cx, cy, r, rgb) {
-  pdf.setFillColor(rgb[0], rgb[1], rgb[2]);
-  pdf.setDrawColor(rgb[0], rgb[1], rgb[2]);
-  const pts = [];
-  for(let i=0; i<10; i++){
-    const angle = (i*Math.PI/5) - Math.PI/2;
-    const rad   = i%2===0 ? r : r*0.38;
-    pts.push([cx + rad*Math.cos(angle), cy + rad*Math.sin(angle)]);
+function canvasStar(ctx,cx,cy,r,color){
+  ctx.fillStyle=color;ctx.beginPath();
+  for(let i=0;i<10;i++){
+    const angle=(i*Math.PI/5)-Math.PI/2;
+    const rad=i%2===0?r:r*0.4;
+    i===0?ctx.moveTo(cx+rad*Math.cos(angle),cy+rad*Math.sin(angle)):ctx.lineTo(cx+rad*Math.cos(angle),cy+rad*Math.sin(angle));
   }
-  const lines = pts.slice(1).map((p,i)=>[p[0]-pts[i][0], p[1]-pts[i][1]]);
-  pdf.lines(lines, pts[0][0], pts[0][1], [1,1], 'F', true);
+  ctx.closePath();ctx.fill();
+}
+function canvasRoundRect(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}
+}
+function wrapText(ctx,text,x,y,maxW,lineH){
+  const words=text.split(' ');let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,x,y);y+=lineH;line=w;}
+    else line=test;
+  }
+  if(line)ctx.fillText(line,x,y);
 }
 
 // ══════════════════════════════════════════════
-// BUILD TICKET PDF — Estilo Azúcar Fest
+// BUILD TICKET PDF — 6 campos
 // ══════════════════════════════════════════════
-async function buildTicketPDF(ev, attendee) {
-  const jsPDF = (window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
-  const pdf = new jsPDF({orientation:'landscape',unit:'mm',format:[216,89]});
-  const W=216, H=89;
-  const evInfo = EVENTS[ev];
-  const perf = 148; // línea de perforación
+async function buildTicketPDF(ev,attendee){
+  const qrUrl=await makeQRDataURL(qrPayload(ev,attendee));
+  const S=4;
+  const W=216*S,H=89*S;
+  const perf=148*S;
+  const cv=document.createElement('canvas');
+  cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d');
+  const mm=S;
 
-  // ── Fondo oscuro marrón-rojo ──
-  pdf.setFillColor(12,2,2); pdf.rect(0,0,W,H,'F');
-  // Tono ligeramente más claro en mitad superior
-  pdf.setFillColor(18,4,4); pdf.rect(0,0,W,H*0.55,'F');
+  // Fondo gradiente oscuro
+  const bgGrad=ctx.createLinearGradient(0,0,W,H);
+  bgGrad.addColorStop(0,'#1c0303');bgGrad.addColorStop(0.4,'#0d0101');bgGrad.addColorStop(1,'#1c0303');
+  ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
+  const topGrad=ctx.createLinearGradient(0,0,0,H*0.4);
+  topGrad.addColorStop(0,'rgba(60,8,8,0.5)');topGrad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=topGrad;ctx.fillRect(0,0,W,H*0.4);
 
-  // ── Estrellas de fondo decorativas (muy tenues) ──
-  const bgStarPos=[[18,18,2.5],[45,12,2],[70,30,1.8],[100,18,2.2],[125,40,1.8],[32,55,2],[60,68,1.5],[90,52,2],[118,65,2],[38,80,1.8],[80,78,1.5],[112,80,2],[155,15,2],[172,40,2],[195,20,1.8],[160,60,2],[185,72,1.5],[205,50,2]];
-  bgStarPos.forEach(([x,y,r])=>drawStar(pdf,x,y,r,[35,8,8]));
+  // Estrellas fondo
+  const bgStars=[[18,18,8],[50,10,6],[85,30,7],[120,14,8],[148,38,6],[35,55,7],[65,70,5],[100,58,7],[128,72,7],[158,12,7],[175,42,7],[200,18,6],[162,62,6],[190,74,5],[208,50,7]];
+  bgStars.forEach(([x,y,r])=>canvasStar(ctx,x*mm,y*mm,r*mm/3,'rgba(140,15,15,0.18)'));
 
-  // ── Línea de perforación ──
-  pdf.setDrawColor(70,18,18); pdf.setLineWidth(0.3);
-  pdf.setLineDashPattern([2,2],0); pdf.line(perf,0,perf,H); pdf.setLineDashPattern([],0);
+  // Línea de perforación
+  ctx.save();ctx.strokeStyle='rgba(130,25,25,0.65)';ctx.lineWidth=1.5;ctx.setLineDash([8,8]);
+  ctx.beginPath();ctx.moveTo(perf,0);ctx.lineTo(perf,H);ctx.stroke();ctx.restore();
 
-  // ════════════════════════════════
-  // SECCIÓN PRINCIPAL (izquierda)
-  // ════════════════════════════════
-  const mainW = perf;
-  // Dividir en dos columnas dentro de la sección principal:
-  // Col izq (campos): x=8 a x=76   (68mm)
-  // Col der (logo+info): x=80 a perf-4
+  // ── SECCIÓN IZQUIERDA ──
+  // Estrellas doradas + PREVENTA
+  canvasStar(ctx,10*mm,8*mm,2.5*mm,'#f5c518');
+  canvasStar(ctx,16*mm,8*mm,2.5*mm,'#f5c518');
+  canvasStar(ctx,22*mm,8*mm,2.5*mm,'#f5c518');
+  ctx.font=`bold ${6.5*mm}px Arial,sans-serif`;ctx.fillStyle='#f5c518';
+  ctx.fillText('PREVENTA $250',8*mm,13*mm);
+  ctx.font=`${5.5*mm}px Arial,sans-serif`;ctx.fillStyle='#c89000';
+  ctx.fillText('DÍA DEL EVENTO $350',8*mm,18.5*mm);
 
-  // ── Col izquierda: ESTRELLAS + PRECIOS ──
-  drawStar(pdf, 12, 11, 3, [245,197,24]);
-  drawStar(pdf, 20, 11, 3, [245,197,24]);
-  drawStar(pdf, 28, 11, 3, [245,197,24]);
+  // 6 campos compactos
+  const fX=8*mm, fW=70*mm, fH=10*mm, fR=3*mm;
+  const halfW=(fW-4*mm)/2;
 
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(8); pdf.setTextColor(245,197,24);
-  pdf.text('PREVENTA $250', 8, 21);
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(7); pdf.setTextColor(210,165,15);
-  pdf.text('DÍA EVENTO $350', 8, 27);
+  const fields=[
+    {label:'FOLIO',value:'#'+attendee.folio,fy:21*mm,w:fW},
+    {label:'NOMBRE',value:(attendee.nombre||'—').toUpperCase().slice(0,24),fy:33*mm,w:fW},
+    {label:'ACADEMIA',value:(attendee.academia||'—').toUpperCase().slice(0,22),fy:45*mm,w:fW},
+    {label:'VENDEDOR',value:(attendee.vendedor||'—').toUpperCase().slice(0,22),fy:57*mm,w:fW},
+    {label:'MESA',value:(attendee.mesa||'—').toUpperCase(),fy:69*mm,w:halfW},
+    {label:'PLANTA',value:(attendee.planta||'—').toUpperCase(),fy:69*mm,x:fX+halfW+4*mm,w:halfW},
+  ];
 
-  // ── CAMPOS FOLIO / VENDEDOR / MESA ──
-  const fX=8, fW=68, fH=12.5, fR=3.5;
-  let fy=32;
+  fields.forEach(({label,value,fy,w,x:fx2})=>{
+    const fx=fx2!==undefined?fx2:fX;
+    const fw=w||fW;
+    canvasRoundRect(ctx,fx,fy,fw,fH,fR,'#9e0006');
+    canvasRoundRect(ctx,fx,fy,fw,fH*0.42,fR,'#c8000a');
+    ctx.fillStyle='#c8000a';ctx.fillRect(fx,fy+fH*0.28,fw,fH*0.14);
+    ctx.font=`bold ${4.5*mm}px Arial,sans-serif`;ctx.fillStyle='rgba(255,255,255,0.85)';
+    ctx.fillText(label,fx+3*mm,fy+4*mm);
+    ctx.font=`bold ${7*mm}px Arial,sans-serif`;ctx.fillStyle='#ffffff';
+    ctx.fillText(value,fx+3*mm,fy+9.2*mm);
+  });
 
-  // FOLIO
-  pdf.setFillColor(160,0,8); pdf.roundedRect(fX,fy,fW,fH,fR,fR,'F');
-  pdf.setFillColor(185,0,10); pdf.roundedRect(fX,fy,fW,fH*0.45,fR,fR,'F');
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
-  pdf.text('FOLIO', fX+4, fy+4.5);
-  pdf.setFontSize(9); pdf.setTextColor(255,255,255);
-  pdf.text('#'+attendee.folio, fX+4, fy+11);
+  // Contacto
+  ctx.font=`bold ${5*mm}px Arial,sans-serif`;ctx.fillStyle='#f5c518';
+  ctx.fillText('CUPO LIMITADO.',8*mm,82.5*mm);
+  ctx.font=`${4.5*mm}px Arial,sans-serif`;ctx.fillStyle='#888';
+  ctx.fillText('info@azucardancestudio.com · 55 6607 7277',8*mm,87.5*mm);
 
-  // VENDEDOR
-  fy+=15;
-  pdf.setFillColor(160,0,8); pdf.roundedRect(fX,fy,fW,fH,fR,fR,'F');
-  pdf.setFillColor(185,0,10); pdf.roundedRect(fX,fy,fW,fH*0.45,fR,fR,'F');
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
-  pdf.text('VENDEDOR', fX+4, fy+4.5);
-  pdf.setFontSize(8.5); pdf.setTextColor(255,255,255);
-  const vendTxt=pdf.splitTextToSize(String(attendee.vendedor||'—').toUpperCase(), fW-8);
-  pdf.text(vendTxt[0], fX+4, fy+11);
+  // ── COLUMNA B: Logo + evento ──
+  const lX=82*mm;
+  const evInfo=EVENTS[ev];
+  ctx.font=`bold ${10*mm}px Arial Black,Arial,sans-serif`;
+  ctx.fillStyle='#ffffff';
+  const wAZ=ctx.measureText('AZÚCAR').width;
+  ctx.fillText('AZÚCAR',lX,11*mm);
+  ctx.fillStyle='#cc0000';ctx.fillText(' FEST',lX+wAZ,11*mm);
+  ctx.font=`bold ${18*mm}px Arial Black,Arial,sans-serif`;ctx.fillStyle='#cc0000';
+  ctx.fillText('2026',lX,26*mm);
+  ctx.strokeStyle='rgba(150,20,20,0.7)';ctx.lineWidth=1.5;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(lX,29*mm);ctx.lineTo(perf-4*mm,29*mm);ctx.stroke();
+  ctx.font=`bold ${9*mm}px Arial Black,Arial,sans-serif`;ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.day,lX,38*mm);
+  ctx.font=`bold ${7*mm}px Arial,sans-serif`;ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.date,lX,46*mm);ctx.fillText(evInfo.time,lX,53*mm);
+  ctx.font=`bold ${6.5*mm}px Arial,sans-serif`;ctx.fillStyle='#ffffff';
+  ctx.fillText(evInfo.venue,lX,60.5*mm);
+  ctx.font=`${5.5*mm}px Arial,sans-serif`;ctx.fillStyle='#bbb';
+  wrapText(ctx,evInfo.addr,lX,67.5*mm,perf-lX-6*mm,7*mm);
 
-  // MESA
-  fy+=15;
-  pdf.setFillColor(160,0,8); pdf.roundedRect(fX,fy,fW,fH,fR,fR,'F');
-  pdf.setFillColor(185,0,10); pdf.roundedRect(fX,fy,fW,fH*0.45,fR,fR,'F');
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(255,255,255);
-  pdf.text('MESA', fX+4, fy+4.5);
-  pdf.setFontSize(9); pdf.setTextColor(255,255,255);
-  pdf.text(String(attendee.mesa||'—').toUpperCase(), fX+4, fy+11);
+  // ── SECCIÓN QR ──
+  const sX=perf+4*mm;
+  const sW=W-perf-6*mm;
+  canvasStar(ctx,sX+4*mm,9*mm,2.2*mm,'#f5c518');
+  canvasStar(ctx,sX+11*mm,9*mm,2.2*mm,'#f5c518');
+  ctx.font=`bold ${5.5*mm}px Arial,sans-serif`;ctx.fillStyle='#ffffff';
+  const nameLines=[];
+  let line='';
+  attendee.nombre.toUpperCase().split(' ').forEach(w=>{
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>sW-2*mm&&line){nameLines.push(line);line=w;}
+    else line=test;
+  });
+  if(line)nameLines.push(line);
+  nameLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,sX,(15+i*7)*mm));
 
-  // ── Bottom izquierda ──
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(6); pdf.setTextColor(245,197,24);
-  pdf.text('CUPO LIMITADO.', 8, 82);
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(5.5); pdf.setTextColor(150,150,150);
-  pdf.text('info@azucardancestudio.com · 55 6607 7277', 8, 87);
-
-  // ── Col derecha: LOGO + INFO EVENTO ──
-  const lX = 82; // inicio columna derecha dentro de sección principal
-
-  // AZÚCAR FEST logo
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(11.5); pdf.setTextColor(255,255,255);
-  pdf.text('AZ', lX, 11);
-  const wAZ = pdf.getTextWidth('AZ');
-  pdf.setTextColor(245,197,24);
-  pdf.text('ÚCAR', lX+wAZ, 11);
-  const wAZUCAR = pdf.getTextWidth('AZÚCAR');
-  pdf.setTextColor(192,0,10);
-  pdf.text(' FEST', lX+wAZUCAR, 11);
-
-  // 2026
-  pdf.setFontSize(22); pdf.setTextColor(192,0,10);
-  pdf.text('2026', lX, 25);
-
-  // Separador
-  pdf.setDrawColor(100,10,10); pdf.setLineWidth(0.5);
-  pdf.line(lX, 28, perf-5, 28);
-
-  // Día y hora
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(11); pdf.setTextColor(245,197,24);
-  pdf.text(evInfo.day, lX, 37);
-  pdf.setFontSize(9); pdf.setTextColor(245,197,24);
-  pdf.text(evInfo.date, lX, 45);
-  pdf.text(evInfo.time, lX, 52);
-
-  // Venue
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(8); pdf.setTextColor(255,255,255);
-  pdf.text(evInfo.venue, lX, 59);
-
-  // Dirección
-  const addrLines = pdf.splitTextToSize(evInfo.addr, perf-lX-6);
-  pdf.setFontSize(6.5); pdf.setTextColor(185,185,185);
-  pdf.text(addrLines, lX, 65);
-
-  // ════════════════════════════════
-  // SECCIÓN QR (derecha del perf)
-  // ════════════════════════════════
-  const sX = perf+4, sW = W-perf-5;
-
-  // Estrellas pequeñas en stub
-  drawStar(pdf, sX+2,   9, 2.2, [245,197,24]);
-  drawStar(pdf, sX+8,   9, 2.2, [245,197,24]);
-
-  // Nombre del asistente
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(6.5); pdf.setTextColor(255,255,255);
-  const nameLines = pdf.splitTextToSize(attendee.nombre.toUpperCase(), sW-2);
-  pdf.text(nameLines.slice(0,2), sX, 17);
-
-  // QR code
-  const qrUrl = await makeQRDataURL(qrPayload(ev, attendee));
-  const qrSize = sW - 2;
   if(qrUrl){
-    pdf.setFillColor(255,255,255);
-    pdf.roundedRect(sX-1, 21, qrSize+2, qrSize+2, 2, 2, 'F');
-    pdf.addImage(qrUrl, 'PNG', sX, 22, qrSize, qrSize);
+    const qrImg=new Image();
+    await new Promise(res=>{qrImg.onload=res;qrImg.src=qrUrl;});
+    const qrY=(nameLines.length>1?24:19)*mm;
+    const qrSz=Math.min(sW,H-qrY-8*mm);
+    canvasRoundRect(ctx,sX-1,qrY-1,qrSz+2,qrSz+2,4,'#ffffff');
+    ctx.drawImage(qrImg,sX,qrY,qrSz,qrSz);
+    const qrBot=qrY+qrSz+4*mm;
+    ctx.font=`bold ${4*mm}px Arial,sans-serif`;ctx.fillStyle='#bbb';
+    const sl='ESCANEAR EN ENTRADA';
+    ctx.fillText(sl,sX+(sW-ctx.measureText(sl).width)/2,qrBot);
+    const[rc,gc,bc]=evInfo.color;
+    ctx.font=`bold ${4.5*mm}px Arial,sans-serif`;ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
+    const dl=ev==='dia1'?'DÍA 1 · 1 AGO':'DÍA 2 · 2 AGO';
+    ctx.fillText(dl,sX+(sW-ctx.measureText(dl).width)/2,qrBot+5.5*mm);
   }
 
-  const qrB = 21 + qrSize + 3;
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(4.8); pdf.setTextColor(190,190,190);
-  const scanLbl = 'ESCANEAR EN ENTRADA';
-  pdf.text(scanLbl, sX + sW/2 - pdf.getTextWidth(scanLbl)/2, qrB+1);
-
-  // Etiqueta día
-  const [rc,gc,bc] = evInfo.color;
-  pdf.setFontSize(5.2); pdf.setTextColor(rc,gc,bc);
-  const dayLbl = ev==='dia1'?'DIA 1 · 1 AGO':'DIA 2 · 2 AGO';
-  pdf.text(dayLbl, sX + sW/2 - pdf.getTextWidth(dayLbl)/2, qrB+6);
-
+  const jsPDF=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
+  const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:[216,89]});
+  pdf.addImage(cv.toDataURL('image/jpeg',0.97),'JPEG',0,0,216,89);
   return pdf;
 }
 
-async function downloadOne(ev, id, btn) {
-  const a=data[ev].find(x=>x.id===id); if(!a) return;
-  const orig=btn.textContent; btn.textContent='⏳'; btn.disabled=true;
+// ══════════════════════════════════════════════
+// DESCARGAS
+// ══════════════════════════════════════════════
+async function downloadOne(ev,id,btn){
+  const a=data[ev].find(x=>x.id===id);if(!a)return;
+  const orig=btn.textContent;btn.textContent='⏳';btn.disabled=true;
   try{const pdf=await buildTicketPDF(ev,a);pdf.save(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${a.nombre.replace(/\s+/g,'_')}.pdf`);}
   catch(e){alert('Error: '+e.message);}
-  btn.textContent=orig; btn.disabled=false;
+  btn.textContent=orig;btn.disabled=false;
 }
 
-async function downloadAll(ev) {
-  const arr=data[ev];
-  if(!arr.length){alert('No hay asistentes.');return;}
+async function downloadZip(ev,arr,label){
+  if(!arr.length){alert('No hay asistentes para descargar.');return;}
   const n=ev.slice(-1);
   const pw=document.getElementById('pw'+n);
   const pb=document.getElementById('pb'+n);
@@ -871,15 +1129,22 @@ async function downloadAll(ev) {
   pt.textContent='Creando ZIP…';
   const blob=await zip.generateAsync({type:'blob'});
   const url=URL.createObjectURL(blob);
-  const link=document.createElement('a');link.href=url;link.download=`AzucarFest_${ev==='dia1'?'Dia1':'Dia2'}_Tickets.zip`;link.click();
+  const link=document.createElement('a');link.href=url;link.download=`AzucarFest_${label}.zip`;link.click();
   URL.revokeObjectURL(url);
   pw.style.display='none';pb.style.width='0%';
+}
+
+function downloadAll(ev){downloadZip(ev,data[ev],ev==='dia1'?'Dia1_Todos':'Dia2_Todos');}
+function downloadFiltered(ev){
+  const filtered=getFilteredData(ev);
+  if(!filtered.length){alert('No hay asistentes con esos filtros.');return;}
+  downloadZip(ev,filtered,ev==='dia1'?'Dia1_Filtrado':'Dia2_Filtrado');
 }
 
 // ══════════════════════════════════════════════
 // ESCÁNER
 // ══════════════════════════════════════════════
-async function startScanner() {
+async function startScanner(){
   try{
     const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});
     scanStream=stream;scanning=true;
@@ -895,17 +1160,17 @@ async function startScanner() {
     requestAnimationFrame(jsqrLoop);
   }catch(e){alert('No se pudo acceder a la cámara.\nAsegúrate de dar permiso y estar en HTTPS.');}
 }
-
 function setScanStatus(t){const el=document.getElementById('scan-status');if(el)el.textContent=t;}
 function stopScanner(){
   scanning=false;
   if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
-  document.getElementById('scan-start-view').style.display='block';
-  document.getElementById('scan-active-view').style.display='none';
+  const sv=document.getElementById('scan-start-view');
+  const av=document.getElementById('scan-active-view');
+  if(sv)sv.style.display='block';
+  if(av)av.style.display='none';
 }
-
 async function nativeScanLoop(){
-  if(!scanning||!barcodeDetector) return;
+  if(!scanning||!barcodeDetector)return;
   const vid=document.getElementById('qr-video');
   try{
     if(vid.readyState===vid.HAVE_ENOUGH_DATA){
@@ -913,11 +1178,10 @@ async function nativeScanLoop(){
       if(codes.length){const raw=codes[0].rawValue,now=Date.now();if(raw!==lastScanId||now-lastScanTime>3500){lastScanId=raw;lastScanTime=now;handleScan(raw);}}
     }
   }catch{}
-  if(scanning) setTimeout(nativeScanLoop,150);
+  if(scanning)setTimeout(nativeScanLoop,150);
 }
-
 function jsqrLoop(){
-  if(!scanning) return;
+  if(!scanning)return;
   const vid=document.getElementById('qr-video'),can=document.getElementById('qr-canvas');
   try{
     if(vid.readyState===vid.HAVE_ENOUGH_DATA){
@@ -929,7 +1193,7 @@ function jsqrLoop(){
       if(code){const now=Date.now();if(code.data!==lastScanId||now-lastScanTime>3500){lastScanId=code.data;lastScanTime=now;handleScan(code.data);}}
     }
   }catch(e){console.warn(e);}
-  if(scanning) requestAnimationFrame(jsqrLoop);
+  if(scanning)requestAnimationFrame(jsqrLoop);
 }
 
 function handleScan(raw){
@@ -940,52 +1204,43 @@ function handleScan(raw){
   const sSub=document.getElementById('s-sub');
   const sMsg=document.getElementById('s-msg');
   rEl.className='scan-result show';
-
   if(!res.ok){
-    rEl.classList.add('invalid');
-    icon.textContent='❌';sName.textContent='QR inválido';sSub.textContent='';
+    rEl.classList.add('invalid');icon.textContent='❌';sName.textContent='QR inválido';sSub.textContent='';
     sMsg.textContent='Este código no corresponde a Azúcar Fest 2026.';return;
   }
-
-  const evInfo = EVENTS[res.ev];
-  const yaEntro = history.find(h=>h.id===res.id);
+  const evInfo=EVENTS[res.ev];
+  const yaEntro=history.find(h=>h.id===res.id);
   if(yaEntro){
-    rEl.classList.add('dup');
-    icon.textContent='⚠️';sName.textContent=res.nombre;
-    sSub.textContent=evInfo.label;
-    sMsg.textContent='Ya ingresó a las '+fmtTime(yaEntro.checkInTime);return;
+    rEl.classList.add('dup');icon.textContent='⚠️';sName.textContent=res.nombre;
+    sSub.textContent=evInfo.label;sMsg.textContent='Ya ingresó a las '+fmtTime(yaEntro.checkInTime);return;
   }
-
   const att=data[res.ev].find(a=>a.id===res.id);
-  if(!att && data[res.ev].length>0){
-    rEl.classList.add('invalid');
-    icon.textContent='❌';sName.textContent=res.nombre||'Desconocido';sSub.textContent='';
+  if(!att&&data[res.ev].length>0){
+    rEl.classList.add('invalid');icon.textContent='❌';sName.textContent=res.nombre||'Desconocido';sSub.textContent='';
     sMsg.textContent='Ticket no encontrado en la lista del '+evInfo.label;return;
   }
-
   // ✅ VÁLIDO
   const entry={
-    id:res.id, ev:res.ev,
-    nombre:   att?att.nombre:res.nombre,
-    vendedor: att?att.vendedor:'—',
-    mesa:     att?att.mesa:'—',
-    folio:    att?att.folio:'—',
-    checkInTime: Date.now()
+    id:res.id,ev:res.ev,
+    nombre:att?att.nombre:res.nombre,
+    academia:att?att.academia:'—',
+    vendedor:att?att.vendedor:'—',
+    mesa:att?att.mesa:'—',
+    planta:att?att.planta:'—',
+    folio:att?att.folio:'—',
+    checkInTime:Date.now()
   };
-
   if(db){
-    if(att) db.ref(FB_ROOT+'/'+res.ev+'/attendees/'+att.id).update({checkedIn:true,checkInTime:entry.checkInTime});
+    if(att)db.ref(FB_ROOT+'/'+res.ev+'/attendees/'+att.id).update({checkedIn:true,checkInTime:entry.checkInTime});
     db.ref(FB_ROOT+'/checkins').push(entry);
-  } else {
+  }else{
     if(att){att.checkedIn=true;att.checkInTime=entry.checkInTime;saveLocal(res.ev);}
     history.unshift(entry);saveHistory();renderDashboard();renderRecent();
   }
-
-  rEl.classList.add('valid');
-  icon.textContent='✅';sName.textContent=entry.nombre;
-  sSub.textContent=evInfo.label+' · Mesa '+entry.mesa;
-  sMsg.textContent='¡Bienvenido/a! — Folio #'+entry.folio;
-  if(navigator.vibrate) navigator.vibrate([80,40,80]);
+  rEl.classList.add('valid');icon.textContent='✅';sName.textContent=entry.nombre;
+  sSub.textContent=evInfo.label+' · Mesa '+entry.mesa+' · Planta '+entry.planta;
+  sMsg.textContent='¡Bienvenido/a! — Folio #'+entry.folio+' · '+entry.academia;
+  if(navigator.vibrate)navigator.vibrate([80,40,80]);
 }
 
 // ══════════════════════════════════════════════
@@ -1006,11 +1261,17 @@ function handleScan(raw){
 });
 
 // ══════════════════════════════════════════════
+// FIX button IDs for map day selector
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('btn-map-all').id='btn-map-all';
+});
+
+// ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
 loadLocal();
-renderList('dia1');
-renderList('dia2');
+['dia1','dia2'].forEach(ev=>{populateFilters(ev);renderList(ev);});
 renderDashboard();
 initFirebase();
 </script>
