@@ -314,7 +314,7 @@
     <div class="legend-item"><div class="legend-dot" style="background:#3d0000;border:1px solid var(--red);"></div>8+ personas</div>
   </div>
   <div class="map-svg-wrap">
-    <svg id="map-svg" width="100%" preserveAspectRatio="xMinYMin meet" style="min-width:380px;cursor:pointer;"></svg>
+    <svg id="map-svg" width="100%" preserveAspectRatio="xMinYMin meet" style="min-width:520px;cursor:pointer;"></svg>
   </div>
   <div class="map-table-modal" id="map-modal">
     <h3 id="modal-title">Mesa —</h3>
@@ -372,67 +372,119 @@ const EVENTS = {
 // FLOOR MAP TABLE POSITIONS
 // ══════════════════════════════════════════════
 // Planta Baja — viewBox 0 0 600 390
+// PLANTA BAJA — viewBox "0 0 820 730"
+// Formato: {n, cx, cy, r}  (mesas redondas)
+//          {n, cx, cy, r, rect:true}  (sillones/bancas rectangulares)
 const MAPA_BAJA = [
-  // Fila superior 20-29
-  {n:'20',x:8,y:8,w:50,h:26},{n:'21',x:62,y:8,w:50,h:26},{n:'22',x:116,y:8,w:50,h:26},
-  {n:'23',x:170,y:8,w:50,h:26},{n:'24',x:224,y:8,w:50,h:26},{n:'25',x:278,y:8,w:50,h:26},
-  {n:'26',x:332,y:8,w:50,h:26},{n:'27',x:386,y:8,w:50,h:26},{n:'28',x:440,y:8,w:50,h:26},
-  {n:'29',x:494,y:8,w:98,h:26},
-  // Zona VIP 40-56 (izquierda)
-  {n:'40',x:8,y:48,w:56,h:26},{n:'41',x:70,y:48,w:56,h:26},{n:'42',x:132,y:48,w:56,h:26},
-  {n:'43',x:8,y:80,w:56,h:26},{n:'44',x:70,y:80,w:56,h:26},{n:'45',x:132,y:80,w:56,h:26},
-  {n:'46',x:8,y:112,w:56,h:26},{n:'47',x:70,y:112,w:56,h:26},{n:'48',x:132,y:112,w:56,h:26},
-  {n:'49',x:8,y:144,w:56,h:26},{n:'50',x:70,y:144,w:56,h:26},{n:'51',x:132,y:144,w:56,h:26},
-  {n:'52',x:8,y:176,w:56,h:26},{n:'53',x:70,y:176,w:56,h:26},{n:'54',x:132,y:176,w:56,h:26},
-  {n:'55',x:8,y:208,w:56,h:26},{n:'56',x:70,y:208,w:56,h:26},
-  // Zona centro 60-74
-  {n:'60',x:210,y:48,w:52,h:26},{n:'61',x:210,y:80,w:52,h:26},{n:'62',x:210,y:112,w:52,h:26},
-  {n:'63',x:210,y:144,w:52,h:26},{n:'64',x:210,y:176,w:52,h:26},
-  {n:'65',x:268,y:48,w:52,h:26},{n:'66',x:268,y:80,w:52,h:26},{n:'67',x:268,y:112,w:52,h:26},
-  {n:'68',x:268,y:144,w:52,h:26},{n:'69',x:268,y:176,w:52,h:26},
-  {n:'70',x:326,y:48,w:52,h:26},{n:'71',x:326,y:80,w:52,h:26},{n:'72',x:326,y:112,w:52,h:26},
-  {n:'73',x:326,y:144,w:52,h:26},{n:'74',x:326,y:176,w:52,h:26},
-  // Zona derecha 80-85
-  {n:'80',x:400,y:48,w:52,h:26},{n:'81',x:458,y:48,w:52,h:26},{n:'82',x:516,y:48,w:76,h:26},
-  {n:'83',x:400,y:80,w:52,h:26},{n:'84',x:458,y:80,w:52,h:26},{n:'85',x:516,y:80,w:76,h:26},
-  // Zona B 90-102 (derecha abajo)
-  {n:'90',x:400,y:120,w:52,h:26},{n:'91',x:458,y:120,w:52,h:26},{n:'92',x:516,y:120,w:76,h:26},
-  {n:'93',x:400,y:152,w:52,h:26},{n:'94',x:458,y:152,w:52,h:26},{n:'95',x:516,y:152,w:76,h:26},
-  {n:'96',x:400,y:184,w:52,h:26},{n:'97',x:458,y:184,w:52,h:26},{n:'98',x:516,y:184,w:76,h:26},
-  {n:'99',x:400,y:216,w:52,h:26},{n:'100',x:458,y:216,w:52,h:26},{n:'101',x:516,y:216,w:76,h:26},
-  {n:'102',x:400,y:248,w:52,h:26},
-  // Fila inferior 10-15
-  {n:'10',x:8,y:270,w:56,h:34},{n:'11',x:70,y:270,w:56,h:34},{n:'12',x:132,y:270,w:56,h:34},
-  {n:'14',x:194,y:270,w:56,h:34},{n:'15',x:256,y:270,w:56,h:34},
+  // ── LATERAL A superior ──
+  {n:'20',cx:175,cy:52,r:18},{n:'21',cx:220,cy:52,r:18},
+  {n:'22',cx:288,cy:52,r:18},{n:'23',cx:333,cy:52,r:18},{n:'24',cx:373,cy:52,r:18},
+  {n:'25',cx:418,cy:50,r:14},{n:'26',cx:452,cy:50,r:14},
+  {n:'27',cx:485,cy:50,r:14},{n:'28',cx:518,cy:50,r:14},
+  {n:'29',cx:568,cy:55,r:14},
+
+  // ── ZONA VIP superior — sillones (columna izq) ──
+  {n:'49.3',cx:392,cy:178,r:11,rect:true},
+  {n:'49.2',cx:392,cy:215,r:11,rect:true},
+  {n:'49.1',cx:392,cy:252,r:11,rect:true},
+  {n:'49',  cx:392,cy:289,r:11,rect:true},
+  {n:'48',  cx:392,cy:326,r:11,rect:true},
+  {n:'47',  cx:392,cy:363,r:11,rect:true},
+  // ZONA VIP superior — mesas redondas (columna der)
+  {n:'56',cx:453,cy:183,r:20},
+  {n:'55',cx:453,cy:252,r:20},
+  {n:'54',cx:453,cy:323,r:20},
+  {n:'53',cx:453,cy:392,r:20},
+
+  // ── ZONA A inferior — sillones (columna izq) ──
+  {n:'46',cx:392,cy:432,r:11,rect:true},
+  {n:'45',cx:392,cy:468,r:11,rect:true},
+  {n:'44',cx:392,cy:504,r:11,rect:true},
+  {n:'43',cx:392,cy:540,r:11,rect:true},
+  {n:'42',cx:392,cy:576,r:11,rect:true},
+  {n:'40',cx:392,cy:615,r:11,rect:true},
+  // ZONA A inferior — mesas redondas (columna der)
+  {n:'52',cx:453,cy:445,r:20},
+  {n:'51',cx:453,cy:517,r:20},
+  {n:'50',cx:453,cy:590,r:20},
+
+  // ── Columna 69.1-65 ──
+  {n:'69.1',cx:512,cy:178,r:16},
+  {n:'69',  cx:512,cy:228,r:16},
+  {n:'68',  cx:512,cy:278,r:16},
+  {n:'67',  cx:512,cy:325,r:16},
+  {n:'66',  cx:512,cy:370,r:16},
+  {n:'65',  cx:512,cy:415,r:16},
+  // Columna 74-70
+  {n:'74',cx:567,cy:178,r:16},
+  {n:'73',cx:567,cy:238,r:16},
+  {n:'72',cx:567,cy:300,r:16},
+  {n:'71',cx:567,cy:360,r:16},
+  {n:'70',cx:567,cy:418,r:16},
+
+  // ── Columna 64-60 ──
+  {n:'64',cx:512,cy:462,r:16},
+  {n:'63',cx:512,cy:510,r:16},
+  {n:'62',cx:512,cy:558,r:16},
+  {n:'61',cx:512,cy:606,r:16},
+  {n:'60',cx:512,cy:655,r:16},
+  // Columna 93-90
+  {n:'93',cx:567,cy:462,r:16},
+  {n:'92',cx:567,cy:512,r:16},
+  {n:'91',cx:567,cy:562,r:16},
+  {n:'90',cx:567,cy:615,r:16},
+
+  // ── ZONA B superior ──
+  {n:'81',cx:643,cy:262,r:20},{n:'83',cx:697,cy:262,r:20},{n:'85',cx:750,cy:258,r:20},
+  {n:'80',cx:643,cy:342,r:20},{n:'82',cx:697,cy:342,r:20},{n:'84',cx:750,cy:340,r:20},
+
+  // ── ZONA B inferior ──
+  {n:'97', cx:658,cy:462,r:22},
+  {n:'94', cx:658,cy:532,r:22},
+  {n:'102',cx:658,cy:604,r:22},
+
+  // ── LATERAL A inferior ──
+  {n:'10',cx:108,cy:688,r:18},{n:'11',cx:152,cy:688,r:18},
+  {n:'12',cx:196,cy:688,r:18},{n:'14',cx:248,cy:688,r:18},
+  {n:'15',cx:352,cy:688,r:18},
 ];
 
-// Planta Alta — viewBox 0 0 600 320
+// PLANTA ALTA — viewBox "0 0 820 555"
 const MAPA_ALTA = [
-  // Zona lateral izq 204-209
-  {n:'204',x:8,y:8,w:56,h:26},{n:'207',x:70,y:8,w:56,h:26},
-  {n:'205',x:8,y:40,w:56,h:26},{n:'208',x:70,y:40,w:56,h:26},
-  {n:'206',x:8,y:72,w:56,h:26},{n:'209',x:70,y:72,w:56,h:26},
-  // Zona 300-305 (cabina DJ)
-  {n:'300',x:155,y:8,w:56,h:26},{n:'303',x:217,y:8,w:56,h:26},
-  {n:'301',x:155,y:40,w:56,h:26},{n:'304',x:217,y:40,w:56,h:26},
-  {n:'302',x:155,y:72,w:56,h:26},{n:'305',x:217,y:72,w:56,h:26},
-  // Zona 400-409
-  {n:'400',x:295,y:8,w:56,h:26},{n:'401',x:357,y:8,w:56,h:26},
-  {n:'402',x:295,y:40,w:56,h:26},{n:'403',x:357,y:40,w:56,h:26},
-  {n:'404',x:295,y:72,w:56,h:26},{n:'405',x:357,y:72,w:56,h:26},
-  {n:'406',x:295,y:104,w:56,h:26},{n:'407',x:357,y:104,w:56,h:26},
-  {n:'408',x:295,y:136,w:56,h:26},{n:'409',x:357,y:136,w:56,h:26},
-  // Zona 500-512
-  {n:'500',x:435,y:8,w:56,h:26},{n:'501',x:497,y:8,w:95,h:26},
-  {n:'502',x:435,y:40,w:56,h:26},{n:'503',x:497,y:40,w:95,h:26},
-  {n:'504',x:435,y:72,w:56,h:26},{n:'505',x:497,y:72,w:95,h:26},
-  {n:'506',x:435,y:104,w:56,h:26},{n:'507',x:497,y:104,w:95,h:26},
-  {n:'508',x:435,y:136,w:56,h:26},{n:'509',x:497,y:136,w:95,h:26},
-  {n:'510',x:435,y:168,w:56,h:26},{n:'511',x:497,y:168,w:95,h:26},
-  {n:'512',x:435,y:200,w:56,h:26},
-  // Zona 200-203 (grandes, fondo)
-  {n:'200',x:8,y:240,w:72,h:40},{n:'201',x:86,y:240,w:72,h:40},
-  {n:'202',x:164,y:240,w:72,h:40},{n:'203',x:242,y:240,w:72,h:40},
+  // ── LATERAL PA superior (204-209) ──
+  {n:'204',cx:118,cy:52,r:18},{n:'205',cx:173,cy:52,r:18},
+  {n:'206',cx:228,cy:52,r:18},{n:'207',cx:283,cy:52,r:18},
+  {n:'208',cx:340,cy:52,r:18},{n:'209',cx:398,cy:52,r:18},
+
+  // ── Zona 300 (sobre y bajo Cabina DJ) ──
+  {n:'305',cx:530,cy:128,r:18},
+  {n:'304',cx:530,cy:180,r:18},
+  {n:'303',cx:530,cy:232,r:18},
+  {n:'302',cx:530,cy:358,r:18},
+  {n:'301',cx:530,cy:410,r:18},
+  {n:'300',cx:530,cy:462,r:18},
+  {n:'306',cx:597,cy:78,r:14},
+
+  // ── Zona 400 (columna vertical) ──
+  {n:'409',cx:625,cy:130,r:14},{n:'408',cx:625,cy:173,r:14},
+  {n:'407',cx:625,cy:216,r:14},{n:'406',cx:625,cy:259,r:14},
+  {n:'405',cx:625,cy:320,r:14},{n:'404',cx:625,cy:370,r:14},
+  {n:'403',cx:625,cy:410,r:14},{n:'402',cx:625,cy:447,r:14},
+  {n:'401',cx:625,cy:482,r:14},{n:'400',cx:625,cy:517,r:14},
+
+  // ── Zona 500 (dispersas lado derecho) ──
+  {n:'512',  cx:778,cy:45, r:15},
+  {n:'511',  cx:743,cy:108,r:22},
+  {n:'510',  cx:690,cy:193,r:19},{n:'509',cx:746,cy:193,r:19},
+  {n:'508',  cx:690,cy:250,r:19},{n:'507',cx:746,cy:250,r:19},
+  {n:'500',  cx:697,cy:328,r:19},{n:'506',cx:750,cy:345,r:17},
+  {n:'501',  cx:697,cy:403,r:19},{n:'505',cx:755,cy:420,r:17},
+  {n:'502',  cx:697,cy:475,r:19},{n:'504',cx:755,cy:490,r:17},
+  {n:'503',  cx:690,cy:530,r:19},{n:'503.1',cx:752,cy:530,r:17},
+
+  // ── LATERAL PA inferior (200-203, mesas grandes) ──
+  {n:'200',cx:108,cy:498,r:26},{n:'201',cx:183,cy:498,r:26},
+  {n:'202',cx:257,cy:498,r:26},{n:'203',cx:330,cy:498,r:26},
 ];
 
 // ══════════════════════════════════════════════
@@ -820,78 +872,142 @@ function tableColor(count){
 }
 
 function renderMap(){
-  const tables=mapFloor==='baja'?MAPA_BAJA:MAPA_ALTA;
-  const vbW=600, vbH=mapFloor==='baja'?320:290;
-  const svg=document.getElementById('map-svg');
+  const isBaja = mapFloor==='baja';
+  const tables = isBaja ? MAPA_BAJA : MAPA_ALTA;
+  const vbW = 820, vbH = isBaja ? 730 : 555;
+  const svg = document.getElementById('map-svg');
   svg.setAttribute('viewBox',`0 0 ${vbW} ${vbH}`);
-  svg.innerHTML='';
+  svg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg';
 
-  const ns='http://www.w3.org/2000/svg';
-
-  // Background grid lines (subtle)
-  const gridG=document.createElementNS(ns,'g');
-  gridG.setAttribute('opacity','0.07');
-  for(let x=0;x<vbW;x+=30){const l=document.createElementNS(ns,'line');l.setAttribute('x1',x);l.setAttribute('y1',0);l.setAttribute('x2',x);l.setAttribute('y2',vbH);l.setAttribute('stroke','#888');gridG.appendChild(l);}
-  for(let y=0;y<vbH;y+=30){const l=document.createElementNS(ns,'line');l.setAttribute('x1',0);l.setAttribute('y1',y);l.setAttribute('x2',vbW);l.setAttribute('y2',y);l.setAttribute('stroke','#888');gridG.appendChild(l);}
-  svg.appendChild(gridG);
-
-  // Floor label
-  const lbl=document.createElementNS(ns,'text');
-  lbl.setAttribute('x',vbW-6);lbl.setAttribute('y',vbH-6);
-  lbl.setAttribute('text-anchor','end');lbl.setAttribute('font-size','10');
-  lbl.setAttribute('fill','#444');lbl.textContent=mapFloor==='baja'?'PLANTA BAJA':'PLANTA ALTA';
-  svg.appendChild(lbl);
-
-  // DJ booth label for Alta
-  if(mapFloor==='alta'){
-    const dj=document.createElementNS(ns,'rect');
-    dj.setAttribute('x',295-10);dj.setAttribute('y',120);dj.setAttribute('width',280);dj.setAttribute('height',106);
-    dj.setAttribute('fill','rgba(90,10,10,0.15)');dj.setAttribute('stroke','rgba(150,20,20,0.3)');dj.setAttribute('stroke-dasharray','4,3');dj.setAttribute('rx','4');
-    svg.appendChild(dj);
-    const djt=document.createElementNS(ns,'text');djt.setAttribute('x',435);djt.setAttribute('y',235);
-    djt.setAttribute('text-anchor','middle');djt.setAttribute('font-size','9');djt.setAttribute('fill','rgba(200,50,50,0.5)');djt.textContent='ZONA 400-500';
-    svg.appendChild(djt);
+  function mkEl(tag, attrs, txt){
+    const e = document.createElementNS(ns, tag);
+    Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,v));
+    if(txt!=null) e.textContent = txt;
+    return e;
+  }
+  function mkRect(x,y,w,h,opts){
+    return mkEl('rect',{x,y,width:w,height:h,rx:opts&&opts.rx||0,...(opts||{})});
+  }
+  function mkTxt(t,x,y,size,fill,anchor,weight){
+    return mkEl('text',{x,y,'text-anchor':anchor||'middle','font-size':size,fill,
+      'font-weight':weight||'normal','font-family':'Arial,sans-serif'},t);
   }
 
-  // Tables
+  // ── Fondo ──
+  svg.appendChild(mkRect(0,0,vbW,vbH,{fill:'#111118'}));
+
+  if(isBaja){
+    // Salida emergencia (franja izq)
+    svg.appendChild(mkRect(0,0,28,128,{fill:'rgba(255,80,80,0.06)',stroke:'rgba(255,80,80,0.18)','stroke-width':1}));
+    svg.appendChild(mkTxt('SAL.',14,42,5.5,'rgba(255,100,100,0.5)'));
+    svg.appendChild(mkTxt('EMER.',14,55,5.5,'rgba(255,100,100,0.5)'));
+
+    // Escalera
+    svg.appendChild(mkRect(30,15,120,90,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('ESCALERA',90,62,8,'#555'));
+
+    // Escenario
+    svg.appendChild(mkRect(0,128,270,325,{fill:'#181820',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('ESCENARIO',135,300,10,'#404050','middle','bold'));
+
+    // Pista
+    svg.appendChild(mkRect(270,128,108,325,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA',324,300,10,'#404050','middle','bold'));
+
+    // Zona VIP (área sombreada rosa)
+    svg.appendChild(mkRect(375,152,118,495,{fill:'rgba(255,160,160,0.05)',stroke:'rgba(255,130,130,0.16)','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('ZONA VIP',434,167,7.5,'rgba(210,130,130,0.65)'));
+    svg.appendChild(mkTxt('ZONA A',434,463,7.5,'rgba(210,130,130,0.55)'));
+
+    // Barra
+    svg.appendChild(mkRect(686,152,115,67,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('BARRA',744,190,8,'#555'));
+
+    // CAJA
+    svg.appendChild(mkRect(686,102,115,45,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('CAJA',744,128,8,'#555'));
+
+    // Zona B etiquetas
+    svg.appendChild(mkTxt('ZONA B',705,242,8,'rgba(140,140,210,0.45)'));
+    svg.appendChild(mkTxt('ZONA B',690,447,8,'rgba(140,140,210,0.45)'));
+
+    // Acceso / Escaleras
+    svg.appendChild(mkTxt('ACCESO',745,600,9,'rgba(140,140,210,0.4)','middle','bold'));
+    svg.appendChild(mkTxt('ESCALERAS',492,576,7.5,'#484858'));
+
+    // Lateral A etiquetas
+    svg.appendChild(mkTxt('LATERAL A',298,22,7.5,'#555'));
+    svg.appendChild(mkTxt('LATERAL A',183,657,7.5,'#555'));
+
+  } else {
+    // PLANTA ALTA
+    // Salida emergencia
+    svg.appendChild(mkTxt('SALIDA DE EMERGENCIA',450,13,6.5,'rgba(255,90,90,0.5)'));
+
+    // Escalera
+    svg.appendChild(mkRect(25,15,100,80,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('ESCALERA',75,55,8,'#555'));
+
+    // Escenario
+    svg.appendChild(mkRect(0,108,200,315,{fill:'#181820',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('ESCENARIO',100,272,10,'#404050','middle','bold'));
+
+    // Pista
+    svg.appendChild(mkRect(200,108,315,315,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA',358,272,10,'#404050','middle','bold'));
+    svg.appendChild(mkTxt('503',358,298,7,'#333340'));
+
+    // Cabina DJ
+    svg.appendChild(mkRect(488,266,120,85,{fill:'#1c2030',stroke:'#4a4a66','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('CABINA DJ',548,314,8.5,'#6666aa'));
+
+    // Zona labels
+    svg.appendChild(mkTxt('ZONA PA',682,148,8,'rgba(140,140,210,0.5)'));
+    svg.appendChild(mkTxt('LATERAL PA',268,22,7.5,'#555'));
+    svg.appendChild(mkTxt('LATERAL PA',213,520,7.5,'#555'));
+    svg.appendChild(mkTxt('ESCALERAS',437,522,7.5,'#484858'));
+  }
+
+  // ── Mesas ──
   tables.forEach(t=>{
-    const count=getTableCount(t.n);
-    const col=tableColor(count);
-    const g=document.createElementNS(ns,'g');
-    g.style.cursor='pointer';
+    const count = getTableCount(t.n);
+    const col = tableColor(count);
+    const g = document.createElementNS(ns,'g');
+    g.style.cursor = 'pointer';
 
-    const rect=document.createElementNS(ns,'rect');
-    rect.setAttribute('x',t.x);rect.setAttribute('y',t.y);
-    rect.setAttribute('width',t.w);rect.setAttribute('height',t.h);
-    rect.setAttribute('rx','4');rect.setAttribute('fill',col.fill);
-    rect.setAttribute('stroke',col.stroke);rect.setAttribute('stroke-width','1.5');
-    g.appendChild(rect);
+    if(t.rect){
+      // Mesa rectangular / sillón
+      const w=t.r*2.2, h=t.r*2.8;
+      g.appendChild(mkEl('rect',{x:t.cx-w/2,y:t.cy-h/2,width:w,height:h,rx:3,
+        fill:col.fill,stroke:col.stroke,'stroke-width':1.5}));
+    } else {
+      // Mesa redonda
+      g.appendChild(mkEl('circle',{cx:t.cx,cy:t.cy,r:t.r,
+        fill:col.fill,stroke:col.stroke,'stroke-width':1.5}));
+    }
 
-    // Table number
-    const numT=document.createElementNS(ns,'text');
-    numT.setAttribute('x',t.x+t.w/2);numT.setAttribute('y',t.y+t.h*0.48);
-    numT.setAttribute('text-anchor','middle');numT.setAttribute('dominant-baseline','middle');
-    numT.setAttribute('font-size',t.w>60?'9':'8');numT.setAttribute('font-weight','bold');
-    numT.setAttribute('fill',col.text);numT.textContent=t.n;
-    g.appendChild(numT);
+    // Número
+    const fs = t.r>=22?9.5 : t.r>=18?9 : t.r>=16?8.5 : t.r>=14?7.5 : 6.5;
+    g.appendChild(mkEl('text',{x:t.cx,y:t.cy,'text-anchor':'middle','dominant-baseline':'middle',
+      'font-size':fs,'font-weight':'bold',fill:col.text,'font-family':'Arial,sans-serif',
+      'pointer-events':'none'},t.n));
 
-    // Count badge
+    // Badge de ocupación
     if(count>0){
-      const cx=t.x+t.w-6,cy=t.y+6;
-      const circ=document.createElementNS(ns,'circle');
-      circ.setAttribute('cx',cx);circ.setAttribute('cy',cy);circ.setAttribute('r','7');
-      circ.setAttribute('fill',col.stroke);g.appendChild(circ);
-      const ct=document.createElementNS(ns,'text');
-      ct.setAttribute('x',cx);ct.setAttribute('y',cy);
-      ct.setAttribute('text-anchor','middle');ct.setAttribute('dominant-baseline','middle');
-      ct.setAttribute('font-size','7');ct.setAttribute('font-weight','bold');
-      ct.setAttribute('fill','#fff');ct.textContent=count>9?'9+':count;
-      g.appendChild(ct);
+      const bx=t.cx+t.r*0.62, by=t.cy-t.r*0.62;
+      g.appendChild(mkEl('circle',{cx:bx,cy:by,r:7.5,fill:col.stroke}));
+      g.appendChild(mkEl('text',{x:bx,y:by,'text-anchor':'middle','dominant-baseline':'middle',
+        'font-size':6.5,'font-weight':'bold',fill:'#fff','font-family':'Arial,sans-serif',
+        'pointer-events':'none'}, count>9?'9+':String(count)));
     }
 
     g.addEventListener('click',()=>showTableModal(t.n));
     svg.appendChild(g);
   });
+
+  // Etiqueta de planta (bottom-right)
+  svg.appendChild(mkTxt(isBaja?'PLANTA BAJA':'PLANTA ALTA', vbW-8, vbH-8, 9, '#333344', 'end', 'bold'));
 }
 
 function showTableModal(tableNum){
