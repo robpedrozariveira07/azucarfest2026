@@ -507,6 +507,88 @@ const MAPA_ALTA = [
   {n:'202',cx:257,cy:498,r:26},{n:'203',cx:330,cy:498,r:26},
 ];
 
+// ── FORO SAN RAFAEL — Planta Baja (Día 1) viewBox "0 0 820 720" ──
+const FSR_BAJA = [
+  // Far left column (ovals)
+  {n:'5', cx:48,cy:188,r:22},{n:'8',cx:48,cy:298,r:22},{n:'11',cx:48,cy:402,r:22},
+  // Left cluster (mix)
+  {n:'4',cx:118,cy:92,r:18,rect:true},{n:'6',cx:110,cy:210,r:15},
+  {n:'7',cx:170,cy:112,r:18,rect:true},{n:'9',cx:162,cy:230,r:15},
+  {n:'10',cx:165,cy:312,r:18,rect:true},{n:'12',cx:162,cy:402,r:18,rect:true},
+  {n:'13',cx:162,cy:472,r:18,rect:true},
+  // Left-center column
+  {n:'16',cx:240,cy:90,r:18,rect:true},{n:'17',cx:240,cy:165,r:18,rect:true},
+  {n:'18',cx:240,cy:242,r:18,rect:true},{n:'19',cx:240,cy:318,r:18,rect:true},
+  {n:'20',cx:248,cy:418,r:18,rect:true},
+  // Center-left rows (below pista)
+  {n:'21',cx:312,cy:390,r:20},{n:'22',cx:388,cy:390,r:20},{n:'23',cx:462,cy:390,r:20},
+  {n:'27',cx:312,cy:462,r:20},{n:'28',cx:388,cy:462,r:20},{n:'29',cx:462,cy:462,r:20},
+  {n:'33',cx:312,cy:534,r:20},{n:'34',cx:388,cy:534,r:20},{n:'35',cx:462,cy:534,r:20},
+  // Center-right rows
+  {n:'24',cx:538,cy:390,r:20},{n:'25',cx:612,cy:390,r:20},{n:'26',cx:686,cy:390,r:20},
+  {n:'30',cx:538,cy:462,r:20},{n:'31',cx:612,cy:462,r:20},{n:'32',cx:686,cy:462,r:20},
+  {n:'36',cx:538,cy:534,r:20},{n:'37',cx:625,cy:534,r:20},
+  // Right near-pista
+  {n:'38',cx:638,cy:352,r:18,rect:true},{n:'39',cx:716,cy:352,r:18,rect:true},
+  // Upper-right cluster
+  {n:'41',cx:720,cy:92,r:18,rect:true},{n:'44',cx:720,cy:165,r:18,rect:true},
+  {n:'46',cx:780,cy:128,r:20},{n:'45',cx:780,cy:250,r:18,rect:true},
+  {n:'48',cx:780,cy:198,r:20},{n:'47',cx:780,cy:322,r:18,rect:true},
+  {n:'50',cx:780,cy:270,r:20},{n:'49',cx:780,cy:395,r:18,rect:true},
+  // Bottom center pairs
+  {n:'51',cx:368,cy:592,r:18,rect:true},{n:'52',cx:440,cy:592,r:18,rect:true},
+  {n:'54',cx:368,cy:642,r:18,rect:true},{n:'55',cx:440,cy:642,r:18,rect:true},
+  {n:'56',cx:368,cy:692,r:18,rect:true},{n:'57',cx:440,cy:692,r:18,rect:true},
+  // Bottom right
+  {n:'58',cx:590,cy:592,r:18,rect:true},{n:'59',cx:652,cy:592,r:18,rect:true},
+  {n:'60',cx:714,cy:592,r:18,rect:true},
+];
+
+// ── FORO SAN RAFAEL — Planta Alta (Día 1) viewBox "0 0 820 620" ──
+const FSR_ALTA = [
+  // Top-left large rect (101)
+  {n:'101',cx:90,cy:48,r:28,rect:true},
+  // Far left ovals
+  {n:'103',cx:50,cy:162,r:22},{n:'105',cx:50,cy:232,r:22},
+  {n:'107',cx:50,cy:300,r:22},{n:'109',cx:50,cy:368,r:22},{n:'111',cx:50,cy:432,r:22},
+  // Left rects
+  {n:'104',cx:122,cy:162,r:18,rect:true},{n:'106',cx:122,cy:232,r:18,rect:true},
+  {n:'108',cx:122,cy:300,r:18,rect:true},{n:'110',cx:122,cy:368,r:18,rect:true},
+  // Left inner (beside pista)
+  {n:'112',cx:220,cy:162,r:15,rect:true},{n:'113',cx:220,cy:248,r:15,rect:true},
+  {n:'114',cx:220,cy:332,r:15,rect:true},
+  // Top-right large rect (102)
+  {n:'102',cx:735,cy:48,r:28,rect:true},
+  // Right inner (beside pista)
+  {n:'122',cx:610,cy:162,r:15,rect:true},{n:'123',cx:610,cy:248,r:15,rect:true},
+  {n:'124',cx:610,cy:332,r:15,rect:true},
+  // Right rects
+  {n:'125',cx:682,cy:162,r:18,rect:true},{n:'127',cx:682,cy:232,r:18,rect:true},
+  {n:'129',cx:682,cy:300,r:18,rect:true},
+  // Far right ovals
+  {n:'126',cx:752,cy:162,r:20},{n:'128',cx:752,cy:232,r:20},
+  {n:'130',cx:752,cy:300,r:20},{n:'131',cx:752,cy:368,r:20},
+  // Middle row ovals (below pista)
+  {n:'115',cx:310,cy:360,r:20},{n:'116',cx:385,cy:360,r:20},{n:'117',cx:460,cy:360,r:20},
+  {n:'118',cx:535,cy:360,r:20},{n:'119',cx:610,cy:360,r:20},
+  {n:'120',cx:685,cy:360,r:20},{n:'121',cx:760,cy:360,r:20},
+  // Lower grid row 1 (y=422)
+  {n:'132',cx:235,cy:422,r:18,rect:true},{n:'133',cx:308,cy:422,r:18,rect:true},
+  {n:'134',cx:455,cy:422,r:18,rect:true},{n:'135',cx:528,cy:422,r:18,rect:true},
+  {n:'136',cx:602,cy:422,r:18,rect:true},{n:'137',cx:676,cy:422,r:18,rect:true},
+  {n:'138',cx:750,cy:422,r:18,rect:true},
+  // Lower grid row 2 (y=492)
+  {n:'139',cx:235,cy:492,r:18,rect:true},{n:'140',cx:308,cy:492,r:18,rect:true},
+  {n:'141',cx:381,cy:492,r:18,rect:true},{n:'142',cx:455,cy:492,r:18,rect:true},
+  {n:'143',cx:528,cy:492,r:18,rect:true},{n:'144',cx:602,cy:492,r:18,rect:true},
+  {n:'145',cx:676,cy:492,r:18,rect:true},{n:'146',cx:750,cy:492,r:18,rect:true},
+  // Lower grid row 3 (y=562)
+  {n:'147',cx:235,cy:562,r:18,rect:true},{n:'148',cx:308,cy:562,r:18,rect:true},
+  {n:'149',cx:381,cy:562,r:18,rect:true},{n:'150',cx:455,cy:562,r:18,rect:true},
+  {n:'151',cx:528,cy:562,r:18,rect:true},{n:'152',cx:602,cy:562,r:18,rect:true},
+  {n:'153',cx:676,cy:562,r:18,rect:true},{n:'154',cx:750,cy:562,r:18,rect:true},
+];
+
 // ══════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════
@@ -908,8 +990,17 @@ function tableColor(count){
 
 function renderMap(){
   const isBaja = mapFloor==='baja';
-  const tables = isBaja ? MAPA_BAJA : MAPA_ALTA;
-  const vbW = 820, vbH = isBaja ? 730 : 555;
+  // Día 1 = Foro San Rafael; Día 2 = Mambo Café; 'all' = Foro (primary venue)
+  const isForo = (mapDay !== 'dia2');
+  let tables;
+  if(isForo) tables = isBaja ? FSR_BAJA : FSR_ALTA;
+  else        tables = isBaja ? MAPA_BAJA : MAPA_ALTA;
+
+  const vbW = 820;
+  let vbH;
+  if(isForo) vbH = isBaja ? 720 : 620;
+  else        vbH = isBaja ? 730 : 555;
+
   const svg = document.getElementById('map-svg');
   svg.setAttribute('viewBox',`0 0 ${vbW} ${vbH}`);
   svg.innerHTML = '';
@@ -932,7 +1023,52 @@ function renderMap(){
   // ── Fondo ──
   svg.appendChild(mkRect(0,0,vbW,vbH,{fill:'#111118'}));
 
-  if(isBaja){
+  // ── Venue label (top center) ──
+  const venueName = isForo ? 'FORO SAN RAFAEL — DÍA 1' : 'MAMBO CAFÉ — DÍA 2';
+  svg.appendChild(mkTxt(venueName, vbW/2, 13, 8, '#446', 'middle', 'bold'));
+
+  if(isForo && isBaja){
+    // ══ FORO SAN RAFAEL — PLANTA BAJA ══
+    // Escenario (top center)
+    svg.appendChild(mkRect(280,18,290,72,{fill:'#181820',stroke:'#333340','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('ESCENARIO',425,60,10,'#404050','middle','bold'));
+    // Pista de Baile
+    svg.appendChild(mkRect(280,90,290,265,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA DE BAILE',425,230,10,'#404050','middle','bold'));
+    // Barra (bottom center)
+    svg.appendChild(mkRect(315,648,200,52,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('BARRA',415,678,9,'#555'));
+    // Escaleras izquierda
+    svg.appendChild(mkRect(15,448,140,55,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('ESCALERAS',85,479,7.5,'#555'));
+    // Escaleras derecha (borde)
+    svg.appendChild(mkRect(798,218,22,252,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1}));
+    svg.appendChild(mkTxt('E',809,348,6.5,'#555'));
+    // Labels
+    svg.appendChild(mkTxt('SANITARIOS',72,568,7.5,'#484858'));
+    svg.appendChild(mkTxt('RECEPCIÓN',612,548,7.5,'rgba(140,140,210,0.5)'));
+
+  } else if(isForo && !isBaja){
+    // ══ FORO SAN RAFAEL — PLANTA ALTA ══
+    // Escenario (top center)
+    svg.appendChild(mkRect(282,18,285,68,{fill:'#181820',stroke:'#333340','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('ESCENARIO',424,57,10,'#404050','middle','bold'));
+    // Pista de Baile
+    svg.appendChild(mkRect(282,86,285,235,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA DE BAILE',424,210,10,'#404050','middle','bold'));
+    // Cabina (bottom left)
+    svg.appendChild(mkRect(15,458,148,122,{fill:'#1c2030',stroke:'#4a4a66','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('CABINA',89,524,9,'#6666aa'));
+    // Barra (bottom center)
+    svg.appendChild(mkRect(318,570,200,42,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('BARRA',418,595,9,'#555'));
+    // Escaleras labels
+    svg.appendChild(mkTxt('ESCALERAS',168,450,7.5,'#484858'));
+    svg.appendChild(mkRect(798,195,22,220,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1}));
+    svg.appendChild(mkTxt('E',809,310,6.5,'#555'));
+
+  } else if(!isForo && isBaja){
+    // ══ MAMBO CAFÉ — PLANTA BAJA ══
     // Salida emergencia (franja izq)
     svg.appendChild(mkRect(0,0,28,128,{fill:'rgba(255,80,80,0.06)',stroke:'rgba(255,80,80,0.18)','stroke-width':1}));
     svg.appendChild(mkTxt('SAL.',14,42,5.5,'rgba(255,100,100,0.5)'));
@@ -976,7 +1112,7 @@ function renderMap(){
     svg.appendChild(mkTxt('LATERAL A',183,657,7.5,'#555'));
 
   } else {
-    // PLANTA ALTA
+    // ══ MAMBO CAFÉ — PLANTA ALTA ══
     // Salida emergencia
     svg.appendChild(mkTxt('SALIDA DE EMERGENCIA',450,13,6.5,'rgba(255,90,90,0.5)'));
 
@@ -1056,7 +1192,7 @@ function showTableModal(tableNum){
   }else{
     list.innerHTML=attendees.map(a=>`
       <div class="table-att-item">
-        <span>${escH(a.nombre)} <span style="color:var(--muted);font-size:0.85em;">· ${escH(a.academia||'—')}</span></span>
+        <span>${escH(a.nombreAsistente||a.nombre||'—')} <span style="color:var(--muted);font-size:0.85em;">· ${escH(a.academia||'—')}</span></span>
         <span style="color:var(--muted);">${escH(a.planta||'—')} · <span class="ev-tag ${a.ev==='dia1'?'d1':'d2'}">${a.ev==='dia1'?'Día 1':'Día 2'}</span></span>
       </div>
     `).join('');
@@ -1135,144 +1271,180 @@ async function buildTicketPDF(ev,attendee){
   const nombreAst=(attendee.nombreAsistente||attendee.nombre||'—');
   const nombreRes=(attendee.nombreReserva||'—');
   const qrUrl=await makeQRDataURL(qrPayload(ev,attendee));
-  const S=4;
-  const W=216*S, H=100*S, perf=148*S; // 864×400px
+  const S=4; // 1mm = 4px
+  const W=216*S, H=100*S, perf=148*S;
   const cv=document.createElement('canvas');
   cv.width=W; cv.height=H;
   const ctx=cv.getContext('2d');
   const mm=S;
+  const evInfo=EVENTS[ev];
 
-  // ── Fondo ──
-  const bg=ctx.createLinearGradient(0,0,W,H);
-  bg.addColorStop(0,'#1a0202'); bg.addColorStop(0.5,'#070000'); bg.addColorStop(1,'#190202');
+  // ── Fondo: radial oscuro vinotinto (igual al PDF) ──
+  const bg=ctx.createRadialGradient(perf*0.45,H*0.5,H*0.05,perf*0.45,H*0.5,W*0.75);
+  bg.addColorStop(0,'#2e0303'); bg.addColorStop(0.45,'#160101'); bg.addColorStop(1,'#060000');
   ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-  const top=ctx.createLinearGradient(0,0,0,H*0.45);
-  top.addColorStop(0,'rgba(50,5,5,0.55)'); top.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=top; ctx.fillRect(0,0,W,H*0.45);
+  // Viñeta oscura en bordes
+  const vig=ctx.createLinearGradient(0,0,W,0);
+  vig.addColorStop(0,'rgba(0,0,0,0.45)'); vig.addColorStop(0.12,'rgba(0,0,0,0)');
+  vig.addColorStop(0.88,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.45)');
+  ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
 
-  [[15,15,8],[45,8,6],[78,25,7],[115,10,8],[35,55,6],[72,75,5],[108,62,7],[155,12,7],[178,45,7],[205,20,6],[168,68,5]].forEach(
-    ([x,y,r])=>canvasStar(ctx,x*mm,y*mm,r*mm/3,'rgba(130,10,10,0.13)')
-  );
+  // Estrellas de fondo (outline, muy tenues)
+  ctx.strokeStyle='rgba(110,10,10,0.2)'; ctx.lineWidth=2; ctx.setLineDash([]);
+  [[52,38,32],[175,22,26],[310,65,20],[455,18,28],[600,50,24],[730,28,30],[820,70,19],[130,82,22],[390,88,18],[660,78,25]].forEach(([cx,cy,r])=>{
+    ctx.beginPath();
+    for(let i=0;i<10;i++){
+      const a=(i*Math.PI/5)-Math.PI/2, rad=i%2===0?r:r*0.4;
+      i===0?ctx.moveTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a)):ctx.lineTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a));
+    }
+    ctx.closePath(); ctx.stroke();
+  });
 
-  // Línea de perforación
+  // ── Línea de perforación ──
   ctx.save();
-  ctx.strokeStyle='rgba(120,20,20,0.5)'; ctx.lineWidth=1.5; ctx.setLineDash([7,7]);
-  ctx.beginPath(); ctx.moveTo(perf,0); ctx.lineTo(perf,H); ctx.stroke();
+  ctx.strokeStyle='rgba(180,180,180,0.45)'; ctx.lineWidth=1.5; ctx.setLineDash([5,5]);
+  ctx.beginPath(); ctx.moveTo(perf,4); ctx.lineTo(perf,H-4); ctx.stroke();
   ctx.restore();
 
-  // ══════════════════════════════════════════
-  // ZONA IZQUIERDA
-  // ══════════════════════════════════════════
-  const fX=8*mm, fFullW=68*mm, fHalfW=(fFullW-3*mm)/2;
-  const col2X=fX+fHalfW+3*mm, fR=3.5*mm;
+  // ════════════════════════════════════════════
+  // ZONA IZQUIERDA — COLUMNA A: Stars + Precio + Campos
+  // ════════════════════════════════════════════
+  // Tres estrellas doradas grandes (igual al PDF)
+  const sY=9.5*mm, sR=5*mm;
+  [9,20,31].forEach(sx=>canvasStar(ctx,sx*mm,sY,sR,'#f5c518'));
 
-  canvasStar(ctx,10*mm,6*mm,2.1*mm,'#f5c518');
-  canvasStar(ctx,15*mm,6*mm,2.1*mm,'#f5c518');
-  canvasStar(ctx,20*mm,6*mm,2.1*mm,'#f5c518');
-  ctx.font=`bold ${6*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('PREVENTA $250',8*mm,11*mm);
-  ctx.font=`${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#c89000';
-  ctx.fillText('DÍA EVENTO $350',8*mm,16*mm);
+  ctx.font=`bold ${6.5*mm}px Arial Black,sans-serif`;
+  ctx.fillStyle='#f5c518';
+  ctx.fillText('PREVENTA $250',8*mm,20*mm);
+  ctx.font=`bold ${5*mm}px Arial,sans-serif`;
+  ctx.fillStyle='rgba(245,197,24,0.7)';
+  ctx.fillText('DÍA EVENTO $350',8*mm,26.5*mm);
+
+  // ── Campos: 5 filas desde y=30mm ──
+  const fX=8*mm, fFullW=89*mm, fHalf=(fFullW-4*mm)/2, col2=fX+fHalf+4*mm;
+  const fH=11*mm, fGap=1.8*mm, fStartY=30*mm;
 
   function drawField(x,y,w,h,label,rawValue,fontMM){
     const value=String(rawValue||'—').toUpperCase();
-    canvasRoundRect(ctx,x,y,w,h,fR,'#8e0008');
-    canvasRoundRect(ctx,x,y,w,h*0.42,fR,'#bf000a');
-    ctx.fillStyle='#bf000a'; ctx.fillRect(x,y+h*0.29,w,h*0.13);
-    ctx.strokeStyle='rgba(200,40,40,0.2)'; ctx.lineWidth=0.8;
-    canvasRoundRect(ctx,x,y,w,h,fR,null,'rgba(200,40,40,0.2)');
-    ctx.font=`bold ${4.3*mm}px Arial,sans-serif`; ctx.fillStyle='rgba(255,255,255,0.85)';
-    ctx.fillText(label,x+2.5*mm,y+h*0.37);
-    fitText(ctx,value,w-5*mm,fontMM,3.0,mm);
-    ctx.fillStyle='#ffffff'; ctx.fillText(value,x+2.5*mm,y+h*0.88);
+    // Sombra sutil
+    ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=6; ctx.shadowOffsetY=2;
+    canvasRoundRect(ctx,x,y,w,h,3.5*mm,'#c0000b');
+    ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+    // Franja superior levemente más oscura para la etiqueta
+    ctx.fillStyle='rgba(0,0,0,0.22)';
+    ctx.fillRect(x+3.5*mm,y+1*mm,w-5*mm,h*0.38);
+    // Etiqueta
+    ctx.font=`bold ${3.8*mm}px Arial,sans-serif`;
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    ctx.fillText(label,x+3*mm,y+h*0.38);
+    // Valor
+    fitText(ctx,value,w-6*mm,fontMM,3.0,mm);
+    ctx.fillStyle='#ffffff';
+    ctx.fillText(value,x+3*mm,y+h-2.8*mm);
   }
 
-  // Fila 1 — NOMBRE ASISTENTE (full, 13mm)
-  drawField(fX,       18*mm, fFullW, 13*mm, 'NOMBRE ASISTENTE', nombreAst,        8);
-  // Fila 2 — NOMBRE RESERVA (full, 11mm)
-  drawField(fX,       33*mm, fFullW, 11*mm, 'NOMBRE DE RESERVA', nombreRes,       7.5);
-  // Fila 3 — ACADEMIA (full, 10mm)
-  drawField(fX,       46*mm, fFullW, 10*mm, 'ACADEMIA',          attendee.academia, 7);
-  // Fila 4 — FOLIO | VENDEDOR/PROF (half, 10mm)
-  drawField(fX,       58*mm, fHalfW, 10*mm, 'FOLIO',        '#'+attendee.folio,  6.5);
-  drawField(col2X,    58*mm, fHalfW, 10*mm, 'VEND./PROF.',  attendee.vendedor,    6);
-  // Fila 5 — MESA | PLANTA (half, 10mm)
-  drawField(fX,       70*mm, fHalfW, 10*mm, 'MESA',         attendee.mesa,        6.5);
-  drawField(col2X,    70*mm, fHalfW, 10*mm, 'PLANTA',       attendee.planta,      6.5);
+  drawField(fX,              fStartY+0*(fH+fGap), fFullW, fH, 'NOMBRE ASISTENTE',  nombreAst,           6.5);
+  drawField(fX,              fStartY+1*(fH+fGap), fFullW, fH, 'NOMBRE DE RESERVA', nombreRes,           6.5);
+  drawField(fX,              fStartY+2*(fH+fGap), fFullW, fH, 'ACADEMIA',           attendee.academia,   6.5);
+  drawField(fX,              fStartY+3*(fH+fGap), fHalf,  fH, 'FOLIO',             '#'+attendee.folio,  6);
+  drawField(col2,            fStartY+3*(fH+fGap), fHalf,  fH, 'VEND./PROF.',        attendee.vendedor,   5.5);
+  drawField(fX,              fStartY+4*(fH+fGap), fHalf,  fH, 'MESA',               attendee.mesa,       6);
+  drawField(col2,            fStartY+4*(fH+fGap), fHalf,  fH, 'PLANTA',             attendee.planta,     6);
 
-  // Separador + contacto
-  ctx.strokeStyle='rgba(110,15,15,0.3)'; ctx.lineWidth=0.8; ctx.setLineDash([3,4]);
-  ctx.beginPath(); ctx.moveTo(fX,82.5*mm); ctx.lineTo(fX+fFullW,82.5*mm); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('CUPO LIMITADO.',fX,87*mm);
-  ctx.font=`${3.8*mm}px Arial,sans-serif`; ctx.fillStyle='#666';
-  ctx.fillText('info@azucardancestudio.com · 55 6607 7277',fX,92*mm);
+  // ── Footer ──
+  const footY=fStartY+5*(fH+fGap)+2*mm;
+  ctx.font=`bold ${5.2*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText('CUPO LIMITADO.',fX,footY);
+  ctx.font=`${3.8*mm}px Arial,sans-serif`; ctx.fillStyle='#555';
+  ctx.fillText('info@azucardancestudio.com  ·  55 6607 7277',fX,footY+6*mm);
 
-  // ══════════════════════════════════════════
-  // ZONA CENTRAL — Logo
-  // ══════════════════════════════════════════
-  const lX=82*mm;
-  const evInfo=EVENTS[ev];
+  // ════════════════════════════════════════════
+  // ZONA IZQUIERDA — COLUMNA B: Logo + Info evento
+  // ════════════════════════════════════════════
+  const lX=102*mm; // columna derecha dentro de zona izquierda
 
-  ctx.font=`bold ${9.5*mm}px Arial Black,Arial,sans-serif`; ctx.fillStyle='#ffffff';
-  const wAZ=ctx.measureText('AZÚCAR').width;
-  ctx.fillText('AZÚCAR',lX,11.5*mm);
-  ctx.fillStyle='#cc0000';
-  ctx.fillText(' FEST',lX+wAZ,11.5*mm);
+  // Logo AZÚCAR FEST
+  ctx.font=`bold ${8.5*mm}px Arial Black,sans-serif`;
+  ctx.fillStyle='#ffffff';
+  const azW=ctx.measureText('AZÚCAR').width;
+  ctx.fillText('AZÚCAR',lX,9.5*mm);
+  ctx.font=`italic bold ${8.5*mm}px Arial Black,sans-serif`;
+  ctx.fillStyle='#f5c518';
+  ctx.fillText('FEST',lX+azW+1.5,9.5*mm);
 
-  ctx.font=`bold ${17*mm}px Arial Black,Arial,sans-serif`; ctx.fillStyle='#b80000';
-  ctx.fillText('2026',lX,28*mm);
+  // 2026 grande rojo
+  ctx.font=`bold ${22*mm}px Arial Black,sans-serif`;
+  ctx.fillStyle='#c00008';
+  ctx.fillText('2026',lX,31*mm);
 
-  ctx.strokeStyle='rgba(155,15,15,0.5)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(lX,31*mm); ctx.lineTo(perf-5*mm,31*mm); ctx.stroke();
+  // Línea divisoria
+  ctx.strokeStyle='rgba(170,20,20,0.45)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(lX,33.5*mm); ctx.lineTo(perf-4*mm,33.5*mm); ctx.stroke();
 
-  ctx.font=`bold ${9*mm}px Arial Black,Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText(evInfo.day,lX,41*mm);
+  // Día del evento (grande, amarillo)
+  ctx.font=`bold ${9.5*mm}px Arial Black,sans-serif`;
+  ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.day,lX,44.5*mm);
 
-  ctx.font=`bold ${7*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText(evInfo.date,lX,49*mm);
-  ctx.fillText(evInfo.time,lX,57*mm);
+  // Fecha y hora
+  ctx.font=`bold ${6.5*mm}px Arial,sans-serif`;
+  ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.date,lX,53*mm);
+  ctx.fillText(evInfo.time,lX,61*mm);
 
-  ctx.font=`bold ${6.8*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
-  ctx.fillText(evInfo.venue,lX,66*mm);
+  // Venue
+  ctx.font=`bold ${5.8*mm}px Arial,sans-serif`;
+  ctx.fillStyle='#ffffff';
+  fitText(ctx,evInfo.venue,(perf-lX-4*mm),5.8,3.5,mm);
+  ctx.fillText(evInfo.venue,lX,70*mm);
 
-  ctx.font=`${5.3*mm}px Arial,sans-serif`; ctx.fillStyle='#999';
-  wrapText(ctx,evInfo.addr,lX,74*mm,perf-lX-5*mm,7*mm);
+  // Dirección
+  ctx.font=`${4.5*mm}px Arial,sans-serif`;
+  ctx.fillStyle='#888888';
+  wrapText(ctx,evInfo.addr,lX,77*mm,(perf-lX-4*mm),6*mm);
 
-  // ══════════════════════════════════════════
-  // ZONA QR — stub derecho
-  // ══════════════════════════════════════════
-  const sX=perf+4.5*mm;
-  const sW=W-perf-7*mm;
+  // CUPO LIMITADO en columna derecha también
+  ctx.font=`bold ${5.2*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText('CUPO LIMITADO.',lX,94*mm);
 
-  // Nombre asistente en stub
-  ctx.font=`bold ${5.5*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
-  const nameLines=[]; let ln='';
+  // ════════════════════════════════════════════
+  // ZONA QR — stub derecho (148–216mm)
+  // ════════════════════════════════════════════
+  const qX=perf+5*mm;
+  const qW=W-perf-8*mm; // ~55mm usable
+
+  // 2 estrellas en stub
+  canvasStar(ctx,qX+4*mm,8.5*mm,3.5*mm,'#f5c518');
+  canvasStar(ctx,qX+13*mm,8.5*mm,3.5*mm,'#f5c518');
+
+  // Nombre asistente (pequeño, wrapped)
+  ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
+  const nLines=[]; let cl='';
   nombreAst.toUpperCase().split(' ').forEach(w=>{
-    const test=ln?ln+' '+w:w;
-    if(ctx.measureText(test).width>sW-1*mm&&ln){nameLines.push(ln);ln=w;}else ln=test;
+    const t=cl?cl+' '+w:w;
+    if(ctx.measureText(t).width>qW-1*mm&&cl){nLines.push(cl);cl=w;}else cl=t;
   });
-  if(ln)nameLines.push(ln);
-  nameLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,sX,(8+i*7)*mm));
+  if(cl)nLines.push(cl);
+  nLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,qX,(8+i*6)*mm));
 
+  // QR
   if(qrUrl){
     const qrImg=new Image();
-    await new Promise(res=>{qrImg.onload=res; qrImg.src=qrUrl;});
-    const qrY=(nameLines.length>1?18:14)*mm;
-    const qrSz=Math.min(sW, H-qrY-10*mm);
-    ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=8;
-    canvasRoundRect(ctx,sX-2,qrY-2,qrSz+4,qrSz+4,6,'#ffffff');
+    await new Promise(r=>{qrImg.onload=r; qrImg.src=qrUrl;});
+    const qrTopY=(nLines.length>1?16.5:14)*mm;
+    const qrSz=Math.min(qW, H-qrTopY-11*mm);
+    ctx.shadowColor='rgba(0,0,0,0.55)'; ctx.shadowBlur=10;
+    canvasRoundRect(ctx,qX-1,qrTopY-1,qrSz+2,qrSz+2,4,'#ffffff');
     ctx.shadowBlur=0;
-    ctx.drawImage(qrImg,sX,qrY,qrSz,qrSz);
-    const qrBot=qrY+qrSz+4*mm;
-    ctx.font=`bold ${3.8*mm}px Arial,sans-serif`; ctx.fillStyle='#aaa';
+    ctx.drawImage(qrImg,qX,qrTopY,qrSz,qrSz);
+    const qBot=qrTopY+qrSz+3.5*mm;
+    ctx.font=`${3.5*mm}px Arial,sans-serif`; ctx.fillStyle='#777';
     const sl='ESCANEAR EN ENTRADA';
-    ctx.fillText(sl,sX+(sW-ctx.measureText(sl).width)/2,qrBot);
+    ctx.fillText(sl,qX+(qW-ctx.measureText(sl).width)/2,qBot);
     const[rc,gc,bc]=evInfo.color;
-    ctx.font=`bold ${4.5*mm}px Arial,sans-serif`; ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
+    ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
     const dl=ev==='dia1'?'DÍA 1 · 1 AGO':'DÍA 2 · 2 AGO';
-    ctx.fillText(dl,sX+(sW-ctx.measureText(dl).width)/2,qrBot+5.5*mm);
+    ctx.fillText(dl,qX+(qW-ctx.measureText(dl).width)/2,qBot+5.5*mm);
   }
 
   const jsPDF=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
