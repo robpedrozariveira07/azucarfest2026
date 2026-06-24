@@ -168,26 +168,30 @@
 <!-- ══════ DÍA 1 ══════ -->
 <div id="tab-dia1" class="page active">
   <span class="event-badge">SÁBADO 1 DE AGOSTO · 20:00 HRS · FORO SAN RAFAEL</span>
-  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Academia, Vendedor, Mesa, Planta — o cárgalos manualmente. <button class="btn btn-outline" style="margin-left:8px;" onclick="downloadTemplate()">⬇️ Plantilla Excel</button></div>
+  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre Asistente, Nombre Reserva, Academia, Vendedor/Profesor, Mesa, Planta — o cárgalos manualmente. <button class="btn btn-outline" style="margin-left:8px;" onclick="downloadTemplate()">⬇️ Plantilla Excel</button></div>
 
   <div class="upload-zone" id="uz1" onclick="document.getElementById('fi1').click()">
     <div class="icon">📂</div>
     <p><strong>Clic para subir Excel o CSV</strong></p>
-    <p style="margin-top:3px">Columnas: Nombre · Academia · Vendedor · Mesa · Planta</p>
+    <p style="margin-top:3px">Nombre Asistente · Nombre Reserva · Academia · Vendedor/Profesor · Mesa · Planta</p>
   </div>
   <input type="file" id="fi1" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia1')" style="display:none">
 
   <div class="divider">o agrega manualmente</div>
   <div class="field-row">
-    <div class="field-group"><label>Nombre</label><input type="text" id="m1-nombre" placeholder="Juan Pérez"></div>
-    <div class="field-group"><label>Academia</label><input type="text" id="m1-academia" placeholder="Academia XYZ"></div>
+    <div class="field-group"><label>Nombre de Asistente</label><input type="text" id="m1-nombreAsistente" placeholder="Juan Pérez"></div>
+    <div class="field-group"><label>Nombre de Reserva</label><input type="text" id="m1-nombreReserva" placeholder="Reserva García"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-group"><label>Academia</label><input type="text" id="m1-academia" placeholder="Estudio Salsa MX"></div>
+    <div class="field-group"><label>Vendedor/Profesor</label><input type="text" id="m1-vendedor" placeholder="Ana"></div>
   </div>
   <div class="field-row-3">
-    <div class="field-group"><label>Vendedor</label><input type="text" id="m1-vendedor" placeholder="Ana"></div>
     <div class="field-group"><label>Mesa</label><input type="text" id="m1-mesa" placeholder="40"></div>
     <div class="field-group"><label>Planta</label>
       <select class="inp" id="m1-planta"><option value="">-- Seleccionar --</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
     </div>
+    <div class="field-group"></div>
   </div>
   <button class="btn btn-red" onclick="addManual('dia1')">➕ Agregar Asistente</button>
 
@@ -210,7 +214,13 @@
       <select class="inp" id="f1-planta" onchange="renderList('dia1')"><option value="">Todas las plantas</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
       <select class="inp" id="f1-academia" onchange="renderList('dia1')"><option value="">Todas las academias</option></select>
       <select class="inp" id="f1-vendedor" onchange="renderList('dia1')"><option value="">Todos los vendedores</option></select>
-      <input type="text" id="sb1" placeholder="🔍 Buscar nombre…" oninput="renderList('dia1')">
+      <input type="text" id="sb1" placeholder="🔍 Buscar asistente o reserva…" oninput="renderList('dia1')">
+    </div>
+    <div class="filter-row" style="margin-top:0">
+      <label style="font-size:0.7em;color:var(--muted);align-self:center;white-space:nowrap;flex-shrink:0;">📅 Fecha carga:</label>
+      <input type="date" class="inp" id="f1-fecha-d" onchange="renderList('dia1')" style="flex:1;min-width:0">
+      <span style="color:var(--muted);align-self:center;padding:0 4px;">—</span>
+      <input type="date" class="inp" id="f1-fecha-h" onchange="renderList('dia1')" style="flex:1;min-width:0">
     </div>
     <div class="progress-wrap" id="pw1"><p id="pt1">Generando…</p><div class="progress"><div class="progress-bar" id="pb1"></div></div></div>
     <div class="attendee-list" id="list-dia1"><p class="empty-msg">Sin asistentes aún.</p></div>
@@ -220,26 +230,30 @@
 <!-- ══════ DÍA 2 ══════ -->
 <div id="tab-dia2" class="page">
   <span class="event-badge gold">DOMINGO 2 DE AGOSTO · 18:00 HRS · MAMBO CAFÉ INSURGENTES</span>
-  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre, Academia, Vendedor, Mesa, Planta — o cárgalos manualmente. <button class="btn btn-outline" style="margin-left:8px;" onclick="downloadTemplate()">⬇️ Plantilla Excel</button></div>
+  <div class="info-box">Sube un <strong>Excel/CSV</strong> con columnas: Nombre Asistente, Nombre Reserva, Academia, Vendedor/Profesor, Mesa, Planta — o cárgalos manualmente. <button class="btn btn-outline" style="margin-left:8px;" onclick="downloadTemplate()">⬇️ Plantilla Excel</button></div>
 
   <div class="upload-zone" id="uz2" onclick="document.getElementById('fi2').click()">
     <div class="icon">📂</div>
     <p><strong>Clic para subir Excel o CSV</strong></p>
-    <p style="margin-top:3px">Columnas: Nombre · Academia · Vendedor · Mesa · Planta</p>
+    <p style="margin-top:3px">Nombre Asistente · Nombre Reserva · Academia · Vendedor/Profesor · Mesa · Planta</p>
   </div>
   <input type="file" id="fi2" accept=".xlsx,.xls,.csv,.txt" onchange="handleFile(event,'dia2')" style="display:none">
 
   <div class="divider">o agrega manualmente</div>
   <div class="field-row">
-    <div class="field-group"><label>Nombre</label><input type="text" id="m2-nombre" placeholder="María García"></div>
-    <div class="field-group"><label>Academia</label><input type="text" id="m2-academia" placeholder="Academia XYZ"></div>
+    <div class="field-group"><label>Nombre de Asistente</label><input type="text" id="m2-nombreAsistente" placeholder="María García"></div>
+    <div class="field-group"><label>Nombre de Reserva</label><input type="text" id="m2-nombreReserva" placeholder="Reserva López"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-group"><label>Academia</label><input type="text" id="m2-academia" placeholder="Estudio Salsa MX"></div>
+    <div class="field-group"><label>Vendedor/Profesor</label><input type="text" id="m2-vendedor" placeholder="Pedro"></div>
   </div>
   <div class="field-row-3">
-    <div class="field-group"><label>Vendedor</label><input type="text" id="m2-vendedor" placeholder="Pedro"></div>
     <div class="field-group"><label>Mesa</label><input type="text" id="m2-mesa" placeholder="40"></div>
     <div class="field-group"><label>Planta</label>
       <select class="inp" id="m2-planta"><option value="">-- Seleccionar --</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
     </div>
+    <div class="field-group"></div>
   </div>
   <button class="btn btn-gold" onclick="addManual('dia2')">➕ Agregar Asistente</button>
 
@@ -262,7 +276,13 @@
       <select class="inp" id="f2-planta" onchange="renderList('dia2')"><option value="">Todas las plantas</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
       <select class="inp" id="f2-academia" onchange="renderList('dia2')"><option value="">Todas las academias</option></select>
       <select class="inp" id="f2-vendedor" onchange="renderList('dia2')"><option value="">Todos los vendedores</option></select>
-      <input type="text" id="sb2" placeholder="🔍 Buscar nombre…" oninput="renderList('dia2')">
+      <input type="text" id="sb2" placeholder="🔍 Buscar asistente o reserva…" oninput="renderList('dia2')">
+    </div>
+    <div class="filter-row" style="margin-top:0">
+      <label style="font-size:0.7em;color:var(--muted);align-self:center;white-space:nowrap;flex-shrink:0;">📅 Fecha carga:</label>
+      <input type="date" class="inp" id="f2-fecha-d" onchange="renderList('dia2')" style="flex:1;min-width:0">
+      <span style="color:var(--muted);align-self:center;padding:0 4px;">—</span>
+      <input type="date" class="inp" id="f2-fecha-h" onchange="renderList('dia2')" style="flex:1;min-width:0">
     </div>
     <div class="progress-wrap" id="pw2"><p id="pt2">Generando…</p><div class="progress"><div class="progress-bar" id="pb2"></div></div></div>
     <div class="attendee-list" id="list-dia2"><p class="empty-msg">Sin asistentes aún.</p></div>
@@ -337,8 +357,8 @@
   <div class="search-wrap"><input type="text" id="dsh-search" placeholder="🔍 Buscar en historial…" oninput="renderDashboard()"></div>
   <div class="dash-table-wrap">
     <table>
-      <thead><tr><th>#</th><th>Nombre</th><th>Academia</th><th>Vendedor</th><th>Mesa</th><th>Planta</th><th>Día</th><th>Hora</th></tr></thead>
-      <tbody id="dsh-body"><tr><td colspan="8" class="empty-msg">Sin registros aún.</td></tr></tbody>
+      <thead><tr><th>#</th><th>Asistente</th><th>Reserva</th><th>Academia</th><th>Vend./Prof.</th><th>Mesa</th><th>Planta</th><th>Día</th><th>F.Carga</th><th>Check-In</th></tr></thead>
+      <tbody id="dsh-body"><tr><td colspan="10" class="empty-msg">Sin registros aún.</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -545,17 +565,14 @@ function loadLocal(){
 // ══════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════
-function genId(ev,name,idx){
-  const str=EVENT_KEY+'|'+ev+'|'+idx+'|'+name;
-  let h=0x811c9dc5;
-  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=(h*0x01000193)>>>0;}
-  return h.toString(36).toUpperCase().padStart(7,'0');
+function genId(){
+  return (Date.now().toString(36)+Math.random().toString(36).slice(2,5)).toUpperCase().slice(0,9);
 }
-function qrPayload(ev,a){return EVENT_KEY+'|'+ev+'|'+a.id+'|'+a.nombre;}
+function qrPayload(ev,a){return EVENT_KEY+'|'+ev+'|'+a.id+'|'+(a.nombreAsistente||a.nombre||'');}
 function parseQR(txt){
   const p=txt.split('|');
   if(p.length>=4&&p[0]===EVENT_KEY&&(p[1]==='dia1'||p[1]==='dia2'))
-    return{ok:true,ev:p[1],id:p[2],nombre:p.slice(3).join('|')};
+    return{ok:true,ev:p[1],id:p[2],nombreAsistente:p.slice(3).join('|')};
   return{ok:false};
 }
 function fmtTime(ts){return ts?new Date(ts).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):''}
@@ -586,11 +603,11 @@ function showTab(id){
 function downloadTemplate(){
   const wb=XLSX.utils.book_new();
   const ws=XLSX.utils.aoa_to_sheet([
-    ['NOMBRE','ACADEMIA','VENDEDOR','MESA','PLANTA'],
-    ['Juan Pérez','Academia XYZ','Ana','40','Baja'],
-    ['María García','Studio ABC','Pedro','201','Alta'],
+    ['NOMBRE ASISTENTE','NOMBRE RESERVA','ACADEMIA','VENDEDOR/PROFESOR','MESA','PLANTA'],
+    ['Juan Pérez','Reserva García','Estudio Salsa MX','Ana','40','Baja'],
+    ['María García','Reserva López','Dance World','Pedro','201','Alta'],
   ]);
-  ws['!cols']=[{wch:25},{wch:20},{wch:15},{wch:8},{wch:8}];
+  ws['!cols']=[{wch:25},{wch:25},{wch:20},{wch:20},{wch:8},{wch:8}];
   XLSX.utils.book_append_sheet(wb,ws,'Asistentes');
   XLSX.writeFile(wb,'Plantilla_AzucarFest.xlsx');
 }
@@ -614,25 +631,28 @@ function handleFile(e,ev){
     const first=rows[0]?rows[0].map(c=>String(c).toLowerCase()):[];
     const hasHeader=first.some(c=>c.includes('nombre')||c.includes('vendedor')||c.includes('mesa')||c.includes('academia'));
     const start=hasHeader?1:0;
-    let iNombre=0,iAcademia=1,iVendedor=2,iMesa=3,iPlanta=4;
+    let iNombreAst=0,iNombreRes=1,iAcademia=2,iVendedor=3,iMesa=4,iPlanta=5;
     if(hasHeader){
       first.forEach((c,i)=>{
-        if(c.includes('nombre')||c.includes('name'))iNombre=i;
+        if(c.includes('asistente'))iNombreAst=i;
+        else if(c.includes('reserva'))iNombreRes=i;
+        else if(c.includes('nombre')&&!c.includes('reserva')&&!c.includes('asistente'))iNombreAst=i;
         else if(c.includes('academia'))iAcademia=i;
-        else if(c.includes('vendedor')||c.includes('seller'))iVendedor=i;
+        else if(c.includes('vendedor')||c.includes('seller')||c.includes('profesor'))iVendedor=i;
         else if(c.includes('mesa')||c.includes('table'))iMesa=i;
         else if(c.includes('planta')||c.includes('floor'))iPlanta=i;
       });
     }
     const records=rows.slice(start)
       .map(r=>({
-        nombre:String(r[iNombre]||'').trim(),
+        nombreAsistente:String(r[iNombreAst]||'').trim(),
+        nombreReserva:String(r[iNombreRes]||'').trim(),
         academia:String(r[iAcademia]||'').trim(),
         vendedor:String(r[iVendedor]||'').trim(),
         mesa:String(r[iMesa]||'').trim(),
         planta:String(r[iPlanta]||'').trim()
       }))
-      .filter(r=>r.nombre);
+      .filter(r=>r.nombreAsistente);
     if(!records.length){alert('No se encontraron datos válidos.');return;}
     processRecords(ev,records);
   };
@@ -642,41 +662,44 @@ function handleFile(e,ev){
 
 function addManual(ev){
   const n=ev.slice(-1);
-  const nombre=document.getElementById('m'+n+'-nombre').value.trim();
+  const nombreAsistente=document.getElementById('m'+n+'-nombreAsistente').value.trim();
+  const nombreReserva=document.getElementById('m'+n+'-nombreReserva').value.trim();
   const academia=document.getElementById('m'+n+'-academia').value.trim();
   const vendedor=document.getElementById('m'+n+'-vendedor').value.trim();
   const mesa=document.getElementById('m'+n+'-mesa').value.trim();
   const planta=document.getElementById('m'+n+'-planta').value.trim();
-  if(!nombre){alert('El nombre es obligatorio.');return;}
-  processRecords(ev,[{nombre,academia,vendedor,mesa,planta}]);
-  ['nombre','academia','vendedor','mesa'].forEach(f=>document.getElementById('m'+n+'-'+f).value='');
+  if(!nombreAsistente){alert('El nombre de asistente es obligatorio.');return;}
+  processRecords(ev,[{nombreAsistente,nombreReserva,academia,vendedor,mesa,planta}]);
+  ['nombreAsistente','nombreReserva','academia','vendedor','mesa'].forEach(f=>document.getElementById('m'+n+'-'+f).value='');
   document.getElementById('m'+n+'-planta').value='';
 }
 
 function processRecords(ev,records){
-  const existingNames=new Set(data[ev].map(a=>a.nombre.toLowerCase().trim()));
   const startIdx=data[ev].length;
   const newOnes=[];
-  records.forEach((rec,i)=>{
-    if(existingNames.has(rec.nombre.toLowerCase().trim()))return;
-    existingNames.add(rec.nombre.toLowerCase().trim());
+  const ts=Date.now();
+  records.forEach(rec=>{
     const globalIdx=startIdx+newOnes.length;
-    const id=genId(ev,rec.nombre,globalIdx);
+    const id=genId();
     newOnes.push({
       id,folio:String(globalIdx+1).padStart(4,'0'),
-      nombre:rec.nombre,academia:rec.academia||'—',
-      vendedor:rec.vendedor||'—',mesa:rec.mesa||'—',
-      planta:rec.planta||'—',checkedIn:false,checkInTime:null
+      nombreAsistente:rec.nombreAsistente||rec.nombre||'—',
+      nombreReserva:rec.nombreReserva||'—',
+      academia:rec.academia||'—',
+      vendedor:rec.vendedor||'—',
+      mesa:rec.mesa||'—',
+      planta:rec.planta||'—',
+      checkedIn:false,checkInTime:null,
+      fechaCarga:rec.fechaCarga||ts
     });
   });
-  if(!newOnes.length){alert('Todos los nombres ya están en la lista.');return;}
+  if(!newOnes.length){alert('No se encontraron registros válidos.');return;}
   data[ev]=[...data[ev],...newOnes];
   saveLocal(ev);
   if(db){const fbData={};newOnes.forEach(a=>{fbData[a.id]=a;});db.ref(FB_ROOT+'/'+ev+'/attendees').update(fbData).catch(e=>console.warn(e));}
   const n=ev.slice(-1);
   document.getElementById('cnt'+n).textContent=data[ev].length;
   document.getElementById('result-'+ev).style.display='block';
-  if(newOnes.length<records.length)alert(`✅ ${newOnes.length} agregado(s). ${records.length-newOnes.length} ya estaban en la lista.`);
   populateFilters(ev);
   renderList(ev);
 }
@@ -704,11 +727,17 @@ function getFilteredData(ev){
   const fPlanta=(document.getElementById('f'+n+'-planta')?.value||'');
   const fAcademia=(document.getElementById('f'+n+'-academia')?.value||'');
   const fVendedor=(document.getElementById('f'+n+'-vendedor')?.value||'');
+  const fFechaD=(document.getElementById('f'+n+'-fecha-d')?.value||'');
+  const fFechaH=(document.getElementById('f'+n+'-fecha-h')?.value||'');
   return data[ev].filter(a=>{
     if(fPlanta&&(a.planta||'')!==fPlanta)return false;
     if(fAcademia&&(a.academia||'—')!==fAcademia)return false;
     if(fVendedor&&(a.vendedor||'—')!==fVendedor)return false;
-    if(q&&!a.nombre.toLowerCase().includes(q)&&!(a.vendedor||'').toLowerCase().includes(q)&&!(a.mesa||'').toLowerCase().includes(q))return false;
+    if(fFechaD&&a.fechaCarga&&new Date(a.fechaCarga).toISOString().slice(0,10)<fFechaD)return false;
+    if(fFechaH&&a.fechaCarga&&new Date(a.fechaCarga).toISOString().slice(0,10)>fFechaH)return false;
+    const nom=(a.nombreAsistente||a.nombre||'').toLowerCase();
+    const res=(a.nombreReserva||'').toLowerCase();
+    if(q&&!nom.includes(q)&&!res.includes(q)&&!(a.vendedor||'').toLowerCase().includes(q)&&!(a.mesa||'').toLowerCase().includes(q))return false;
     return true;
   });
 }
@@ -729,19 +758,24 @@ function renderList(ev){
   const filtered=getFilteredData(ev);
   const el=document.getElementById('list-'+ev);
   if(!filtered.length){el.innerHTML=`<p class="empty-msg">${arr.length?'Sin resultados para esos filtros.':'Sin asistentes aún.'}</p>`;return;}
-  el.innerHTML=filtered.map(a=>`
-    <div class="attendee-card ${a.checkedIn?'in':''}">
+  el.innerHTML=filtered.map(a=>{
+    const nom=a.nombreAsistente||a.nombre||'—';
+    const res=a.nombreReserva||'—';
+    const fc=a.fechaCarga?fmtDate(a.fechaCarga):'—';
+    return `<div class="attendee-card ${a.checkedIn?'in':''}">
       <div class="a-info">
-        <div class="a-name">${escH(a.nombre)}</div>
-        <div class="a-meta">Folio #${a.folio} · ${escH(a.academia||'—')} · ${escH(a.vendedor||'—')} · Mesa ${escH(a.mesa||'—')} · Planta ${escH(a.planta||'—')}${a.checkedIn?' · ✅ '+fmtTime(a.checkInTime):''}</div>
+        <div class="a-name">${escH(nom)}</div>
+        <div class="a-meta" style="margin-top:2px">Reserva: <span style="color:#ddd">${escH(res)}</span></div>
+        <div class="a-meta">#${a.folio} · ${escH(a.academia||'—')} · ${escH(a.vendedor||'—')} · Mesa ${escH(a.mesa||'—')} · ${escH(a.planta||'—')}</div>
+        <div class="a-meta">Carga: ${fc}${a.checkedIn?' · ✅ '+fmtTime(a.checkInTime):''}</div>
       </div>
       <div class="a-actions">
         <span class="badge ${a.checkedIn?'badge-ok':'badge-pend'}">${a.checkedIn?'✓ OK':'Pend.'}</span>
         <button class="btn btn-outline" onclick="downloadOne('${ev}','${a.id}',this)">⬇️</button>
-        <button class="btn btn-outline danger" onclick="deleteOne('${ev}','${a.id}','${escH(a.nombre).replace(/'/g,"\\'")}')">🗑️</button>
+        <button class="btn btn-outline danger" onclick="deleteOne('${ev}','${a.id}','${escH(nom).replace(/'/g,"\\'")}')">🗑️</button>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function deleteOne(ev,id,nombre){
@@ -772,23 +806,24 @@ function renderDashboard(){
   document.getElementById('dsh-d2').textContent=inD2;
   document.getElementById('dsh-pct').textContent=pct+'%';
   const q=(document.getElementById('dsh-search')?.value||'').toLowerCase();
-  const filtered=history.filter(h=>
-    h.nombre.toLowerCase().includes(q)||
-    (h.vendedor||'').toLowerCase().includes(q)||
-    (h.academia||'').toLowerCase().includes(q)||
-    (h.mesa||'').toLowerCase().includes(q)
-  );
+  const filtered=history.filter(h=>{
+    const nom=(h.nombreAsistente||h.nombre||'').toLowerCase();
+    const res=(h.nombreReserva||'').toLowerCase();
+    return nom.includes(q)||res.includes(q)||(h.vendedor||'').toLowerCase().includes(q)||(h.academia||'').toLowerCase().includes(q)||(h.mesa||'').toLowerCase().includes(q);
+  });
   const tb=document.getElementById('dsh-body');
-  if(!filtered.length){tb.innerHTML='<tr><td colspan="8" class="empty-msg">Sin registros aún.</td></tr>';return;}
+  if(!filtered.length){tb.innerHTML='<tr><td colspan="10" class="empty-msg">Sin registros aún.</td></tr>';return;}
   tb.innerHTML=filtered.map((h,i)=>`
     <tr>
       <td>${i+1}</td>
-      <td class="tag-in">${escH(h.nombre)}</td>
+      <td class="tag-in">${escH(h.nombreAsistente||h.nombre||'—')}</td>
+      <td>${escH(h.nombreReserva||'—')}</td>
       <td>${escH(h.academia||'—')}</td>
       <td>${escH(h.vendedor||'—')}</td>
       <td>${escH(h.mesa||'—')}</td>
       <td>${escH(h.planta||'—')}</td>
       <td><span class="ev-tag ${h.ev==='dia1'?'d1':'d2'}">${h.ev==='dia1'?'Ago 1':'Ago 2'}</span></td>
+      <td>${h.fechaCarga?fmtDate(h.fechaCarga):'—'}</td>
       <td>${fmtTime(h.checkInTime)}</td>
     </tr>
   `).join('');
@@ -799,7 +834,7 @@ function renderRecent(){
   if(!recent.length){el.innerHTML='<p class="empty-msg" style="padding:8px;">Sin registros aún.</p>';return;}
   el.innerHTML=recent.map(h=>`
     <div class="recent-item">
-      <span>${escH(h.nombre)}</span>
+      <span>${escH(h.nombreAsistente||h.nombre||'—')}</span>
       <div class="ri-right">
         <span class="ev-tag ${h.ev==='dia1'?'d1':'d2'}" style="font-size:0.65em">${h.ev==='dia1'?'Ago 1':'Ago 2'}</span><br>
         ${fmtTime(h.checkInTime)}
@@ -810,12 +845,12 @@ function renderRecent(){
 function exportDashboard(){
   if(!history.length){alert('Sin registros.');return;}
   const wb=XLSX.utils.book_new();
-  const rows=[['#','Nombre','Academia','Vendedor','Mesa','Planta','Evento','Fecha','Hora']];
+  const rows=[['#','Nombre Asistente','Nombre Reserva','Academia','Vendedor/Profesor','Mesa','Planta','Evento','Fecha Carga','Hora Check-In']];
   [...history].sort((a,b)=>a.checkInTime-b.checkInTime).forEach((h,i)=>{
-    rows.push([i+1,h.nombre,h.academia||'—',h.vendedor||'—',h.mesa||'—',h.planta||'—',h.ev==='dia1'?'1 Ago · Foro SR':'2 Ago · Mambo Café',fmtDate(h.checkInTime),fmtTime(h.checkInTime)]);
+    rows.push([i+1,h.nombreAsistente||h.nombre||'—',h.nombreReserva||'—',h.academia||'—',h.vendedor||'—',h.mesa||'—',h.planta||'—',h.ev==='dia1'?'1 Ago · Foro SR':'2 Ago · Mambo Café',h.fechaCarga?fmtDate(h.fechaCarga):'—',fmtTime(h.checkInTime)]);
   });
   const ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[{wch:4},{wch:28},{wch:20},{wch:16},{wch:8},{wch:8},{wch:20},{wch:12},{wch:8}];
+  ws['!cols']=[{wch:4},{wch:28},{wch:28},{wch:20},{wch:18},{wch:8},{wch:8},{wch:20},{wch:12},{wch:12}];
   XLSX.utils.book_append_sheet(wb,ws,'Entradas');
   XLSX.writeFile(wb,'Dashboard_AzucarFest_'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
@@ -1097,165 +1132,137 @@ function fitText(ctx, text, maxWpx, fontMM, minFontMM, mm) {
 }
 
 async function buildTicketPDF(ev,attendee){
+  const nombreAst=(attendee.nombreAsistente||attendee.nombre||'—');
+  const nombreRes=(attendee.nombreReserva||'—');
   const qrUrl=await makeQRDataURL(qrPayload(ev,attendee));
-  const S=4;                         // px por mm
-  const W=216*S, H=89*S, perf=148*S;
+  const S=4;
+  const W=216*S, H=100*S, perf=148*S; // 864×400px
   const cv=document.createElement('canvas');
   cv.width=W; cv.height=H;
   const ctx=cv.getContext('2d');
-  const mm=S;                        // 1mm = 4px
+  const mm=S;
 
-  // ── Fondo oscuro ──
+  // ── Fondo ──
   const bg=ctx.createLinearGradient(0,0,W,H);
   bg.addColorStop(0,'#1a0202'); bg.addColorStop(0.5,'#070000'); bg.addColorStop(1,'#190202');
   ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-  const top=ctx.createLinearGradient(0,0,0,H*0.5);
-  top.addColorStop(0,'rgba(50,5,5,0.6)'); top.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=top; ctx.fillRect(0,0,W,H*0.5);
+  const top=ctx.createLinearGradient(0,0,0,H*0.45);
+  top.addColorStop(0,'rgba(50,5,5,0.55)'); top.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=top; ctx.fillRect(0,0,W,H*0.45);
 
-  // Estrellas tenues de fondo
-  [[15,15,8],[45,8,6],[78,25,7],[115,10,8],[35,50,6],[72,70,5],[108,58,7],[155,12,7],[178,42,7],[205,18,6],[168,62,5]].forEach(
-    ([x,y,r])=>canvasStar(ctx,x*mm,y*mm,r*mm/3,'rgba(130,10,10,0.14)')
+  [[15,15,8],[45,8,6],[78,25,7],[115,10,8],[35,55,6],[72,75,5],[108,62,7],[155,12,7],[178,45,7],[205,20,6],[168,68,5]].forEach(
+    ([x,y,r])=>canvasStar(ctx,x*mm,y*mm,r*mm/3,'rgba(130,10,10,0.13)')
   );
 
   // Línea de perforación
   ctx.save();
-  ctx.strokeStyle='rgba(120,20,20,0.55)'; ctx.lineWidth=1.5; ctx.setLineDash([7,7]);
+  ctx.strokeStyle='rgba(120,20,20,0.5)'; ctx.lineWidth=1.5; ctx.setLineDash([7,7]);
   ctx.beginPath(); ctx.moveTo(perf,0); ctx.lineTo(perf,H); ctx.stroke();
   ctx.restore();
 
   // ══════════════════════════════════════════
-  // ZONA IZQUIERDA — Encabezado + campos
-  // Layout:
-  //   0-19mm  : Stars + PREVENTA
-  //  20-34mm  : NOMBRE (ancho completo, campo más alto)
-  //  36-47mm  : ACADEMIA (ancho completo)
-  //  49-60mm  : FOLIO (mitad) | VENDEDOR (mitad)
-  //  62-73mm  : MESA  (mitad) | PLANTA   (mitad)
-  //  75-84mm  : contacto
+  // ZONA IZQUIERDA
   // ══════════════════════════════════════════
+  const fX=8*mm, fFullW=68*mm, fHalfW=(fFullW-3*mm)/2;
+  const col2X=fX+fHalfW+3*mm, fR=3.5*mm;
 
-  // Stars + precio (esquina superior izquierda)
-  canvasStar(ctx,10*mm,7*mm,2.3*mm,'#f5c518');
-  canvasStar(ctx,15.5*mm,7*mm,2.3*mm,'#f5c518');
-  canvasStar(ctx,21*mm,7*mm,2.3*mm,'#f5c518');
-  ctx.font=`bold ${6.5*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('PREVENTA $250',8*mm,12.5*mm);
-  ctx.font=`${5.5*mm}px Arial,sans-serif`; ctx.fillStyle='#c89000';
-  ctx.fillText('DÍA EVENTO $350',8*mm,17.5*mm);
+  canvasStar(ctx,10*mm,6*mm,2.1*mm,'#f5c518');
+  canvasStar(ctx,15*mm,6*mm,2.1*mm,'#f5c518');
+  canvasStar(ctx,20*mm,6*mm,2.1*mm,'#f5c518');
+  ctx.font=`bold ${6*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText('PREVENTA $250',8*mm,11*mm);
+  ctx.font=`${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#c89000';
+  ctx.fillText('DÍA EVENTO $350',8*mm,16*mm);
 
-  // Medidas de campos
-  const fX=8*mm;
-  const fFullW=68*mm;                        // ancho completo (8→76mm)
-  const fHalfW=(fFullW-3*mm)/2;             // ancho mitad con gap 3mm
-  const col2X=fX+fHalfW+3*mm;              // inicio de segunda columna
-  const fR=3.5*mm;                           // radio esquinas
-
-  // Función auxiliar: dibuja un campo
   function drawField(x,y,w,h,label,rawValue,fontMM){
     const value=String(rawValue||'—').toUpperCase();
-    // Cuerpo oscuro
     canvasRoundRect(ctx,x,y,w,h,fR,'#8e0008');
-    // Franja de etiqueta (rojo claro)
     canvasRoundRect(ctx,x,y,w,h*0.42,fR,'#bf000a');
-    ctx.fillStyle='#bf000a';
-    ctx.fillRect(x,y+h*0.29,w,h*0.13);
-    // Borde sutil
-    ctx.strokeStyle='rgba(200,40,40,0.22)'; ctx.lineWidth=0.8;
-    canvasRoundRect(ctx,x,y,w,h,fR,null,'rgba(200,40,40,0.22)');
-    // Texto etiqueta
-    ctx.font=`bold ${4.8*mm}px Arial,sans-serif`;
-    ctx.fillStyle='rgba(255,255,255,0.88)';
-    ctx.fillText(label,x+3*mm,y+h*0.37);
-    // Texto valor — auto-ajusta tamaño (fontMM = mm SIN multiplicar)
-    fitText(ctx,value,w-6*mm,fontMM,3.2,mm);
-    ctx.fillStyle='#ffffff';
-    ctx.fillText(value,x+3*mm,y+h*0.88);
+    ctx.fillStyle='#bf000a'; ctx.fillRect(x,y+h*0.29,w,h*0.13);
+    ctx.strokeStyle='rgba(200,40,40,0.2)'; ctx.lineWidth=0.8;
+    canvasRoundRect(ctx,x,y,w,h,fR,null,'rgba(200,40,40,0.2)');
+    ctx.font=`bold ${4.3*mm}px Arial,sans-serif`; ctx.fillStyle='rgba(255,255,255,0.85)';
+    ctx.fillText(label,x+2.5*mm,y+h*0.37);
+    fitText(ctx,value,w-5*mm,fontMM,3.0,mm);
+    ctx.fillStyle='#ffffff'; ctx.fillText(value,x+2.5*mm,y+h*0.88);
   }
 
-  // Fila 1 — NOMBRE (ancho completo, 14mm alto)
-  drawField(fX, 20*mm, fFullW, 14*mm, 'NOMBRE', attendee.nombre, 8.5);
-
-  // Fila 2 — ACADEMIA (ancho completo, 11mm alto)
-  drawField(fX, 36*mm, fFullW, 11*mm, 'ACADEMIA', attendee.academia, 7);
-
-  // Fila 3 — FOLIO | VENDEDOR
-  drawField(fX,    49*mm, fHalfW, 11*mm, 'FOLIO',    '#'+attendee.folio,    7);
-  drawField(col2X, 49*mm, fHalfW, 11*mm, 'VENDEDOR', attendee.vendedor,     7);
-
-  // Fila 4 — MESA | PLANTA
-  drawField(fX,    62*mm, fHalfW, 11*mm, 'MESA',   attendee.mesa,   7);
-  drawField(col2X, 62*mm, fHalfW, 11*mm, 'PLANTA', attendee.planta, 7);
+  // Fila 1 — NOMBRE ASISTENTE (full, 13mm)
+  drawField(fX,       18*mm, fFullW, 13*mm, 'NOMBRE ASISTENTE', nombreAst,        8);
+  // Fila 2 — NOMBRE RESERVA (full, 11mm)
+  drawField(fX,       33*mm, fFullW, 11*mm, 'NOMBRE DE RESERVA', nombreRes,       7.5);
+  // Fila 3 — ACADEMIA (full, 10mm)
+  drawField(fX,       46*mm, fFullW, 10*mm, 'ACADEMIA',          attendee.academia, 7);
+  // Fila 4 — FOLIO | VENDEDOR/PROF (half, 10mm)
+  drawField(fX,       58*mm, fHalfW, 10*mm, 'FOLIO',        '#'+attendee.folio,  6.5);
+  drawField(col2X,    58*mm, fHalfW, 10*mm, 'VEND./PROF.',  attendee.vendedor,    6);
+  // Fila 5 — MESA | PLANTA (half, 10mm)
+  drawField(fX,       70*mm, fHalfW, 10*mm, 'MESA',         attendee.mesa,        6.5);
+  drawField(col2X,    70*mm, fHalfW, 10*mm, 'PLANTA',       attendee.planta,      6.5);
 
   // Separador + contacto
-  ctx.strokeStyle='rgba(110,15,15,0.35)'; ctx.lineWidth=0.8; ctx.setLineDash([3,4]);
-  ctx.beginPath(); ctx.moveTo(fX,75.5*mm); ctx.lineTo(fX+fFullW,75.5*mm); ctx.stroke();
+  ctx.strokeStyle='rgba(110,15,15,0.3)'; ctx.lineWidth=0.8; ctx.setLineDash([3,4]);
+  ctx.beginPath(); ctx.moveTo(fX,82.5*mm); ctx.lineTo(fX+fFullW,82.5*mm); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.font=`bold ${5*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('CUPO LIMITADO.',fX,79.5*mm);
-  ctx.font=`${4.2*mm}px Arial,sans-serif`; ctx.fillStyle='#777';
-  ctx.fillText('info@azucardancestudio.com · 55 6607 7277',fX,84*mm);
+  ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText('CUPO LIMITADO.',fX,87*mm);
+  ctx.font=`${3.8*mm}px Arial,sans-serif`; ctx.fillStyle='#666';
+  ctx.fillText('info@azucardancestudio.com · 55 6607 7277',fX,92*mm);
 
   // ══════════════════════════════════════════
-  // ZONA CENTRAL — Logo + datos del evento
+  // ZONA CENTRAL — Logo
   // ══════════════════════════════════════════
   const lX=82*mm;
   const evInfo=EVENTS[ev];
 
-  ctx.font=`bold ${10*mm}px Arial Black,Arial,sans-serif`;
-  ctx.fillStyle='#ffffff';
+  ctx.font=`bold ${9.5*mm}px Arial Black,Arial,sans-serif`; ctx.fillStyle='#ffffff';
   const wAZ=ctx.measureText('AZÚCAR').width;
-  ctx.fillText('AZÚCAR',lX,11*mm);
+  ctx.fillText('AZÚCAR',lX,11.5*mm);
   ctx.fillStyle='#cc0000';
-  ctx.fillText(' FEST',lX+wAZ,11*mm);
+  ctx.fillText(' FEST',lX+wAZ,11.5*mm);
 
-  ctx.font=`bold ${18*mm}px Arial Black,Arial,sans-serif`;
-  ctx.fillStyle='#b80000';
-  ctx.fillText('2026',lX,27*mm);
+  ctx.font=`bold ${17*mm}px Arial Black,Arial,sans-serif`; ctx.fillStyle='#b80000';
+  ctx.fillText('2026',lX,28*mm);
 
-  ctx.strokeStyle='rgba(155,15,15,0.55)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(lX,30*mm); ctx.lineTo(perf-5*mm,30*mm); ctx.stroke();
+  ctx.strokeStyle='rgba(155,15,15,0.5)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(lX,31*mm); ctx.lineTo(perf-5*mm,31*mm); ctx.stroke();
 
-  ctx.font=`bold ${9.5*mm}px Arial Black,Arial,sans-serif`;
-  ctx.fillStyle='#f5c518';
-  ctx.fillText(evInfo.day,lX,39.5*mm);
+  ctx.font=`bold ${9*mm}px Arial Black,Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.day,lX,41*mm);
 
-  ctx.font=`bold ${7.5*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText(evInfo.date,lX,47.5*mm);
-  ctx.fillText(evInfo.time,lX,55*mm);
+  ctx.font=`bold ${7*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.date,lX,49*mm);
+  ctx.fillText(evInfo.time,lX,57*mm);
 
-  ctx.font=`bold ${7*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
-  ctx.fillText(evInfo.venue,lX,62.5*mm);
+  ctx.font=`bold ${6.8*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
+  ctx.fillText(evInfo.venue,lX,66*mm);
 
-  ctx.font=`${5.8*mm}px Arial,sans-serif`; ctx.fillStyle='#aaa';
-  wrapText(ctx,evInfo.addr,lX,70*mm,perf-lX-5*mm,7.5*mm);
+  ctx.font=`${5.3*mm}px Arial,sans-serif`; ctx.fillStyle='#999';
+  wrapText(ctx,evInfo.addr,lX,74*mm,perf-lX-5*mm,7*mm);
 
   // ══════════════════════════════════════════
-  // ZONA QR — stub derecho (148→216mm)
+  // ZONA QR — stub derecho
   // ══════════════════════════════════════════
   const sX=perf+4.5*mm;
   const sW=W-perf-7*mm;
 
-  canvasStar(ctx,sX+4*mm,9*mm,2.2*mm,'#f5c518');
-  canvasStar(ctx,sX+11*mm,9*mm,2.2*mm,'#f5c518');
-
-  // Nombre en stub (con wrap)
+  // Nombre asistente en stub
   ctx.font=`bold ${5.5*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
   const nameLines=[]; let ln='';
-  attendee.nombre.toUpperCase().split(' ').forEach(w=>{
+  nombreAst.toUpperCase().split(' ').forEach(w=>{
     const test=ln?ln+' '+w:w;
     if(ctx.measureText(test).width>sW-1*mm&&ln){nameLines.push(ln);ln=w;}else ln=test;
   });
   if(ln)nameLines.push(ln);
-  nameLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,sX,(15+i*7)*mm));
+  nameLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,sX,(8+i*7)*mm));
 
   if(qrUrl){
     const qrImg=new Image();
     await new Promise(res=>{qrImg.onload=res; qrImg.src=qrUrl;});
-    const qrY=(nameLines.length>1?24:20)*mm;
-    const qrSz=Math.min(sW,H-qrY-9*mm);
+    const qrY=(nameLines.length>1?18:14)*mm;
+    const qrSz=Math.min(sW, H-qrY-10*mm);
     ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=8;
-    canvasRoundRect(ctx,sX-2,qrY-2,qrSz+4,qrSz+4,5,'#ffffff');
+    canvasRoundRect(ctx,sX-2,qrY-2,qrSz+4,qrSz+4,6,'#ffffff');
     ctx.shadowBlur=0;
     ctx.drawImage(qrImg,sX,qrY,qrSz,qrSz);
     const qrBot=qrY+qrSz+4*mm;
@@ -1269,8 +1276,8 @@ async function buildTicketPDF(ev,attendee){
   }
 
   const jsPDF=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
-  const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:[216,89]});
-  pdf.addImage(cv.toDataURL('image/jpeg',0.97),'JPEG',0,0,216,89);
+  const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:[216,100]});
+  pdf.addImage(cv.toDataURL('image/jpeg',0.97),'JPEG',0,0,216,100);
   return pdf;
 }
 
@@ -1280,7 +1287,7 @@ async function buildTicketPDF(ev,attendee){
 async function downloadOne(ev,id,btn){
   const a=data[ev].find(x=>x.id===id);if(!a)return;
   const orig=btn.textContent;btn.textContent='⏳';btn.disabled=true;
-  try{const pdf=await buildTicketPDF(ev,a);pdf.save(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${a.nombre.replace(/\s+/g,'_')}.pdf`);}
+  try{const nom=(a.nombreAsistente||a.nombre||'S').replace(/\s+/g,'_');const pdf=await buildTicketPDF(ev,a);pdf.save(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${nom}.pdf`);}
   catch(e){alert('Error: '+e.message);}
   btn.textContent=orig;btn.disabled=false;
 }
@@ -1295,11 +1302,12 @@ async function downloadZip(ev,arr,label){
   const zip=new JSZip();
   for(let i=0;i<arr.length;i++){
     const a=arr[i];
-    pt.textContent=`Generando ${i+1}/${arr.length}: ${a.nombre}`;
+    const nom=(a.nombreAsistente||a.nombre||'S');
+    pt.textContent=`Generando ${i+1}/${arr.length}: ${nom}`;
     pb.style.width=((i+1)/arr.length*100)+'%';
     try{
       const pdf=await buildTicketPDF(ev,a);
-      zip.file(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${a.nombre.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_')}.pdf`,pdf.output('blob'));
+      zip.file(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${nom.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_')}.pdf`,pdf.output('blob'));
     }catch(e){console.warn(a.nombre,e);}
     await new Promise(r=>setTimeout(r,30));
   }
@@ -1388,23 +1396,25 @@ function handleScan(raw){
   const evInfo=EVENTS[res.ev];
   const yaEntro=history.find(h=>h.id===res.id);
   if(yaEntro){
-    rEl.classList.add('dup');icon.textContent='⚠️';sName.textContent=res.nombre;
+    rEl.classList.add('dup');icon.textContent='⚠️';sName.textContent=res.nombreAsistente||'—';
     sSub.textContent=evInfo.label;sMsg.textContent='Ya ingresó a las '+fmtTime(yaEntro.checkInTime);return;
   }
   const att=data[res.ev].find(a=>a.id===res.id);
   if(!att&&data[res.ev].length>0){
-    rEl.classList.add('invalid');icon.textContent='❌';sName.textContent=res.nombre||'Desconocido';sSub.textContent='';
+    rEl.classList.add('invalid');icon.textContent='❌';sName.textContent=res.nombreAsistente||'Desconocido';sSub.textContent='';
     sMsg.textContent='Ticket no encontrado en la lista del '+evInfo.label;return;
   }
   // ✅ VÁLIDO
   const entry={
     id:res.id,ev:res.ev,
-    nombre:att?att.nombre:res.nombre,
+    nombreAsistente:att?(att.nombreAsistente||att.nombre):res.nombreAsistente||'—',
+    nombreReserva:att?att.nombreReserva||'—':'—',
     academia:att?att.academia:'—',
     vendedor:att?att.vendedor:'—',
     mesa:att?att.mesa:'—',
     planta:att?att.planta:'—',
     folio:att?att.folio:'—',
+    fechaCarga:att?att.fechaCarga||null:null,
     checkInTime:Date.now()
   };
   if(db){
@@ -1414,9 +1424,9 @@ function handleScan(raw){
     if(att){att.checkedIn=true;att.checkInTime=entry.checkInTime;saveLocal(res.ev);}
     history.unshift(entry);saveHistory();renderDashboard();renderRecent();
   }
-  rEl.classList.add('valid');icon.textContent='✅';sName.textContent=entry.nombre;
+  rEl.classList.add('valid');icon.textContent='✅';sName.textContent=entry.nombreAsistente;
   sSub.textContent=evInfo.label+' · Mesa '+entry.mesa+' · Planta '+entry.planta;
-  sMsg.textContent='¡Bienvenido/a! — Folio #'+entry.folio+' · '+entry.academia;
+  sMsg.textContent='¡Bienvenido/a! — Folio #'+entry.folio+' · Reserva: '+(entry.nombreReserva||'—');
   if(navigator.vibrate)navigator.vibrate([80,40,80]);
 }
 
