@@ -1272,177 +1272,190 @@ async function buildTicketPDF(ev,attendee){
   const nombreRes=(attendee.nombreReserva||'—');
   const qrUrl=await makeQRDataURL(qrPayload(ev,attendee));
   const S=4; // 1mm = 4px
-  const W=216*S, H=100*S, perf=148*S;
+  const W=216*S, H=100*S, perf=170*S; // perf a 170mm → stub QR de 46mm
   const cv=document.createElement('canvas');
   cv.width=W; cv.height=H;
   const ctx=cv.getContext('2d');
   const mm=S;
   const evInfo=EVENTS[ev];
 
-  // ── Fondo: radial oscuro vinotinto (igual al PDF) ──
-  const bg=ctx.createRadialGradient(perf*0.45,H*0.5,H*0.05,perf*0.45,H*0.5,W*0.75);
-  bg.addColorStop(0,'#2e0303'); bg.addColorStop(0.45,'#160101'); bg.addColorStop(1,'#060000');
+  // ══ FONDO radial maroon oscuro (igual al diseño) ══
+  const bg=ctx.createRadialGradient(W*0.62,H*0.32,H*0.04,W*0.62,H*0.32,W*0.85);
+  bg.addColorStop(0,'#3c0404');
+  bg.addColorStop(0.4,'#1d0101');
+  bg.addColorStop(1,'#060000');
   ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
   // Viñeta oscura en bordes
-  const vig=ctx.createLinearGradient(0,0,W,0);
-  vig.addColorStop(0,'rgba(0,0,0,0.45)'); vig.addColorStop(0.12,'rgba(0,0,0,0)');
-  vig.addColorStop(0.88,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.45)');
+  const vig=ctx.createRadialGradient(W*0.5,H*0.5,H*0.22,W*0.5,H*0.5,W*0.6);
+  vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.48)');
   ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
 
-  // Estrellas de fondo (outline, muy tenues)
-  ctx.strokeStyle='rgba(110,10,10,0.2)'; ctx.lineWidth=2; ctx.setLineDash([]);
-  [[52,38,32],[175,22,26],[310,65,20],[455,18,28],[600,50,24],[730,28,30],[820,70,19],[130,82,22],[390,88,18],[660,78,25]].forEach(([cx,cy,r])=>{
+  // ══ ESTRELLAS DE FONDO grandes (outline tenue) ══
+  ctx.strokeStyle='rgba(110,8,8,0.22)'; ctx.lineWidth=2.5; ctx.setLineDash([]);
+  [[60,38,34],[210,16,28],[370,60,24],[520,14,30],[665,46,26],[800,26,32],
+   [48,82,22],[335,88,20],[690,80,28],[460,30,20],[145,54,18]].forEach(([cx,cy,r])=>{
     ctx.beginPath();
-    for(let i=0;i<10;i++){
-      const a=(i*Math.PI/5)-Math.PI/2, rad=i%2===0?r:r*0.4;
-      i===0?ctx.moveTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a)):ctx.lineTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a));
-    }
+    for(let i=0;i<10;i++){const a=(i*Math.PI/5)-Math.PI/2,rad=i%2===0?r:r*0.4;
+      i===0?ctx.moveTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a)):ctx.lineTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a));}
     ctx.closePath(); ctx.stroke();
   });
 
-  // ── Línea de perforación ──
+  // ══ LÍNEA DE PERFORACIÓN ══
   ctx.save();
-  ctx.strokeStyle='rgba(180,180,180,0.45)'; ctx.lineWidth=1.5; ctx.setLineDash([5,5]);
+  ctx.strokeStyle='rgba(210,210,210,0.4)'; ctx.lineWidth=1.5; ctx.setLineDash([6,6]);
   ctx.beginPath(); ctx.moveTo(perf,4); ctx.lineTo(perf,H-4); ctx.stroke();
   ctx.restore();
 
-  // ════════════════════════════════════════════
-  // ZONA IZQUIERDA — COLUMNA A: Stars + Precio + Campos
-  // ════════════════════════════════════════════
-  // Tres estrellas doradas grandes (igual al PDF)
-  const sY=9.5*mm, sR=5*mm;
-  [9,20,31].forEach(sx=>canvasStar(ctx,sx*mm,sY,sR,'#f5c518'));
+  // ══════════════════════════════════════════════════════════════════
+  // SECCIÓN PRINCIPAL (0–170mm)
+  //   IZQUIERDA x=5–82mm   → ★ precio arriba + 5 filas de campos
+  //   DERECHA   x=84–168mm → AZÚCARFEST logo + 2026 ENORME + evento
+  // ══════════════════════════════════════════════════════════════════
 
-  ctx.font=`bold ${6.5*mm}px Arial Black,sans-serif`;
-  ctx.fillStyle='#f5c518';
-  ctx.fillText('PREVENTA $250',8*mm,20*mm);
-  ctx.font=`bold ${5*mm}px Arial,sans-serif`;
-  ctx.fillStyle='rgba(245,197,24,0.7)';
-  ctx.fillText('DÍA EVENTO $350',8*mm,26.5*mm);
+  // ── ★ Estrellas doradas + Precio (top-left) ──
+  [9,20,31].forEach(sx=>canvasStar(ctx,sx*mm,10.5*mm,5.5*mm,'#f5c518'));
+  ctx.font=`bold ${7*mm}px Arial Black,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText('PREVENTA $250',7*mm,22*mm);
+  ctx.font=`bold ${5*mm}px Arial,sans-serif`; ctx.fillStyle='rgba(245,197,24,0.72)';
+  ctx.fillText('DÍA EVENTO $350',7*mm,29*mm);
 
-  // ── Campos: 5 filas desde y=30mm ──
-  const fX=8*mm, fFullW=89*mm, fHalf=(fFullW-4*mm)/2, col2=fX+fHalf+4*mm;
-  const fH=11*mm, fGap=1.8*mm, fStartY=30*mm;
+  // ── CAMPOS (x=5–82mm, 5 filas desde y=31mm) ──
+  //   fila 1: NOMBRE ASISTENTE  (ancho completo 77mm)
+  //   fila 2: NOMBRE DE RESERVA (ancho completo)
+  //   fila 3: ACADEMIA          (ancho completo)
+  //   fila 4: FOLIO ½ | VENDEDOR ½
+  //   fila 5: MESA ½  | PLANTA ½
+  const fX=5*mm, fFullW=77*mm, fHalf=(fFullW-3*mm)/2, fC2=fX+fHalf+3*mm;
+  const fH=9.5*mm, fGap=1.8*mm, fY0=31*mm;
 
   function drawField(x,y,w,h,label,rawValue,fontMM){
     const value=String(rawValue||'—').toUpperCase();
-    // Sombra sutil
     ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=6; ctx.shadowOffsetY=2;
-    canvasRoundRect(ctx,x,y,w,h,3.5*mm,'#c0000b');
+    canvasRoundRect(ctx,x,y,w,h,2.8*mm,'#be000a');
     ctx.shadowBlur=0; ctx.shadowOffsetY=0;
-    // Franja superior levemente más oscura para la etiqueta
-    ctx.fillStyle='rgba(0,0,0,0.22)';
-    ctx.fillRect(x+3.5*mm,y+1*mm,w-5*mm,h*0.38);
+    // Sombra interior para etiqueta
+    ctx.fillStyle='rgba(0,0,0,0.24)'; ctx.fillRect(x+2.8*mm,y+1*mm,w-3.8*mm,3.5*mm);
     // Etiqueta
-    ctx.font=`bold ${3.8*mm}px Arial,sans-serif`;
-    ctx.fillStyle='rgba(255,255,255,0.92)';
-    ctx.fillText(label,x+3*mm,y+h*0.38);
-    // Valor
-    fitText(ctx,value,w-6*mm,fontMM,3.0,mm);
+    ctx.font=`bold ${3.4*mm}px Arial,sans-serif`; ctx.fillStyle='rgba(255,255,255,0.9)';
+    ctx.fillText(label,x+2.8*mm,y+4.2*mm);
+    // Valor (auto-fit)
+    fitText(ctx,value,w-5.5*mm,fontMM,2.8,mm);
     ctx.fillStyle='#ffffff';
-    ctx.fillText(value,x+3*mm,y+h-2.8*mm);
+    ctx.fillText(value,x+2.8*mm,y+h-2.3*mm);
   }
 
-  drawField(fX,              fStartY+0*(fH+fGap), fFullW, fH, 'NOMBRE ASISTENTE',  nombreAst,           6.5);
-  drawField(fX,              fStartY+1*(fH+fGap), fFullW, fH, 'NOMBRE DE RESERVA', nombreRes,           6.5);
-  drawField(fX,              fStartY+2*(fH+fGap), fFullW, fH, 'ACADEMIA',           attendee.academia,   6.5);
-  drawField(fX,              fStartY+3*(fH+fGap), fHalf,  fH, 'FOLIO',             '#'+attendee.folio,  6);
-  drawField(col2,            fStartY+3*(fH+fGap), fHalf,  fH, 'VEND./PROF.',        attendee.vendedor,   5.5);
-  drawField(fX,              fStartY+4*(fH+fGap), fHalf,  fH, 'MESA',               attendee.mesa,       6);
-  drawField(col2,            fStartY+4*(fH+fGap), fHalf,  fH, 'PLANTA',             attendee.planta,     6);
+  drawField(fX,  fY0+0*(fH+fGap), fFullW, fH, 'NOMBRE ASISTENTE',  nombreAst,         6.0);
+  drawField(fX,  fY0+1*(fH+fGap), fFullW, fH, 'NOMBRE DE RESERVA', nombreRes,         6.0);
+  drawField(fX,  fY0+2*(fH+fGap), fFullW, fH, 'ACADEMIA',           attendee.academia, 6.0);
+  drawField(fX,  fY0+3*(fH+fGap), fHalf,  fH, 'FOLIO',    '#'+attendee.folio, 5.8);
+  drawField(fC2, fY0+3*(fH+fGap), fHalf,  fH, 'VENDEDOR', attendee.vendedor,  5.0);
+  drawField(fX,  fY0+4*(fH+fGap), fHalf,  fH, 'MESA',     attendee.mesa,      5.8);
+  drawField(fC2, fY0+4*(fH+fGap), fHalf,  fH, 'PLANTA',   attendee.planta,    5.8);
 
-  // ── Footer ──
-  const footY=fStartY+5*(fH+fGap)+2*mm;
-  ctx.font=`bold ${5.2*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('CUPO LIMITADO.',fX,footY);
-  ctx.font=`${3.8*mm}px Arial,sans-serif`; ctx.fillStyle='#555';
-  ctx.fillText('info@azucardancestudio.com  ·  55 6607 7277',fX,footY+6*mm);
+  // ── Footer izquierdo (bajo los campos) ──
+  const fyEnd=fY0+5*fH+4*fGap; // ≈85.2mm
+  ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText('CUPO LIMITADO.',fX,fyEnd+6.5*mm);   // ≈91.7mm ✓
+  ctx.font=`${3.4*mm}px Arial,sans-serif`; ctx.fillStyle='#555';
+  ctx.fillText('info@azucardancestudio.com  ·  55 6607 7277',fX,fyEnd+12.5*mm); // ≈97.7mm ✓
 
-  // ════════════════════════════════════════════
-  // ZONA IZQUIERDA — COLUMNA B: Logo + Info evento
-  // ════════════════════════════════════════════
-  const lX=102*mm; // columna derecha dentro de zona izquierda
+  // ══════════════════════════════════════════════════════════
+  // COLUMNA DERECHA: AZÚCARFEST + 2026 + INFO EVENTO
+  //   cX=84mm, cW=84mm (84–168mm)
+  // ══════════════════════════════════════════════════════════
+  const cX=84*mm, cW=84*mm;
 
-  // Logo AZÚCAR FEST
-  ctx.font=`bold ${8.5*mm}px Arial Black,sans-serif`;
-  ctx.fillStyle='#ffffff';
+  // ── Logo AZÚCARFEST — auto-fit en cW ──
+  let lsz=13.5;
+  ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
+  while(ctx.measureText('AZÚCARFEST').width>cW-2*mm && lsz>7){
+    lsz-=0.25; ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
+  }
+  ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
   const azW=ctx.measureText('AZÚCAR').width;
-  ctx.fillText('AZÚCAR',lX,9.5*mm);
-  ctx.font=`italic bold ${8.5*mm}px Arial Black,sans-serif`;
-  ctx.fillStyle='#f5c518';
-  ctx.fillText('FEST',lX+azW+1.5,9.5*mm);
-
-  // 2026 grande rojo
-  ctx.font=`bold ${22*mm}px Arial Black,sans-serif`;
-  ctx.fillStyle='#c00008';
-  ctx.fillText('2026',lX,31*mm);
-
-  // Línea divisoria
-  ctx.strokeStyle='rgba(170,20,20,0.45)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(lX,33.5*mm); ctx.lineTo(perf-4*mm,33.5*mm); ctx.stroke();
-
-  // Día del evento (grande, amarillo)
-  ctx.font=`bold ${9.5*mm}px Arial Black,sans-serif`;
-  ctx.fillStyle='#f5c518';
-  ctx.fillText(evInfo.day,lX,44.5*mm);
-
-  // Fecha y hora
-  ctx.font=`bold ${6.5*mm}px Arial,sans-serif`;
-  ctx.fillStyle='#f5c518';
-  ctx.fillText(evInfo.date,lX,53*mm);
-  ctx.fillText(evInfo.time,lX,61*mm);
-
-  // Venue
-  ctx.font=`bold ${5.8*mm}px Arial,sans-serif`;
   ctx.fillStyle='#ffffff';
-  fitText(ctx,evInfo.venue,(perf-lX-4*mm),5.8,3.5,mm);
-  ctx.fillText(evInfo.venue,lX,70*mm);
+  ctx.fillText('AZÚCAR',cX,lsz*mm+2*mm);
+  ctx.font=`italic bold ${lsz*mm}px Arial Black,sans-serif`;
+  ctx.fillStyle='#f5c518';
+  ctx.fillText('FEST',cX+azW,lsz*mm+2*mm);
 
-  // Dirección
-  ctx.font=`${4.5*mm}px Arial,sans-serif`;
-  ctx.fillStyle='#888888';
-  wrapText(ctx,evInfo.addr,lX,77*mm,(perf-lX-4*mm),6*mm);
+  // ── 2026 — tan grande como quepa en cW ──
+  let ysz=36;
+  ctx.font=`bold ${ysz*mm}px Arial Black,sans-serif`;
+  while(ctx.measureText('2026').width>cW && ysz>12){
+    ysz-=0.5; ctx.font=`bold ${ysz*mm}px Arial Black,sans-serif`;
+  }
+  const logoBot=(lsz+2)*mm+(3*mm); // baseline de logo + gap
+  ctx.fillStyle='#c0000a';
+  ctx.fillText('2026',cX,logoBot+ysz*mm);
 
-  // CUPO LIMITADO en columna derecha también
-  ctx.font=`bold ${5.2*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('CUPO LIMITADO.',lX,94*mm);
+  // ── Línea divisoria sutil ──
+  const yr2bot=logoBot+ysz*mm;
+  ctx.strokeStyle='rgba(190,22,22,0.4)'; ctx.lineWidth=1.2; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(cX,yr2bot+3.5*mm); ctx.lineTo(cX+cW,yr2bot+3.5*mm); ctx.stroke();
+
+  // ── Info evento (debajo de la línea) ──
+  const iY=yr2bot+4.5*mm;
+
+  // Día (bold yellow)
+  let dsz=8.5;
+  ctx.font=`bold ${dsz*mm}px Arial Black,sans-serif`;
+  while(ctx.measureText(evInfo.day).width>cW-2*mm && dsz>4){dsz-=0.3; ctx.font=`bold ${dsz*mm}px Arial Black,sans-serif`;}
+  ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.day,cX,iY+dsz*mm);
+
+  // Fecha (gold)
+  ctx.font=`bold ${5*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  ctx.fillText(evInfo.date,cX,iY+dsz*mm+6.5*mm);
+
+  // Hora (gold) + Venue (white) — misma línea, como en el diseño
+  ctx.font=`bold ${5*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
+  const tW=ctx.measureText(evInfo.time+' ').width;
+  ctx.fillText(evInfo.time+' ',cX,iY+dsz*mm+13*mm);
+  ctx.fillStyle='#ffffff';
+  fitText(ctx,evInfo.venue,cW-tW,5,3,mm);
+  ctx.fillText(evInfo.venue,cX+tW,iY+dsz*mm+13*mm);
+
+  // Dirección (pequeña, gris)
+  ctx.font=`${3.6*mm}px Arial,sans-serif`; ctx.fillStyle='#686868';
+  wrapText(ctx,evInfo.addr,cX,iY+dsz*mm+19.5*mm,cW,5*mm);
 
   // ════════════════════════════════════════════
-  // ZONA QR — stub derecho (148–216mm)
+  // STUB QR (170–216mm = 46mm → ~38mm usable)
   // ════════════════════════════════════════════
-  const qX=perf+5*mm;
-  const qW=W-perf-8*mm; // ~55mm usable
+  const qX=perf+4*mm;
+  const qW=W-perf-7*mm; // ≈38mm usable
 
-  // 2 estrellas en stub
-  canvasStar(ctx,qX+4*mm,8.5*mm,3.5*mm,'#f5c518');
-  canvasStar(ctx,qX+13*mm,8.5*mm,3.5*mm,'#f5c518');
+  // 2 estrellitas
+  canvasStar(ctx,qX+5*mm,10*mm,3.5*mm,'#f5c518');
+  canvasStar(ctx,qX+15*mm,10*mm,3.5*mm,'#f5c518');
 
-  // Nombre asistente (pequeño, wrapped)
-  ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
+  // Nombre asistente (wrapped)
+  ctx.font=`bold ${4.5*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
   const nLines=[]; let cl='';
   nombreAst.toUpperCase().split(' ').forEach(w=>{
     const t=cl?cl+' '+w:w;
     if(ctx.measureText(t).width>qW-1*mm&&cl){nLines.push(cl);cl=w;}else cl=t;
   });
   if(cl)nLines.push(cl);
-  nLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,qX,(8+i*6)*mm));
+  nLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,qX,(10+i*5.5)*mm));
 
-  // QR
+  // QR code
   if(qrUrl){
     const qrImg=new Image();
     await new Promise(r=>{qrImg.onload=r; qrImg.src=qrUrl;});
-    const qrTopY=(nLines.length>1?16.5:14)*mm;
-    const qrSz=Math.min(qW, H-qrTopY-11*mm);
-    ctx.shadowColor='rgba(0,0,0,0.55)'; ctx.shadowBlur=10;
+    const qrTopY=(nLines.length>1?17:15)*mm;
+    const qrSz=Math.min(qW,H-qrTopY-12*mm);
+    ctx.shadowColor='rgba(0,0,0,0.65)'; ctx.shadowBlur=10;
     canvasRoundRect(ctx,qX-1,qrTopY-1,qrSz+2,qrSz+2,4,'#ffffff');
     ctx.shadowBlur=0;
     ctx.drawImage(qrImg,qX,qrTopY,qrSz,qrSz);
-    const qBot=qrTopY+qrSz+3.5*mm;
-    ctx.font=`${3.5*mm}px Arial,sans-serif`; ctx.fillStyle='#777';
+    const qBot=qrTopY+qrSz+3*mm;
+    ctx.font=`${3*mm}px Arial,sans-serif`; ctx.fillStyle='#686868';
     const sl='ESCANEAR EN ENTRADA';
     ctx.fillText(sl,qX+(qW-ctx.measureText(sl).width)/2,qBot);
     const[rc,gc,bc]=evInfo.color;
-    ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
+    ctx.font=`bold ${4.5*mm}px Arial,sans-serif`; ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
     const dl=ev==='dia1'?'DÍA 1 · 1 AGO':'DÍA 2 · 2 AGO';
     ctx.fillText(dl,qX+(qW-ctx.measureText(dl).width)/2,qBot+5.5*mm);
   }
