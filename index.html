@@ -157,6 +157,16 @@
   <span class="fb-txt" id="fb-txt">Conectando a la nube…</span>
 </div>
 
+<!-- Logo upload para boletos -->
+<div style="background:#1a0000;padding:6px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #3a0000;">
+  <span style="color:#aaa;font-size:12px;">Logo boleto:</span>
+  <button id="logo-upload-btn" class="btn" style="font-size:12px;padding:4px 12px;background:#6b0000;"
+    onclick="document.getElementById('logo-file-input').click()">🖼️ Subir Logo (PNG)</button>
+  <input type="file" id="logo-file-input" accept="image/png,image/jpeg,image/webp"
+    onchange="loadLogoFile(this)" style="display:none">
+  <span style="color:#666;font-size:11px;">El logo se usa en el centro del boleto en lugar del texto "AZÚCARFEST 2026"</span>
+</div>
+
 <div class="tabs">
   <div class="tab active"  onclick="showTab('dia1')">🗓️ 1 Ago<br>Foro SR</div>
   <div class="tab"         onclick="showTab('dia2')">🗓️ 2 Ago<br>Mambo</div>
@@ -383,6 +393,25 @@ const FIREBASE_CONFIG = {
 };
 const EVENT_KEY = 'AZUCAR_FEST_2026';
 const FB_ROOT   = 'azucar-fest-2026';
+
+// Logo del evento (se carga con el botón "Subir Logo")
+let LOGO_DATA_URL = null;
+let LOGO_ASPECT   = 1; // width/height del logo original
+function loadLogoFile(input){
+  const f=input.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      LOGO_DATA_URL=e.target.result;
+      LOGO_ASPECT=img.naturalWidth/img.naturalHeight;
+      const btn=document.getElementById('logo-upload-btn');
+      if(btn){btn.textContent='✅ Logo cargado'; btn.style.background='#1a7a1a';}
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(f);
+}
 const EVENTS = {
   dia1:{label:'Día 1 · Foro San Rafael',day:'SÁBADO',date:'1 DE AGOSTO,',time:'20:00 HRS.',venue:'Foro San Rafael',addr:'C. Francisco Pimentel 7B, San Rafael, Cuauhtémoc, CDMX',color:[192,0,10],tagCls:'d1'},
   dia2:{label:'Día 2 · Mambo Café Insurgentes',day:'DOMINGO',date:'2 DE AGOSTO,',time:'18:00 HRS.',venue:'Mambo Café Insurgentes',addr:'Av. de los Insurgentes Sur 644, Col. Del Valle Centro, CDMX',color:[180,120,0],tagCls:'d2'}
@@ -1363,42 +1392,53 @@ async function buildTicketPDF(ev,attendee){
   ctx.fillText('info@azucardancestudio.com  ·  55 6607 7277',fX,fyEnd+9*mm); // ≈98.5mm ✓
 
   // ══════════════════════════════════════════════════════════
-  // COLUMNA DERECHA: AZÚCARFEST + 2026 + INFO EVENTO
+  // COLUMNA DERECHA: Logo (imagen o texto) + INFO EVENTO
   //   cX=84mm, cW=84mm (84–168mm)
   // ══════════════════════════════════════════════════════════
   const cX=84*mm, cW=84*mm;
 
-  // ── Logo AZÚCARFEST — auto-fit en cW ──
-  let lsz=13.5;
-  ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
-  while(ctx.measureText('AZÚCARFEST').width>cW-2*mm && lsz>7){
-    lsz-=0.25; ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
+  let iY; // y donde empieza el bloque de info evento
+
+  if(LOGO_DATA_URL){
+    // ── LOGO IMAGEN — se dibuja con modo 'lighten' para que el fondo negro quede transparente ──
+    const logoImg=new Image();
+    await new Promise(r=>{logoImg.onload=r; logoImg.src=LOGO_DATA_URL;});
+    // Altura máxima del logo: 52mm para dejar ~32mm para info evento
+    const logoH=52*mm, logoW=logoH*LOGO_ASPECT;
+    const logoX=cX+(cW-logoW)/2; // centrado horizontalmente
+    ctx.save();
+    ctx.globalCompositeOperation='lighten'; // negro del logo = transparente sobre el fondo oscuro
+    ctx.drawImage(logoImg, logoX, 1*mm, logoW, logoH);
+    ctx.restore();
+    iY=(52+3)*mm; // info evento empieza debajo del logo
+  } else {
+    // ── TEXTO: AZÚCARFEST + 2026 (fallback si no hay logo subido) ──
+    let lsz=13.5;
+    ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
+    while(ctx.measureText('AZÚCARFEST').width>cW-2*mm && lsz>7){
+      lsz-=0.25; ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
+    }
+    ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
+    const azW=ctx.measureText('AZÚCAR').width;
+    ctx.fillStyle='#ffffff';
+    ctx.fillText('AZÚCAR',cX,lsz*mm+2*mm);
+    ctx.font=`italic bold ${lsz*mm}px Arial Black,sans-serif`;
+    ctx.fillStyle='#f5c518';
+    ctx.fillText('FEST',cX+azW,lsz*mm+2*mm);
+
+    let ysz=36;
+    ctx.font=`bold ${ysz*mm}px Arial Black,sans-serif`;
+    while(ctx.measureText('2026').width>cW && ysz>12){
+      ysz-=0.5; ctx.font=`bold ${ysz*mm}px Arial Black,sans-serif`;
+    }
+    const logoBot=(lsz+2)*mm+(3*mm);
+    ctx.fillStyle='#c0000a';
+    ctx.fillText('2026',cX,logoBot+ysz*mm);
+    const yr2bot=logoBot+ysz*mm;
+    ctx.strokeStyle='rgba(190,22,22,0.4)'; ctx.lineWidth=1.2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(cX,yr2bot+3.5*mm); ctx.lineTo(cX+cW,yr2bot+3.5*mm); ctx.stroke();
+    iY=yr2bot+4.5*mm;
   }
-  ctx.font=`bold ${lsz*mm}px Arial Black,sans-serif`;
-  const azW=ctx.measureText('AZÚCAR').width;
-  ctx.fillStyle='#ffffff';
-  ctx.fillText('AZÚCAR',cX,lsz*mm+2*mm);
-  ctx.font=`italic bold ${lsz*mm}px Arial Black,sans-serif`;
-  ctx.fillStyle='#f5c518';
-  ctx.fillText('FEST',cX+azW,lsz*mm+2*mm);
-
-  // ── 2026 — tan grande como quepa en cW ──
-  let ysz=36;
-  ctx.font=`bold ${ysz*mm}px Arial Black,sans-serif`;
-  while(ctx.measureText('2026').width>cW && ysz>12){
-    ysz-=0.5; ctx.font=`bold ${ysz*mm}px Arial Black,sans-serif`;
-  }
-  const logoBot=(lsz+2)*mm+(3*mm); // baseline de logo + gap
-  ctx.fillStyle='#c0000a';
-  ctx.fillText('2026',cX,logoBot+ysz*mm);
-
-  // ── Línea divisoria sutil ──
-  const yr2bot=logoBot+ysz*mm;
-  ctx.strokeStyle='rgba(190,22,22,0.4)'; ctx.lineWidth=1.2; ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(cX,yr2bot+3.5*mm); ctx.lineTo(cX+cW,yr2bot+3.5*mm); ctx.stroke();
-
-  // ── Info evento (debajo de la línea) ──
-  const iY=yr2bot+4.5*mm;
 
   // Día (bold yellow)
   let dsz=8.5;
