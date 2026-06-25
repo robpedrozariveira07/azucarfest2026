@@ -1326,22 +1326,24 @@ async function buildTicketPDF(ev,attendee){
   //   fila 4: FOLIO ½ | VENDEDOR ½
   //   fila 5: MESA ½  | PLANTA ½
   const fX=5*mm, fFullW=77*mm, fHalf=(fFullW-3*mm)/2, fC2=fX+fHalf+3*mm;
-  const fH=9.5*mm, fGap=1.8*mm, fY0=31*mm;
+  const fH=10.5*mm, fGap=1.5*mm, fY0=31*mm;
+  // fH=10.5mm da espacio limpio: label top ~1mm, label bottom ~3.2mm,
+  // valor top ~4.1mm, valor bottom ~8.5mm → 0.9mm de aire entre label y valor
 
   function drawField(x,y,w,h,label,rawValue,fontMM){
     const value=String(rawValue||'—').toUpperCase();
     ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=6; ctx.shadowOffsetY=2;
     canvasRoundRect(ctx,x,y,w,h,2.8*mm,'#be000a');
     ctx.shadowBlur=0; ctx.shadowOffsetY=0;
-    // Sombra interior para etiqueta
-    ctx.fillStyle='rgba(0,0,0,0.24)'; ctx.fillRect(x+2.8*mm,y+1*mm,w-3.8*mm,3.5*mm);
-    // Etiqueta
-    ctx.font=`bold ${3.4*mm}px Arial,sans-serif`; ctx.fillStyle='rgba(255,255,255,0.9)';
-    ctx.fillText(label,x+2.8*mm,y+4.2*mm);
-    // Valor (auto-fit)
+    // Zona oscura para la etiqueta (solo la franja superior)
+    ctx.fillStyle='rgba(0,0,0,0.28)'; ctx.fillRect(x+2.8*mm,y+0.6*mm,w-3.8*mm,2.4*mm);
+    // Etiqueta — micro texto en la franja oscura
+    ctx.font=`bold ${2.5*mm}px Arial,sans-serif`; ctx.fillStyle='rgba(255,255,255,0.88)';
+    ctx.fillText(label,x+3*mm,y+3.2*mm);  // baseline 3.2mm → cap top ~1.1mm
+    // Valor — grande, alineado al fondo del campo
     fitText(ctx,value,w-5.5*mm,fontMM,2.8,mm);
     ctx.fillStyle='#ffffff';
-    ctx.fillText(value,x+2.8*mm,y+h-2.3*mm);
+    ctx.fillText(value,x+3*mm,y+h-2*mm);  // baseline 8.5mm → cap top ~4.1mm ✓ sin encimado
   }
 
   drawField(fX,  fY0+0*(fH+fGap), fFullW, fH, 'NOMBRE ASISTENTE',  nombreAst,         6.0);
@@ -1353,11 +1355,12 @@ async function buildTicketPDF(ev,attendee){
   drawField(fC2, fY0+4*(fH+fGap), fHalf,  fH, 'PLANTA',   attendee.planta,    5.8);
 
   // ── Footer izquierdo (bajo los campos) ──
-  const fyEnd=fY0+5*fH+4*fGap; // ≈85.2mm
+  // fyEnd = 31 + 5×10.5 + 4×1.5 = 89.5mm
+  const fyEnd=fY0+5*fH+4*fGap;
   ctx.font=`bold ${4.8*mm}px Arial,sans-serif`; ctx.fillStyle='#f5c518';
-  ctx.fillText('CUPO LIMITADO.',fX,fyEnd+6.5*mm);   // ≈91.7mm ✓
+  ctx.fillText('CUPO LIMITADO.',fX,fyEnd+4.5*mm);   // ≈94mm ✓
   ctx.font=`${3.4*mm}px Arial,sans-serif`; ctx.fillStyle='#555';
-  ctx.fillText('info@azucardancestudio.com  ·  55 6607 7277',fX,fyEnd+12.5*mm); // ≈97.7mm ✓
+  ctx.fillText('info@azucardancestudio.com  ·  55 6607 7277',fX,fyEnd+9*mm); // ≈98.5mm ✓
 
   // ══════════════════════════════════════════════════════════
   // COLUMNA DERECHA: AZÚCARFEST + 2026 + INFO EVENTO
