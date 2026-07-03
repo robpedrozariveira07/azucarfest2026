@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Azúcar Fest 2026 · Tickets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0e0202;--bg2:#1a0505;--bg3:#220808;--red:#c0000a;--red2:#e00010;--red3:#8b0000;--gold:#f5c518;--gold2:#ffd700;--border:#3d1010;--muted:#9e7070;--white:#fff;}
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -158,13 +159,15 @@
 </div>
 
 <!-- Logo upload para boletos -->
-<div style="background:#1a0000;padding:6px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #3a0000;">
+<div style="background:#1a0000;padding:6px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #3a0000;flex-wrap:wrap;">
   <span style="color:#aaa;font-size:12px;">Logo boleto:</span>
   <button id="logo-upload-btn" class="btn" style="font-size:12px;padding:4px 12px;background:#6b0000;"
     onclick="document.getElementById('logo-file-input').click()">🖼️ Subir Logo (PNG)</button>
   <input type="file" id="logo-file-input" accept="image/png,image/jpeg,image/webp"
     onchange="loadLogoFile(this)" style="display:none">
-  <span style="color:#666;font-size:11px;">El logo se usa en el centro del boleto en lugar del texto "AZÚCARFEST 2026"</span>
+  <button id="logo-fix-btn" class="btn" style="font-size:12px;padding:4px 12px;background:#1a4a1a;display:none;"
+    onclick="fixLogoInHTML()">💾 Fijar logo en HTML</button>
+  <span style="color:#555;font-size:11px;">Sube el logo → haz clic en "Fijar logo en HTML" → guarda el nuevo archivo. El logo quedará permanente.</span>
 </div>
 
 <div class="tabs">
@@ -394,9 +397,12 @@ const FIREBASE_CONFIG = {
 const EVENT_KEY = 'AZUCAR_FEST_2026';
 const FB_ROOT   = 'azucar-fest-2026';
 
-// Logo del evento (se carga con el botón "Subir Logo")
-let LOGO_DATA_URL = null;
-let LOGO_ASPECT   = 1; // width/height del logo original
+// ══ Logo del evento ══
+// Si ya está embebido (base64 pegado aquí), se usa automáticamente.
+// Si no, el usuario puede subirlo con el botón y luego "fijar" el HTML.
+let LOGO_DATA_URL = null; // ← aquí se pega el base64 cuando se fija
+let LOGO_ASPECT   = 1;
+
 function loadLogoFile(input){
   const f=input.files[0]; if(!f)return;
   const r=new FileReader();
@@ -406,11 +412,33 @@ function loadLogoFile(input){
       LOGO_DATA_URL=e.target.result;
       LOGO_ASPECT=img.naturalWidth/img.naturalHeight;
       const btn=document.getElementById('logo-upload-btn');
+      const fixBtn=document.getElementById('logo-fix-btn');
       if(btn){btn.textContent='✅ Logo cargado'; btn.style.background='#1a7a1a';}
+      if(fixBtn){fixBtn.style.display='inline-flex';}
     };
     img.src=e.target.result;
   };
   r.readAsDataURL(f);
+}
+
+function fixLogoInHTML(){
+  if(!LOGO_DATA_URL){alert('Primero sube el logo.');return;}
+  // Lee el HTML actual de la página y reemplaza la línea del placeholder
+  const src=document.documentElement.outerHTML;
+  // Reemplaza la línea: let LOGO_DATA_URL = null;
+  const fixed=src.replace(
+    /let LOGO_DATA_URL = null;/,
+    `let LOGO_DATA_URL = "${LOGO_DATA_URL}";`
+  ).replace(
+    /let LOGO_ASPECT   = 1;/,
+    `let LOGO_ASPECT   = ${LOGO_ASPECT};`
+  );
+  const blob=new Blob([fixed],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='azucar-fest-con-logo.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 const EVENTS = {
   dia1:{label:'Día 1 · Foro San Rafael',day:'SÁBADO',date:'1 DE AGOSTO,',time:'20:00 HRS.',venue:'Foro San Rafael',addr:'C. Francisco Pimentel 7B, San Rafael, Cuauhtémoc, CDMX',color:[192,0,10],tagCls:'d1'},
@@ -537,85 +565,107 @@ const MAPA_ALTA = [
 ];
 
 // ── FORO SAN RAFAEL — Planta Baja (Día 1) viewBox "0 0 820 720" ──
+// TODOS cuadrados r=18 (36×36 px), separación uniforme
 const FSR_BAJA = [
-  // Far left column (ovals)
-  {n:'5', cx:48,cy:188,r:22},{n:'8',cx:48,cy:298,r:22},{n:'11',cx:48,cy:402,r:22},
-  // Left cluster (mix)
-  {n:'4',cx:118,cy:92,r:18,rect:true},{n:'6',cx:110,cy:210,r:15},
-  {n:'7',cx:170,cy:112,r:18,rect:true},{n:'9',cx:162,cy:230,r:15},
-  {n:'10',cx:165,cy:312,r:18,rect:true},{n:'12',cx:162,cy:402,r:18,rect:true},
-  {n:'13',cx:162,cy:472,r:18,rect:true},
-  // Left-center column
-  {n:'16',cx:240,cy:90,r:18,rect:true},{n:'17',cx:240,cy:165,r:18,rect:true},
-  {n:'18',cx:240,cy:242,r:18,rect:true},{n:'19',cx:240,cy:318,r:18,rect:true},
-  {n:'20',cx:248,cy:418,r:18,rect:true},
-  // Center-left rows (below pista)
-  {n:'21',cx:312,cy:390,r:20},{n:'22',cx:388,cy:390,r:20},{n:'23',cx:462,cy:390,r:20},
-  {n:'27',cx:312,cy:462,r:20},{n:'28',cx:388,cy:462,r:20},{n:'29',cx:462,cy:462,r:20},
-  {n:'33',cx:312,cy:534,r:20},{n:'34',cx:388,cy:534,r:20},{n:'35',cx:462,cy:534,r:20},
-  // Center-right rows
-  {n:'24',cx:538,cy:390,r:20},{n:'25',cx:612,cy:390,r:20},{n:'26',cx:686,cy:390,r:20},
-  {n:'30',cx:538,cy:462,r:20},{n:'31',cx:612,cy:462,r:20},{n:'32',cx:686,cy:462,r:20},
-  {n:'36',cx:538,cy:534,r:20},{n:'37',cx:625,cy:534,r:20},
-  // Right near-pista
-  {n:'38',cx:638,cy:352,r:18,rect:true},{n:'39',cx:716,cy:352,r:18,rect:true},
-  // Upper-right cluster
-  {n:'41',cx:720,cy:92,r:18,rect:true},{n:'44',cx:720,cy:165,r:18,rect:true},
-  {n:'46',cx:780,cy:128,r:20},{n:'45',cx:780,cy:250,r:18,rect:true},
-  {n:'48',cx:780,cy:198,r:20},{n:'47',cx:780,cy:322,r:18,rect:true},
-  {n:'50',cx:780,cy:270,r:20},{n:'49',cx:780,cy:395,r:18,rect:true},
-  // Bottom center pairs
-  {n:'51',cx:368,cy:592,r:18,rect:true},{n:'52',cx:440,cy:592,r:18,rect:true},
-  {n:'54',cx:368,cy:642,r:18,rect:true},{n:'55',cx:440,cy:642,r:18,rect:true},
-  {n:'56',cx:368,cy:692,r:18,rect:true},{n:'57',cx:440,cy:692,r:18,rect:true},
-  // Bottom right
-  {n:'58',cx:590,cy:592,r:18,rect:true},{n:'59',cx:652,cy:592,r:18,rect:true},
-  {n:'60',cx:714,cy:592,r:18,rect:true},
+  // ── Columna far-left (5,8,11) — step y=70 ──
+  {n:'5', cx:55, cy:175,r:18,rect:true},
+  {n:'8', cx:55, cy:245,r:18,rect:true},
+  {n:'11',cx:55, cy:315,r:18,rect:true},
+  // ── Cluster izq A (4,6,9,12) — step y=70 ──
+  {n:'4', cx:118,cy:105,r:18,rect:true},
+  {n:'6', cx:118,cy:175,r:18,rect:true},
+  {n:'9', cx:118,cy:245,r:18,rect:true},
+  {n:'12',cx:118,cy:315,r:18,rect:true},
+  // ── Cluster izq B (7,10,13) ──
+  {n:'7', cx:178,cy:105,r:18,rect:true},
+  {n:'10',cx:178,cy:175,r:18,rect:true},
+  {n:'13',cx:178,cy:245,r:18,rect:true},
+  // ── Columna near-pista (16-20) — step y=60 ──
+  {n:'16',cx:248,cy:105,r:18,rect:true},
+  {n:'17',cx:248,cy:165,r:18,rect:true},
+  {n:'18',cx:248,cy:225,r:18,rect:true},
+  {n:'19',cx:248,cy:285,r:18,rect:true},
+  {n:'20',cx:248,cy:345,r:18,rect:true},
+  // ── Centro: 3 filas × 6 mesas (debajo pista) — step x=73, step y=70 ──
+  {n:'21',cx:325,cy:390,r:18,rect:true},{n:'22',cx:398,cy:390,r:18,rect:true},{n:'23',cx:471,cy:390,r:18,rect:true},
+  {n:'24',cx:549,cy:390,r:18,rect:true},{n:'25',cx:622,cy:390,r:18,rect:true},{n:'26',cx:695,cy:390,r:18,rect:true},
+  {n:'27',cx:325,cy:460,r:18,rect:true},{n:'28',cx:398,cy:460,r:18,rect:true},{n:'29',cx:471,cy:460,r:18,rect:true},
+  {n:'30',cx:549,cy:460,r:18,rect:true},{n:'31',cx:622,cy:460,r:18,rect:true},{n:'32',cx:695,cy:460,r:18,rect:true},
+  {n:'33',cx:325,cy:530,r:18,rect:true},{n:'34',cx:398,cy:530,r:18,rect:true},{n:'35',cx:471,cy:530,r:18,rect:true},
+  {n:'36',cx:549,cy:530,r:18,rect:true},{n:'37',cx:622,cy:530,r:18,rect:true},
+  // ── Derecha: fila baja (38,39) ──
+  {n:'38',cx:640,cy:355,r:18,rect:true},{n:'39',cx:712,cy:355,r:18,rect:true},
+  // ── Derecha: grid 2×4 (41,44,49,50 / 45,46,47,48) — step x=66, step y=70 ──
+  {n:'41',cx:712,cy:108,r:18,rect:true},{n:'44',cx:712,cy:178,r:18,rect:true},
+  {n:'49',cx:712,cy:248,r:18,rect:true},{n:'50',cx:712,cy:318,r:18,rect:true},
+  {n:'45',cx:778,cy:108,r:18,rect:true},{n:'46',cx:778,cy:178,r:18,rect:true},
+  {n:'47',cx:778,cy:248,r:18,rect:true},{n:'48',cx:778,cy:318,r:18,rect:true},
+  // ── Fondo izq: 3 pares (51-57) — step y=55 ──
+  {n:'51',cx:370,cy:575,r:18,rect:true},{n:'52',cx:440,cy:575,r:18,rect:true},
+  {n:'54',cx:370,cy:630,r:18,rect:true},{n:'55',cx:440,cy:630,r:18,rect:true},
+  {n:'56',cx:370,cy:685,r:18,rect:true},{n:'57',cx:440,cy:685,r:18,rect:true},
+  // ── Fondo der (58,59,60) — step x=70 ──
+  {n:'58',cx:595,cy:575,r:18,rect:true},{n:'59',cx:665,cy:575,r:18,rect:true},{n:'60',cx:735,cy:575,r:18,rect:true},
 ];
 
 // ── FORO SAN RAFAEL — Planta Alta (Día 1) viewBox "0 0 820 620" ──
+// TODOS cuadrados r=18 (36×36 px), separación uniforme — simétrico izq/der
 const FSR_ALTA = [
-  // Top-left large rect (101)
-  {n:'101',cx:90,cy:48,r:28,rect:true},
-  // Far left ovals
-  {n:'103',cx:50,cy:162,r:22},{n:'105',cx:50,cy:232,r:22},
-  {n:'107',cx:50,cy:300,r:22},{n:'109',cx:50,cy:368,r:22},{n:'111',cx:50,cy:432,r:22},
-  // Left rects
-  {n:'104',cx:122,cy:162,r:18,rect:true},{n:'106',cx:122,cy:232,r:18,rect:true},
-  {n:'108',cx:122,cy:300,r:18,rect:true},{n:'110',cx:122,cy:368,r:18,rect:true},
-  // Left inner (beside pista)
-  {n:'112',cx:220,cy:162,r:15,rect:true},{n:'113',cx:220,cy:248,r:15,rect:true},
-  {n:'114',cx:220,cy:332,r:15,rect:true},
-  // Top-right large rect (102)
-  {n:'102',cx:735,cy:48,r:28,rect:true},
-  // Right inner (beside pista)
-  {n:'122',cx:610,cy:162,r:15,rect:true},{n:'123',cx:610,cy:248,r:15,rect:true},
-  {n:'124',cx:610,cy:332,r:15,rect:true},
-  // Right rects
-  {n:'125',cx:682,cy:162,r:18,rect:true},{n:'127',cx:682,cy:232,r:18,rect:true},
-  {n:'129',cx:682,cy:300,r:18,rect:true},
-  // Far right ovals
-  {n:'126',cx:752,cy:162,r:20},{n:'128',cx:752,cy:232,r:20},
-  {n:'130',cx:752,cy:300,r:20},{n:'131',cx:752,cy:368,r:20},
-  // Middle row ovals (below pista)
-  {n:'115',cx:310,cy:360,r:20},{n:'116',cx:385,cy:360,r:20},{n:'117',cx:460,cy:360,r:20},
-  {n:'118',cx:535,cy:360,r:20},{n:'119',cx:610,cy:360,r:20},
-  {n:'120',cx:685,cy:360,r:20},{n:'121',cx:760,cy:360,r:20},
-  // Lower grid row 1 (y=422)
-  {n:'132',cx:235,cy:422,r:18,rect:true},{n:'133',cx:308,cy:422,r:18,rect:true},
-  {n:'134',cx:455,cy:422,r:18,rect:true},{n:'135',cx:528,cy:422,r:18,rect:true},
-  {n:'136',cx:602,cy:422,r:18,rect:true},{n:'137',cx:676,cy:422,r:18,rect:true},
-  {n:'138',cx:750,cy:422,r:18,rect:true},
-  // Lower grid row 2 (y=492)
-  {n:'139',cx:235,cy:492,r:18,rect:true},{n:'140',cx:308,cy:492,r:18,rect:true},
-  {n:'141',cx:381,cy:492,r:18,rect:true},{n:'142',cx:455,cy:492,r:18,rect:true},
-  {n:'143',cx:528,cy:492,r:18,rect:true},{n:'144',cx:602,cy:492,r:18,rect:true},
-  {n:'145',cx:676,cy:492,r:18,rect:true},{n:'146',cx:750,cy:492,r:18,rect:true},
-  // Lower grid row 3 (y=562)
-  {n:'147',cx:235,cy:562,r:18,rect:true},{n:'148',cx:308,cy:562,r:18,rect:true},
-  {n:'149',cx:381,cy:562,r:18,rect:true},{n:'150',cx:455,cy:562,r:18,rect:true},
-  {n:'151',cx:528,cy:562,r:18,rect:true},{n:'152',cx:602,cy:562,r:18,rect:true},
-  {n:'153',cx:676,cy:562,r:18,rect:true},{n:'154',cx:750,cy:562,r:18,rect:true},
+  // ── Esquinas superiores (101, 102) — r=24 para distinción visual ──
+  {n:'101',cx:90, cy:48, r:24,rect:true},
+  {n:'102',cx:738,cy:48, r:24,rect:true},
+  // ── Far-left: 103,105,107,109,111 — step y=68 ──
+  {n:'103',cx:52, cy:158,r:18,rect:true},
+  {n:'105',cx:52, cy:226,r:18,rect:true},
+  {n:'107',cx:52, cy:294,r:18,rect:true},
+  {n:'109',cx:52, cy:362,r:18,rect:true},
+  {n:'111',cx:52, cy:430,r:18,rect:true},
+  // ── Inner-left: 104,106,108,110 ──
+  {n:'104',cx:120,cy:158,r:18,rect:true},
+  {n:'106',cx:120,cy:226,r:18,rect:true},
+  {n:'108',cx:120,cy:294,r:18,rect:true},
+  {n:'110',cx:120,cy:362,r:18,rect:true},
+  // ── Near-pista left: 112,113,114 ──
+  {n:'112',cx:198,cy:158,r:18,rect:true},
+  {n:'113',cx:198,cy:226,r:18,rect:true},
+  {n:'114',cx:198,cy:294,r:18,rect:true},
+  // ── Near-pista right: 122,123,124 (simétrico de 112-114) ──
+  {n:'122',cx:618,cy:158,r:18,rect:true},
+  {n:'123',cx:618,cy:226,r:18,rect:true},
+  {n:'124',cx:618,cy:294,r:18,rect:true},
+  // ── Inner-right: 125,127,129 (simétrico de 104-108) ──
+  {n:'125',cx:686,cy:158,r:18,rect:true},
+  {n:'127',cx:686,cy:226,r:18,rect:true},
+  {n:'129',cx:686,cy:294,r:18,rect:true},
+  // ── Far-right: 126,128,130,131 (simétrico de 103-109) ──
+  {n:'126',cx:754,cy:158,r:18,rect:true},
+  {n:'128',cx:754,cy:226,r:18,rect:true},
+  {n:'130',cx:754,cy:294,r:18,rect:true},
+  {n:'131',cx:754,cy:362,r:18,rect:true},
+  // ── Fila central bajo pista: 115-121 — step x=70 ──
+  {n:'115',cx:274,cy:352,r:18,rect:true},
+  {n:'116',cx:344,cy:352,r:18,rect:true},
+  {n:'117',cx:414,cy:352,r:18,rect:true},
+  {n:'118',cx:484,cy:352,r:18,rect:true},
+  {n:'119',cx:554,cy:352,r:18,rect:true},
+  {n:'120',cx:624,cy:352,r:18,rect:true},
+  {n:'121',cx:694,cy:352,r:18,rect:true},
+  // ── Grid 3 filas × 8 mesas (132-154) — step x=70, step y=68 ──
+  // Fila 1 (y=422): hueco en pos 3 (mesa 4P sin número)
+  {n:'132',cx:237,cy:422,r:18,rect:true},{n:'133',cx:307,cy:422,r:18,rect:true},
+  {n:'134',cx:447,cy:422,r:18,rect:true},{n:'135',cx:517,cy:422,r:18,rect:true},
+  {n:'136',cx:587,cy:422,r:18,rect:true},{n:'137',cx:657,cy:422,r:18,rect:true},
+  {n:'138',cx:727,cy:422,r:18,rect:true},
+  // Fila 2 (y=490): 8 mesas completas
+  {n:'139',cx:237,cy:490,r:18,rect:true},{n:'140',cx:307,cy:490,r:18,rect:true},
+  {n:'141',cx:377,cy:490,r:18,rect:true},{n:'142',cx:447,cy:490,r:18,rect:true},
+  {n:'143',cx:517,cy:490,r:18,rect:true},{n:'144',cx:587,cy:490,r:18,rect:true},
+  {n:'145',cx:657,cy:490,r:18,rect:true},{n:'146',cx:727,cy:490,r:18,rect:true},
+  // Fila 3 (y=558): 8 mesas completas
+  {n:'147',cx:237,cy:558,r:18,rect:true},{n:'148',cx:307,cy:558,r:18,rect:true},
+  {n:'149',cx:377,cy:558,r:18,rect:true},{n:'150',cx:447,cy:558,r:18,rect:true},
+  {n:'151',cx:517,cy:558,r:18,rect:true},{n:'152',cx:587,cy:558,r:18,rect:true},
+  {n:'153',cx:657,cy:558,r:18,rect:true},{n:'154',cx:727,cy:558,r:18,rect:true},
 ];
 
 // ══════════════════════════════════════════════
@@ -1064,12 +1114,12 @@ function renderMap(){
     // Pista de Baile
     svg.appendChild(mkRect(280,90,290,265,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
     svg.appendChild(mkTxt('PISTA DE BAILE',425,230,10,'#404050','middle','bold'));
-    // Barra (bottom center)
-    svg.appendChild(mkRect(315,648,200,52,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
-    svg.appendChild(mkTxt('BARRA',415,678,9,'#555'));
+    // Barra (bottom center — debajo de las mesas que llegan a y=703)
+    svg.appendChild(mkRect(315,705,200,15,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('BARRA',415,715,8,'#555'));
     // Escaleras izquierda
-    svg.appendChild(mkRect(15,448,140,55,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
-    svg.appendChild(mkTxt('ESCALERAS',85,479,7.5,'#555'));
+    svg.appendChild(mkRect(15,448,140,42,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('ESCALERAS',85,473,7.5,'#555'));
     // Escaleras derecha (borde)
     svg.appendChild(mkRect(798,218,22,252,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1}));
     svg.appendChild(mkTxt('E',809,348,6.5,'#555'));
@@ -1089,8 +1139,8 @@ function renderMap(){
     svg.appendChild(mkRect(15,458,148,122,{fill:'#1c2030',stroke:'#4a4a66','stroke-width':1.5,rx:3}));
     svg.appendChild(mkTxt('CABINA',89,524,9,'#6666aa'));
     // Barra (bottom center)
-    svg.appendChild(mkRect(318,570,200,42,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
-    svg.appendChild(mkTxt('BARRA',418,595,9,'#555'));
+    svg.appendChild(mkRect(318,592,200,15,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('BARRA',418,602,8,'#555'));
     // Escaleras labels
     svg.appendChild(mkTxt('ESCALERAS',168,450,7.5,'#484858'));
     svg.appendChild(mkRect(798,195,22,220,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1}));
@@ -1469,38 +1519,27 @@ async function buildTicketPDF(ev,attendee){
   const qX=perf+4*mm;
   const qW=W-perf-7*mm; // ≈38mm usable
 
-  // 2 estrellitas
-  canvasStar(ctx,qX+5*mm,10*mm,3.5*mm,'#f5c518');
-  canvasStar(ctx,qX+15*mm,10*mm,3.5*mm,'#f5c518');
-
-  // Nombre asistente (wrapped)
-  ctx.font=`bold ${4.5*mm}px Arial,sans-serif`; ctx.fillStyle='#ffffff';
-  const nLines=[]; let cl='';
-  nombreAst.toUpperCase().split(' ').forEach(w=>{
-    const t=cl?cl+' '+w:w;
-    if(ctx.measureText(t).width>qW-1*mm&&cl){nLines.push(cl);cl=w;}else cl=t;
-  });
-  if(cl)nLines.push(cl);
-  nLines.slice(0,2).forEach((l,i)=>ctx.fillText(l,qX,(10+i*5.5)*mm));
-
-  // QR code
+  // ── STUB: solo QR grande + día (sin nombre de asistente) ──
   if(qrUrl){
     const qrImg=new Image();
     await new Promise(r=>{qrImg.onload=r; qrImg.src=qrUrl;});
-    const qrTopY=(nLines.length>1?17:15)*mm;
-    const qrSz=Math.min(qW,H-qrTopY-12*mm);
+    // QR lo más grande posible: desde y=4mm dejando 14mm abajo para el día
+    const qrTopY=4*mm;
+    const qrSz=Math.min(qW, H-qrTopY-14*mm);
     ctx.shadowColor='rgba(0,0,0,0.65)'; ctx.shadowBlur=10;
     canvasRoundRect(ctx,qX-1,qrTopY-1,qrSz+2,qrSz+2,4,'#ffffff');
     ctx.shadowBlur=0;
     ctx.drawImage(qrImg,qX,qrTopY,qrSz,qrSz);
     const qBot=qrTopY+qrSz+3*mm;
-    ctx.font=`${3*mm}px Arial,sans-serif`; ctx.fillStyle='#686868';
-    const sl='ESCANEAR EN ENTRADA';
-    ctx.fillText(sl,qX+(qW-ctx.measureText(sl).width)/2,qBot);
+    // Día del evento (color del evento)
     const[rc,gc,bc]=evInfo.color;
-    ctx.font=`bold ${4.5*mm}px Arial,sans-serif`; ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
+    ctx.font=`bold ${5*mm}px Arial Black,sans-serif`; ctx.fillStyle=`rgb(${rc},${gc},${bc})`;
     const dl=ev==='dia1'?'DÍA 1 · 1 AGO':'DÍA 2 · 2 AGO';
     ctx.fillText(dl,qX+(qW-ctx.measureText(dl).width)/2,qBot+5.5*mm);
+    // Fecha pequeña
+    ctx.font=`${3.2*mm}px Arial,sans-serif`; ctx.fillStyle='#686868';
+    const fl=ev==='dia1'?'SÁB 1 AGO · 20:00':'DOM 2 AGO · 18:00';
+    ctx.fillText(fl,qX+(qW-ctx.measureText(fl).width)/2,qBot+10*mm);
   }
 
   const jsPDF=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
