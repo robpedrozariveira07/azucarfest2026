@@ -565,48 +565,51 @@ const MAPA_ALTA = [
 ];
 
 // ── FORO SAN RAFAEL — Planta Baja (Día 1) viewBox "0 0 820 720" ──
-// Planta Baja — todos cuadrados 36×36 (r=18), step uniforme 70px
+// Planta Baja — todos cuadrados 36×36 (r=18)
+// Grid uniforme: step x=65, step y=65
+// Col cx: 50,115,180,245,310,375,440,505,570,635,700,765
+// Filas: A=115  B=180  [17=245]  C=310  D=375  E=440
 const FSR_BAJA = [
-  // ── Col far-left (5,8,11) cx=55 — arrancan en cy=185 ──
-  {n:'5', cx:55, cy:185,r:18,rect:true},
-  {n:'8', cx:55, cy:255,r:18,rect:true},
-  {n:'11',cx:55, cy:325,r:18,rect:true},
-  // ── Col 2 (4,6,9,12) cx=120 — step 70 ──
-  {n:'4', cx:120,cy:115,r:18,rect:true},
-  {n:'6', cx:120,cy:185,r:18,rect:true},
-  {n:'9', cx:120,cy:255,r:18,rect:true},
-  {n:'12',cx:120,cy:325,r:18,rect:true},
-  // ── Col 3 (7,10,13) cx=185 — step 70 ──
-  {n:'7', cx:185,cy:115,r:18,rect:true},
-  {n:'10',cx:185,cy:185,r:18,rect:true},
-  {n:'13',cx:185,cy:255,r:18,rect:true},
-  // ── Col near-pista (16-20) cx=250 — step 70 ──
-  {n:'16',cx:250,cy:115,r:18,rect:true},
-  {n:'17',cx:250,cy:185,r:18,rect:true},
-  {n:'18',cx:250,cy:255,r:18,rect:true},
-  {n:'19',cx:250,cy:325,r:18,rect:true},
-  {n:'20',cx:250,cy:395,r:18,rect:true},
-  // ── Bajo pista: 3 filas × 6 mesas — step x=70, step y=65 ──
-  {n:'21',cx:325,cy:415,r:18,rect:true},{n:'22',cx:395,cy:415,r:18,rect:true},{n:'23',cx:465,cy:415,r:18,rect:true},
-  {n:'24',cx:535,cy:415,r:18,rect:true},{n:'25',cx:605,cy:415,r:18,rect:true},{n:'26',cx:675,cy:415,r:18,rect:true},
-  {n:'27',cx:325,cy:480,r:18,rect:true},{n:'28',cx:395,cy:480,r:18,rect:true},{n:'29',cx:465,cy:480,r:18,rect:true},
-  {n:'30',cx:535,cy:480,r:18,rect:true},{n:'31',cx:605,cy:480,r:18,rect:true},{n:'32',cx:675,cy:480,r:18,rect:true},
-  {n:'33',cx:325,cy:545,r:18,rect:true},{n:'34',cx:395,cy:545,r:18,rect:true},{n:'35',cx:465,cy:545,r:18,rect:true},
-  {n:'36',cx:535,cy:545,r:18,rect:true},{n:'37',cx:605,cy:545,r:18,rect:true},
-  // ── Der lateral (38,39) — a nivel bajo pista ──
-  {n:'38',cx:625,cy:385,r:18,rect:true},
-  {n:'39',cx:710,cy:385,r:18,rect:true},
-  // ── Der grid 2×4 (41,44,49,50 / 45,46,47,48) cx=710,775 — step 70 ──
-  {n:'41',cx:710,cy:115,r:18,rect:true},{n:'44',cx:710,cy:185,r:18,rect:true},
-  {n:'49',cx:710,cy:255,r:18,rect:true},{n:'50',cx:710,cy:325,r:18,rect:true},
-  {n:'45',cx:775,cy:115,r:18,rect:true},{n:'46',cx:775,cy:185,r:18,rect:true},
-  {n:'47',cx:775,cy:255,r:18,rect:true},{n:'48',cx:775,cy:325,r:18,rect:true},
-  // ── Fondo izq 3 pares (51-57) cx=370,440 — step 55 ──
-  {n:'51',cx:370,cy:608,r:18,rect:true},{n:'52',cx:440,cy:608,r:18,rect:true},
-  {n:'54',cx:370,cy:663,r:18,rect:true},{n:'55',cx:440,cy:663,r:18,rect:true},
-  {n:'56',cx:370,cy:718,r:18,rect:true},{n:'57',cx:440,cy:718,r:18,rect:true},
-  // ── Fondo der (58,59,60) — step x=70 ──
-  {n:'58',cx:595,cy:608,r:18,rect:true},{n:'59',cx:665,cy:608,r:18,rect:true},{n:'60',cx:735,cy:608,r:18,rect:true},
+  // ── Fila A (cy=115): 4 sola a izq, 41 sola a der ──
+  {n:'4', cx:180,cy:115,r:18,rect:true},
+  {n:'41',cx:700,cy:115,r:18,rect:true},
+  // ── Fila B (cy=180): 5,6,7,16 a izq | 44,45,46 a der ──
+  {n:'5', cx:50, cy:180,r:18,rect:true},
+  {n:'6', cx:115,cy:180,r:18,rect:true},
+  {n:'7', cx:180,cy:180,r:18,rect:true},
+  {n:'16',cx:245,cy:180,r:18,rect:true},
+  {n:'44',cx:635,cy:180,r:18,rect:true},
+  {n:'45',cx:700,cy:180,r:18,rect:true},
+  {n:'46',cx:765,cy:180,r:18,rect:true},
+  // ── Mesa 17 sola entre B y C (misma col que 16) ──
+  {n:'17',cx:245,cy:245,r:18,rect:true},
+  // ── Fila C (cy=310): 8,9,10,18 | 21-26 | 47,48 ──
+  {n:'8', cx:50, cy:310,r:18,rect:true},
+  {n:'9', cx:115,cy:310,r:18,rect:true},
+  {n:'10',cx:180,cy:310,r:18,rect:true},
+  {n:'18',cx:245,cy:310,r:18,rect:true},
+  {n:'21',cx:310,cy:310,r:18,rect:true},{n:'22',cx:375,cy:310,r:18,rect:true},{n:'23',cx:440,cy:310,r:18,rect:true},
+  {n:'24',cx:505,cy:310,r:18,rect:true},{n:'25',cx:570,cy:310,r:18,rect:true},{n:'26',cx:635,cy:310,r:18,rect:true},
+  {n:'47',cx:700,cy:310,r:18,rect:true},{n:'48',cx:765,cy:310,r:18,rect:true},
+  // ── Fila D (cy=375): 11,12,13,19 | 27-32 | 49,50 ──
+  {n:'11',cx:50, cy:375,r:18,rect:true},
+  {n:'12',cx:115,cy:375,r:18,rect:true},
+  {n:'13',cx:180,cy:375,r:18,rect:true},
+  {n:'19',cx:245,cy:375,r:18,rect:true},
+  {n:'27',cx:310,cy:375,r:18,rect:true},{n:'28',cx:375,cy:375,r:18,rect:true},{n:'29',cx:440,cy:375,r:18,rect:true},
+  {n:'30',cx:505,cy:375,r:18,rect:true},{n:'31',cx:570,cy:375,r:18,rect:true},{n:'32',cx:635,cy:375,r:18,rect:true},
+  {n:'49',cx:700,cy:375,r:18,rect:true},{n:'50',cx:765,cy:375,r:18,rect:true},
+  // ── Fila E (cy=440): 20 | 33-37 | 38,39 ──
+  {n:'20',cx:245,cy:440,r:18,rect:true},
+  {n:'33',cx:310,cy:440,r:18,rect:true},{n:'34',cx:375,cy:440,r:18,rect:true},{n:'35',cx:440,cy:440,r:18,rect:true},
+  {n:'36',cx:505,cy:440,r:18,rect:true},{n:'37',cx:570,cy:440,r:18,rect:true},
+  {n:'38',cx:635,cy:440,r:18,rect:true},{n:'39',cx:700,cy:440,r:18,rect:true},
+  // ── Fondo izq 3 pares (51-57) — step y=60 ──
+  {n:'51',cx:375,cy:510,r:18,rect:true},{n:'52',cx:440,cy:510,r:18,rect:true},
+  {n:'54',cx:375,cy:570,r:18,rect:true},{n:'55',cx:440,cy:570,r:18,rect:true},
+  {n:'56',cx:375,cy:630,r:18,rect:true},{n:'57',cx:440,cy:630,r:18,rect:true},
+  // ── Fondo der (58,59,60) ──
+  {n:'58',cx:570,cy:510,r:18,rect:true},{n:'59',cx:635,cy:510,r:18,rect:true},{n:'60',cx:700,cy:510,r:18,rect:true},
 ];
 
 // ── FORO SAN RAFAEL — Planta Alta (Día 1) viewBox "0 0 820 620" ──
@@ -1078,7 +1081,7 @@ function renderMap(){
 
   const vbW = 820;
   let vbH;
-  if(isForo) vbH = isBaja ? 760 : 620;
+  if(isForo) vbH = isBaja ? 680 : 620;
   else        vbH = isBaja ? 730 : 555;
 
   const svg = document.getElementById('map-svg');
@@ -1112,15 +1115,15 @@ function renderMap(){
     // Escenario (top center)
     svg.appendChild(mkRect(280,18,290,72,{fill:'#181820',stroke:'#333340','stroke-width':1.5,rx:3}));
     svg.appendChild(mkTxt('ESCENARIO',425,60,10,'#404050','middle','bold'));
-    // Pista de Baile
-    svg.appendChild(mkRect(280,90,290,265,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
-    svg.appendChild(mkTxt('PISTA DE BAILE',425,230,10,'#404050','middle','bold'));
-    // Barra (bottom — mesas fondo llegan a y=736, BARRA debajo)
-    svg.appendChild(mkRect(315,742,200,14,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
-    svg.appendChild(mkTxt('BARRA',415,752,8,'#555'));
-    // Escaleras izquierda
-    svg.appendChild(mkRect(15,448,140,42,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
-    svg.appendChild(mkTxt('ESCALERAS',85,473,7.5,'#555'));
+    // Pista de Baile (recortada — termina arriba de fila C cy=310)
+    svg.appendChild(mkRect(280,90,290,185,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA DE BAILE',425,190,10,'#404050','middle','bold'));
+    // Barra (debajo fondo row 3 cy=630, bottom=648)
+    svg.appendChild(mkRect(315,655,200,12,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('BARRA',415,663,8,'#555'));
+    // Escaleras izquierda (debajo de filas D/E)
+    svg.appendChild(mkRect(15,460,140,35,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('ESCALERAS',85,481,7.5,'#555'));
     // Escaleras derecha (borde)
     svg.appendChild(mkRect(798,218,22,252,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1}));
     svg.appendChild(mkTxt('E',809,348,6.5,'#555'));
