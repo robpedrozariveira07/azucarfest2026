@@ -629,31 +629,31 @@ const FSR_ALTA = [
   {n:'106',cx:120,cy:226,r:18,rect:true},
   {n:'108',cx:120,cy:294,r:18,rect:true},
   {n:'110',cx:120,cy:362,r:18,rect:true},
-  // ── Near-pista left: 112,113,114 ──
-  {n:'112',cx:198,cy:158,r:18,rect:true},
-  {n:'113',cx:198,cy:226,r:18,rect:true},
-  {n:'114',cx:198,cy:294,r:18,rect:true},
-  // ── Near-pista right: 122,123,124 (simétrico de 112-114) ──
+  // ── Near-pista left: 112,113,114 — recorridas izq, 18px sep de pista ──
+  {n:'112',cx:170,cy:158,r:18,rect:true},
+  {n:'113',cx:170,cy:226,r:18,rect:true},
+  {n:'114',cx:170,cy:294,r:18,rect:true},
+  // ── Pegada a pista (inner-right): 122,123,124 cx=618 ──
   {n:'122',cx:618,cy:158,r:18,rect:true},
   {n:'123',cx:618,cy:226,r:18,rect:true},
   {n:'124',cx:618,cy:294,r:18,rect:true},
-  // ── Inner-right: 125,127,129 (simétrico de 104-108) ──
-  {n:'125',cx:686,cy:158,r:18,rect:true},
-  {n:'127',cx:686,cy:226,r:18,rect:true},
-  {n:'129',cx:686,cy:294,r:18,rect:true},
-  // ── Far-right: 126,128,130,131 (simétrico de 103-109) ──
-  {n:'126',cx:754,cy:158,r:18,rect:true},
-  {n:'128',cx:754,cy:226,r:18,rect:true},
-  {n:'130',cx:754,cy:294,r:18,rect:true},
-  {n:'131',cx:754,cy:362,r:18,rect:true},
-  // ── Fila central bajo pista: 115-121 — step x=70 ──
-  {n:'115',cx:274,cy:352,r:18,rect:true},
-  {n:'116',cx:344,cy:352,r:18,rect:true},
-  {n:'117',cx:414,cy:352,r:18,rect:true},
-  {n:'118',cx:484,cy:352,r:18,rect:true},
-  {n:'119',cx:554,cy:352,r:18,rect:true},
-  {n:'120',cx:624,cy:352,r:18,rect:true},
-  {n:'121',cx:694,cy:352,r:18,rect:true},
+  // ── Columna media: 125,127,129 cx=688 ──
+  {n:'125',cx:688,cy:158,r:18,rect:true},
+  {n:'127',cx:688,cy:226,r:18,rect:true},
+  {n:'129',cx:688,cy:294,r:18,rect:true},
+  // ── Columna exterior: 126,128,130,131 cx=758 ──
+  {n:'126',cx:758,cy:158,r:18,rect:true},
+  {n:'128',cx:758,cy:226,r:18,rect:true},
+  {n:'130',cx:758,cy:294,r:18,rect:true},
+  {n:'131',cx:758,cy:362,r:18,rect:true},
+  // ── Fila central bajo pista: 115-121 — 115 borde izq pista, 121 alineada col 122-124 ──
+  {n:'115',cx:224,cy:352,r:18,rect:true},
+  {n:'116',cx:290,cy:352,r:18,rect:true},
+  {n:'117',cx:356,cy:352,r:18,rect:true},
+  {n:'118',cx:422,cy:352,r:18,rect:true},
+  {n:'119',cx:488,cy:352,r:18,rect:true},
+  {n:'120',cx:554,cy:352,r:18,rect:true},
+  {n:'121',cx:618,cy:352,r:18,rect:true},
   // ── Grid 3 filas × 8 mesas (132-154) — step x=70, step y=68 ──
   // Fila 1 (y=422): hueco en pos 3 (mesa 4P sin número)
   {n:'132',cx:237,cy:422,r:18,rect:true},{n:'133',cx:307,cy:422,r:18,rect:true},
@@ -1133,12 +1133,12 @@ function renderMap(){
 
   } else if(isForo && !isBaja){
     // ══ FORO SAN RAFAEL — PLANTA ALTA ══
-    // Escenario (top center)
-    svg.appendChild(mkRect(282,18,285,68,{fill:'#181820',stroke:'#333340','stroke-width':1.5,rx:3}));
-    svg.appendChild(mkTxt('ESCENARIO',424,57,10,'#404050','middle','bold'));
-    // Pista de Baile
-    svg.appendChild(mkRect(282,86,285,235,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
-    svg.appendChild(mkTxt('PISTA DE BAILE',424,210,10,'#404050','middle','bold'));
+    // Escenario (recorrido izq — más espacio derecho)
+    svg.appendChild(mkRect(206,18,386,68,{fill:'#181820',stroke:'#333340','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('ESCENARIO',399,57,10,'#404050','middle','bold'));
+    // Pista de Baile (recorrida izq, right edge=592)
+    svg.appendChild(mkRect(206,86,386,235,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA DE BAILE',399,210,10,'#404050','middle','bold'));
     // Cabina (bottom left)
     svg.appendChild(mkRect(15,458,148,122,{fill:'#1c2030',stroke:'#4a4a66','stroke-width':1.5,rx:3}));
     svg.appendChild(mkTxt('CABINA',89,524,9,'#6666aa'));
