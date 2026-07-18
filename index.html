@@ -199,7 +199,13 @@
     <div class="field-group"><label>Academia</label><input type="text" id="m1-academia" placeholder="Estudio Salsa MX"></div>
     <div class="field-group"><label>Vendedor/Profesor</label><input type="text" id="m1-vendedor" placeholder="Ana"></div>
   </div>
-  <div class="field-row-3">
+  <div style="margin:6px 0 4px;">
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85em;color:var(--muted);">
+      <input type="checkbox" id="m1-general" onchange="toggleGeneral('dia1')" style="width:16px;height:16px;cursor:pointer;">
+      <span>🎟️ <strong>Acceso General</strong> (sin asignación de mesa)</span>
+    </label>
+  </div>
+  <div id="m1-mesa-row" class="field-row-3">
     <div class="field-group"><label>Mesa</label><input type="text" id="m1-mesa" placeholder="40"></div>
     <div class="field-group"><label>Planta</label>
       <select class="inp" id="m1-planta"><option value="">-- Seleccionar --</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
@@ -261,7 +267,13 @@
     <div class="field-group"><label>Academia</label><input type="text" id="m2-academia" placeholder="Estudio Salsa MX"></div>
     <div class="field-group"><label>Vendedor/Profesor</label><input type="text" id="m2-vendedor" placeholder="Pedro"></div>
   </div>
-  <div class="field-row-3">
+  <div style="margin:6px 0 4px;">
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85em;color:var(--muted);">
+      <input type="checkbox" id="m2-general" onchange="toggleGeneral('dia2')" style="width:16px;height:16px;cursor:pointer;">
+      <span>🎟️ <strong>Acceso General</strong> (sin asignación de mesa)</span>
+    </label>
+  </div>
+  <div id="m2-mesa-row" class="field-row-3">
     <div class="field-group"><label>Mesa</label><input type="text" id="m2-mesa" placeholder="40"></div>
     <div class="field-group"><label>Planta</label>
       <select class="inp" id="m2-planta"><option value="">-- Seleccionar --</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
@@ -400,8 +412,8 @@ const FB_ROOT   = 'azucar-fest-2026';
 // ══ Logo del evento ══
 // Si ya está embebido (base64 pegado aquí), se usa automáticamente.
 // Si no, el usuario puede subirlo con el botón y luego "fijar" el HTML.
-let LOGO_DATA_URL = null; // ← aquí se pega el base64 cuando se fija
-let LOGO_ASPECT   = 1;
+let LOGO_DATA_URL = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NjAgMzgwIiB3aWR0aD0iOTYwIiBoZWlnaHQ9IjM4MCI+CiAgPHJlY3Qgd2lkdGg9Ijk2MCIgaGVpZ2h0PSIzODAiIGZpbGw9IndoaXRlIi8+CiAgPCEtLSBGRVNUIGFycmliYSBkZXJlY2hhIGNvbiBsaW5lYXMgZGVjb3JhdGl2YXMgLS0+CiAgPHRleHQgeD0iOTQ1IiB5PSI3OCIgZm9udC1mYW1pbHk9IkltcGFjdCxBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijc4IiBmaWxsPSIjQ0MwMDAwIiB0ZXh0LWFuY2hvcj0iZW5kIiBsZXR0ZXItc3BhY2luZz0iMSI+RkVTVDwvdGV4dD4KICA8IS0tIGxpbmVhcyBkZWNvcmF0aXZhcyBzb2JyZSBGRVNUIC0tPgogIDxsaW5lIHgxPSI2ODAiIHkxPSIzOCIgeDI9Ijk0NSIgeTI9IjM4IiBzdHJva2U9IiNDQzAwMDAiIHN0cm9rZS13aWR0aD0iNCIvPgogIDxsaW5lIHgxPSI2ODAiIHkxPSI1MiIgeDI9Ijk0NSIgeTI9IjUyIiBzdHJva2U9IiNDQzAwMDAiIHN0cm9rZS13aWR0aD0iMyIvPgogIDwhLS0gc2xhc2ggZGlhZ29uYWwgZW4gbGEgUyBkZWwgRkVTVCAtLT4KICA8bGluZSB4MT0iODcwIiB5MT0iMjAiIHgyPSI4MzAiIHkyPSI4MiIgc3Ryb2tlPSIjQ0MwMDAwIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gMjAyNiBncmFuZGUgYW1hcmlsbG8vZG9yYWRvIC0tPgogIDx0ZXh0IHg9IjQ4MCIgeT0iMjg1IiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIEJsYWNrLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMjQ4IiBmaWxsPSIjRkZENzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4yMDI2PC90ZXh0PgogIDwhLS0gZmVjaGFzIGFiYWpvIGVuIHJvam8gLS0+CiAgPHRleHQgeD0iNTgiIHk9IjM1NSIgZm9udC1mYW1pbHk9IkltcGFjdCxBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjUyIiBmaWxsPSIjQ0MwMDAwIj4zMTwvdGV4dD4KICA8dGV4dCB4PSIzMjgiIHk9IjM1OCIgZm9udC1mYW1pbHk9IkltcGFjdCxBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjUyIiBmaWxsPSIjQ0MwMDAwIj4xPC90ZXh0PgogIDxjaXJjbGUgY3g9IjQwMyIgY3k9IjM0NSIgcj0iOSIgZmlsbD0iI0NDMDAwMCIvPgogIDx0ZXh0IHg9IjQyOCIgeT0iMzU4IiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIEJsYWNrLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNTIiIGZpbGw9IiNDQzAwMDAiPjI8L3RleHQ+Cjwvc3ZnPg=="; // logo SVG embebido
+let LOGO_ASPECT   = 2.5263;
 
 function loadLogoFile(input){
   const f=input.files[0]; if(!f)return;
@@ -453,115 +465,123 @@ const EVENTS = {
 // Formato: {n, cx, cy, r}  (mesas redondas)
 //          {n, cx, cy, r, rect:true}  (sillones/bancas rectangulares)
 const MAPA_BAJA = [
-  // ── LATERAL A superior ──
-  {n:'20',cx:175,cy:52,r:18},{n:'21',cx:220,cy:52,r:18},
-  {n:'22',cx:288,cy:52,r:18},{n:'23',cx:333,cy:52,r:18},{n:'24',cx:373,cy:52,r:18},
-  {n:'25',cx:418,cy:50,r:14},{n:'26',cx:452,cy:50,r:14},
-  {n:'27',cx:485,cy:50,r:14},{n:'28',cx:518,cy:50,r:14},
-  {n:'29',cx:568,cy:55,r:14},
+  // ── LATERAL A superior (doble, 6p) ──
+  {n:'20',cx:253,cy:77,r:14,dbl:true},{n:'21',cx:304,cy:77,r:14,dbl:true},
+  {n:'22',cx:355,cy:76,r:14,dbl:true},{n:'23',cx:403,cy:77,r:14,dbl:true},{n:'24',cx:441,cy:77,r:14,dbl:true},
+  // 25-29: sencilla
+  {n:'25',cx:485,cy:50,r:14},{n:'26',cx:516,cy:49,r:14},
+  {n:'27',cx:547,cy:50,r:14},{n:'28',cx:578,cy:50,r:14},
+  {n:'29',cx:613,cy:86,r:14},
 
-  // ── ZONA VIP superior — sillones (columna izq) ──
-  {n:'49.3',cx:392,cy:178,r:11,rect:true},
-  {n:'49.2',cx:392,cy:215,r:11,rect:true},
-  {n:'49.1',cx:392,cy:252,r:11,rect:true},
-  {n:'49',  cx:392,cy:289,r:11,rect:true},
-  {n:'48',  cx:392,cy:326,r:11,rect:true},
-  {n:'47',  cx:392,cy:363,r:11,rect:true},
-  // ZONA VIP superior — mesas redondas (columna der)
-  {n:'56',cx:453,cy:183,r:20},
-  {n:'55',cx:453,cy:252,r:20},
-  {n:'54',cx:453,cy:323,r:20},
-  {n:'53',cx:453,cy:392,r:20},
+  // ── ZONA VIP col izq (4p, sencilla) ──
+  {n:'49.3',cx:360,cy:163,r:14},
+  {n:'49.2',cx:361,cy:193,r:14},
+  {n:'49.1',cx:360,cy:224,r:14},
+  {n:'49',  cx:360,cy:254,r:14},
+  {n:'48',  cx:360,cy:284,r:14},
+  {n:'47',  cx:360,cy:315,r:14},
+  // ZONA VIP col der (6p, doble)
+  {n:'56',cx:425,cy:178,r:14,dbl:true},
+  {n:'55',cx:426,cy:228,r:14,dbl:true},
+  {n:'54',cx:427,cy:273,r:14,dbl:true},
+  {n:'53',cx:425,cy:318,r:14,dbl:true},
 
-  // ── ZONA A inferior — sillones (columna izq) ──
-  {n:'46',cx:392,cy:432,r:11,rect:true},
-  {n:'45',cx:392,cy:468,r:11,rect:true},
-  {n:'44',cx:392,cy:504,r:11,rect:true},
-  {n:'43',cx:392,cy:540,r:11,rect:true},
-  {n:'42',cx:392,cy:576,r:11,rect:true},
-  {n:'40',cx:392,cy:615,r:11,rect:true},
-  // ZONA A inferior — mesas redondas (columna der)
-  {n:'52',cx:453,cy:445,r:20},
-  {n:'51',cx:453,cy:517,r:20},
-  {n:'50',cx:453,cy:590,r:20},
+  // ── ZONA A col izq (4p, sencilla) ──
+  {n:'46',cx:359,cy:396,r:14},
+  {n:'45',cx:359,cy:426,r:14},
+  {n:'44',cx:360,cy:456,r:14},
+  {n:'43',cx:359,cy:487,r:14},
+  {n:'42',cx:360,cy:516,r:14},
+  {n:'40',cx:360,cy:547,r:14},
+  // ZONA A col der (6p, doble)
+  {n:'52',cx:425,cy:409,r:14,dbl:true},
+  {n:'51',cx:425,cy:458,r:14,dbl:true},
+  {n:'50',cx:425,cy:506,r:14,dbl:true},
 
-  // ── Columna 69.1-65 ──
-  {n:'69.1',cx:512,cy:178,r:16},
-  {n:'69',  cx:512,cy:228,r:16},
-  {n:'68',  cx:512,cy:278,r:16},
-  {n:'67',  cx:512,cy:325,r:16},
-  {n:'66',  cx:512,cy:370,r:16},
-  {n:'65',  cx:512,cy:415,r:16},
-  // Columna 74-70
-  {n:'74',cx:567,cy:178,r:16},
-  {n:'73',cx:567,cy:238,r:16},
-  {n:'72',cx:567,cy:300,r:16},
-  {n:'71',cx:567,cy:360,r:16},
-  {n:'70',cx:567,cy:418,r:16},
+  // ── Col 69.1-65 (4p) ──
+  {n:'69.1',cx:498,cy:168,r:14},
+  {n:'69',  cx:498,cy:200,r:14},
+  {n:'68',  cx:497,cy:231,r:14},
+  {n:'67',  cx:497,cy:266,r:14},
+  {n:'66',  cx:497,cy:295,r:14},
+  {n:'65',  cx:497,cy:328,r:14},
+  // Col 74-70: 71 doble
+  {n:'74',cx:554,cy:167,r:14},
+  {n:'73',cx:554,cy:198,r:14},
+  {n:'72',cx:553,cy:229,r:14},
+  {n:'71',cx:569,cy:273,r:14,dbl:true},
+  {n:'70',cx:554,cy:395,r:14},
 
-  // ── Columna 64-60 ──
-  {n:'64',cx:512,cy:462,r:16},
-  {n:'63',cx:512,cy:510,r:16},
-  {n:'62',cx:512,cy:558,r:16},
-  {n:'61',cx:512,cy:606,r:16},
-  {n:'60',cx:512,cy:655,r:16},
-  // Columna 93-90
-  {n:'93',cx:567,cy:462,r:16},
-  {n:'92',cx:567,cy:512,r:16},
-  {n:'91',cx:567,cy:562,r:16},
-  {n:'90',cx:567,cy:615,r:16},
+  // ── Col 64-60 (4p) ──
+  {n:'64',cx:497,cy:390,r:14},
+  {n:'63',cx:497,cy:421,r:14},
+  {n:'62',cx:497,cy:454,r:14},
+  {n:'61',cx:496,cy:489,r:14},
+  {n:'60',cx:496,cy:518,r:14},
+  // Col 93-90: 90 doble
+  {n:'93',cx:554,cy:425,r:14},
+  {n:'92',cx:553,cy:456,r:14},
+  {n:'91',cx:554,cy:487,r:14},
+  {n:'90',cx:570,cy:532,r:14,dbl:true},
 
-  // ── ZONA B superior ──
-  {n:'81',cx:643,cy:262,r:20},{n:'83',cx:697,cy:262,r:20},{n:'85',cx:750,cy:258,r:20},
-  {n:'80',cx:643,cy:342,r:20},{n:'82',cx:697,cy:342,r:20},{n:'84',cx:750,cy:340,r:20},
+  // ── ZONA B (6p, doble) ──
+  {n:'81',cx:632,cy:225,r:14,dbl:true},{n:'83',cx:701,cy:225,r:14,dbl:true},{n:'85',cx:763,cy:226,r:14,dbl:true},
+  {n:'80',cx:632,cy:273,r:14,dbl:true},{n:'82',cx:702,cy:273,r:14,dbl:true},{n:'84',cx:764,cy:274,r:14,dbl:true},
 
-  // ── ZONA B inferior ──
-  {n:'97', cx:658,cy:462,r:22},
-  {n:'94', cx:658,cy:532,r:22},
-  {n:'102',cx:658,cy:604,r:22},
+  // ── ZONA B inferior (6p, doble) ──
+  {n:'97', cx:640,cy:411,r:14,dbl:true},
+  {n:'94', cx:641,cy:460,r:14,dbl:true},
+  {n:'102',cx:642,cy:510,r:14,dbl:true},
 
-  // ── LATERAL A inferior ──
-  {n:'10',cx:108,cy:688,r:18},{n:'11',cx:152,cy:688,r:18},
-  {n:'12',cx:196,cy:688,r:18},{n:'14',cx:248,cy:688,r:18},
-  {n:'15',cx:352,cy:688,r:18},
+  // ── LATERAL A inferior (6p, doble) ──
+  {n:'10',cx:154,cy:638,r:14,dbl:true},{n:'11',cx:205,cy:638,r:14,dbl:true},
+  {n:'12',cx:254,cy:638,r:14,dbl:true},{n:'14',cx:304,cy:638,r:14,dbl:true},
+  {n:'15',cx:395,cy:626,r:14,dbl:true},
 ];
 
 // PLANTA ALTA — viewBox "0 0 820 555"
 const MAPA_ALTA = [
-  // ── LATERAL PA superior (204-209) ──
-  {n:'204',cx:118,cy:52,r:18},{n:'205',cx:173,cy:52,r:18},
-  {n:'206',cx:228,cy:52,r:18},{n:'207',cx:283,cy:52,r:18},
-  {n:'208',cx:340,cy:52,r:18},{n:'209',cx:398,cy:52,r:18},
+  // ── LATERAL PA superior (doble, 6p) ──
+  {n:'204',cx:149,cy:70,r:14,dbl:true},{n:'205',cx:213,cy:70,r:14,dbl:true},
+  {n:'206',cx:274,cy:71,r:14,dbl:true},{n:'207',cx:336,cy:71,r:14,dbl:true},
+  {n:'208',cx:398,cy:71,r:14,dbl:true},{n:'209',cx:460,cy:71,r:14,dbl:true},
 
-  // ── Zona 300 (sobre y bajo Cabina DJ) ──
-  {n:'305',cx:530,cy:128,r:18},
-  {n:'304',cx:530,cy:180,r:18},
-  {n:'303',cx:530,cy:232,r:18},
-  {n:'302',cx:530,cy:358,r:18},
-  {n:'301',cx:530,cy:410,r:18},
-  {n:'300',cx:530,cy:462,r:18},
-  {n:'306',cx:597,cy:78,r:14},
+  // ── Zona 300 (todas dobles) ──
+  {n:'305',cx:508,cy:124,r:14,dbl:true},
+  {n:'304',cx:508,cy:166,r:14,dbl:true},
+  {n:'303',cx:508,cy:208,r:14,dbl:true},
+  // CABINA entre 303 y 302
+  {n:'302',cx:511,cy:316,r:14,dbl:true},
+  {n:'301',cx:510,cy:353,r:14,dbl:true},
+  {n:'300',cx:510,cy:396,r:14,dbl:true},
+  {n:'306',cx:516,cy:90,r:14},  // sencilla
 
-  // ── Zona 400 (columna vertical) ──
-  {n:'409',cx:625,cy:130,r:14},{n:'408',cx:625,cy:173,r:14},
-  {n:'407',cx:625,cy:216,r:14},{n:'406',cx:625,cy:259,r:14},
-  {n:'405',cx:625,cy:320,r:14},{n:'404',cx:625,cy:370,r:14},
-  {n:'403',cx:625,cy:410,r:14},{n:'402',cx:625,cy:447,r:14},
-  {n:'401',cx:625,cy:482,r:14},{n:'400',cx:625,cy:517,r:14},
+  // ── Zona 400 — sencillas ──
+  {n:'409',cx:575,cy:97,r:14},{n:'408',cx:590,cy:131,r:14},
+  {n:'407',cx:595,cy:158,r:14},{n:'406',cx:588,cy:180,r:14},
+  {n:'405',cx:591,cy:211,r:14},
+  {n:'404',cx:581,cy:307,r:14},{n:'403',cx:577,cy:334,r:14},
+  {n:'402',cx:572,cy:361,r:14},{n:'401',cx:568,cy:388,r:14},
+  {n:'400',cx:564,cy:436,r:14},
 
-  // ── Zona 500 (dispersas lado derecho) ──
-  {n:'512',  cx:778,cy:45, r:15},
-  {n:'511',  cx:743,cy:108,r:22},
-  {n:'510',  cx:690,cy:193,r:19},{n:'509',cx:746,cy:193,r:19},
-  {n:'508',  cx:690,cy:250,r:19},{n:'507',cx:746,cy:250,r:19},
-  {n:'500',  cx:697,cy:328,r:19},{n:'506',cx:750,cy:345,r:17},
-  {n:'501',  cx:697,cy:403,r:19},{n:'505',cx:755,cy:420,r:17},
-  {n:'502',  cx:697,cy:475,r:19},{n:'504',cx:755,cy:490,r:17},
-  {n:'503',  cx:690,cy:530,r:19},{n:'503.1',cx:752,cy:530,r:17},
+  // ── Zona 500 ──
+  {n:'512',cx:685,cy:60,r:14,dbl:true},
+  {n:'511',cx:730,cy:148,r:14,dbl:true},
+  {n:'510',cx:714,cy:222,r:14},
+  {n:'509',cx:760,cy:222,r:14},
+  {n:'508',cx:729,cy:256,r:14},
+  {n:'507',cx:791,cy:256,r:14},
+  {n:'500',cx:698,cy:303,r:14},
+  {n:'506',cx:771,cy:329,r:14,dbl:true},
+  {n:'501',cx:690,cy:352,r:14},
+  {n:'505',cx:771,cy:386,r:14,dbl:true},
+  {n:'504',cx:758,cy:443,r:14,dbl:true},
+  {n:'502',cx:671,cy:474,r:14},
+  {n:'503',cx:715,cy:474,r:14},
 
-  // ── LATERAL PA inferior (200-203, mesas grandes) ──
-  {n:'200',cx:108,cy:498,r:26},{n:'201',cx:183,cy:498,r:26},
-  {n:'202',cx:257,cy:498,r:26},{n:'203',cx:330,cy:498,r:26},
+  // ── LATERAL PA inferior (doble, 6p) ──
+  {n:'200',cx:155,cy:461,r:14,dbl:true},{n:'201',cx:231,cy:461,r:14,dbl:true},
+  {n:'202',cx:304,cy:462,r:14,dbl:true},{n:'203',cx:377,cy:462,r:14,dbl:true},
 ];
 
 // ── FORO SAN RAFAEL — Planta Baja (Día 1) viewBox "0 0 820 720" ──
@@ -825,18 +845,29 @@ function handleFile(e,ev){
   e.target.value='';
 }
 
+function toggleGeneral(ev){
+  const n=ev.slice(-1);
+  const chk=document.getElementById('m'+n+'-general').checked;
+  const row=document.getElementById('m'+n+'-mesa-row');
+  row.style.display=chk?'none':'';
+}
+
 function addManual(ev){
   const n=ev.slice(-1);
   const nombreAsistente=document.getElementById('m'+n+'-nombreAsistente').value.trim();
   const nombreReserva=document.getElementById('m'+n+'-nombreReserva').value.trim();
   const academia=document.getElementById('m'+n+'-academia').value.trim();
   const vendedor=document.getElementById('m'+n+'-vendedor').value.trim();
-  const mesa=document.getElementById('m'+n+'-mesa').value.trim();
-  const planta=document.getElementById('m'+n+'-planta').value.trim();
+  const isGeneral=document.getElementById('m'+n+'-general').checked;
+  const mesa=isGeneral?'GENERAL':document.getElementById('m'+n+'-mesa').value.trim();
+  const planta=isGeneral?'General':document.getElementById('m'+n+'-planta').value.trim();
   if(!nombreAsistente){alert('El nombre de asistente es obligatorio.');return;}
   processRecords(ev,[{nombreAsistente,nombreReserva,academia,vendedor,mesa,planta}]);
   ['nombreAsistente','nombreReserva','academia','vendedor','mesa'].forEach(f=>document.getElementById('m'+n+'-'+f).value='');
   document.getElementById('m'+n+'-planta').value='';
+  // reset checkbox
+  document.getElementById('m'+n+'-general').checked=false;
+  toggleGeneral(ev);
 }
 
 function processRecords(ev,records){
@@ -1152,75 +1183,73 @@ function renderMap(){
 
   } else if(!isForo && isBaja){
     // ══ MAMBO CAFÉ — PLANTA BAJA ══
-    // Salida emergencia (franja izq)
-    svg.appendChild(mkRect(0,0,28,128,{fill:'rgba(255,80,80,0.06)',stroke:'rgba(255,80,80,0.18)','stroke-width':1}));
-    svg.appendChild(mkTxt('SAL.',14,42,5.5,'rgba(255,100,100,0.5)'));
-    svg.appendChild(mkTxt('EMER.',14,55,5.5,'rgba(255,100,100,0.5)'));
+    // Franja SALIDA DE EMERGENCIA izquierda
+    svg.appendChild(mkRect(0,0,22,730,{fill:'rgba(255,80,80,0.04)',stroke:'rgba(255,80,80,0.12)','stroke-width':1}));
+    svg.appendChild(mkTxt('SALIDA',11,280,5.5,'rgba(255,100,100,0.45)','middle'));
+    svg.appendChild(mkTxt('DE',11,292,5.5,'rgba(255,100,100,0.45)','middle'));
+    svg.appendChild(mkTxt('EMER.',11,304,5.5,'rgba(255,100,100,0.45)','middle'));
 
-    // Escalera
-    svg.appendChild(mkRect(30,15,120,90,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:3}));
-    svg.appendChild(mkTxt('ESCALERA',90,62,8,'#555'));
+    // Escalera (top left)
+    svg.appendChild(mkRect(163,35,67,72,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('ESCALERA',196,73,6.5,'#555','middle'));
 
-    // Escenario
-    svg.appendChild(mkRect(0,128,270,325,{fill:'#181820',stroke:'#333340','stroke-width':1.5}));
-    svg.appendChild(mkTxt('ESCENARIO',135,300,10,'#404050','middle','bold'));
+    // CAJA y BARRA (top right)
+    svg.appendChild(mkRect(716,35,34,38,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('CAJA',733,57,6.5,'#555','middle'));
+    svg.appendChild(mkRect(751,35,52,55,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('BARRA',777,65,6.5,'#555','middle'));
 
-    // Pista
-    svg.appendChild(mkRect(270,128,108,325,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
-    svg.appendChild(mkTxt('PISTA',324,300,10,'#404050','middle','bold'));
+    // Escenario (franja central izquierda)
+    svg.appendChild(mkRect(22,184,113,324,{fill:'#181820',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('ESCENARIO',78,350,8,'#404050','middle','bold'));
 
-    // Zona VIP (área sombreada rosa)
-    svg.appendChild(mkRect(375,152,118,495,{fill:'rgba(255,160,160,0.05)',stroke:'rgba(255,130,130,0.16)','stroke-width':1,rx:2}));
-    svg.appendChild(mkTxt('ZONA VIP',434,167,7.5,'rgba(210,130,130,0.65)'));
-    svg.appendChild(mkTxt('ZONA A',434,463,7.5,'rgba(210,130,130,0.55)'));
+    // Pista de baile
+    svg.appendChild(mkRect(134,184,126,324,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA DE BAILE',197,350,8,'#404050','middle','bold'));
 
-    // Barra
-    svg.appendChild(mkRect(686,152,115,67,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
-    svg.appendChild(mkTxt('BARRA',744,190,8,'#555'));
-
-    // CAJA
-    svg.appendChild(mkRect(686,102,115,45,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1,rx:2}));
-    svg.appendChild(mkTxt('CAJA',744,128,8,'#555'));
+    // Zona VIP / A (área sombreada)
+    svg.appendChild(mkRect(342,150,110,380,{fill:'rgba(255,160,160,0.05)',stroke:'rgba(255,130,130,0.16)','stroke-width':1,rx:2}));
+    svg.appendChild(mkTxt('ZONA VIP',397,165,7.5,'rgba(210,130,130,0.65)'));
+    svg.appendChild(mkTxt('ZONA A',397,380,7.5,'rgba(210,130,130,0.55)'));
 
     // Zona B etiquetas
-    svg.appendChild(mkTxt('ZONA B',705,242,8,'rgba(140,140,210,0.45)'));
-    svg.appendChild(mkTxt('ZONA B',690,447,8,'rgba(140,140,210,0.45)'));
+    svg.appendChild(mkTxt('ZONA B',715,205,8,'rgba(140,140,210,0.45)'));
+    svg.appendChild(mkTxt('ZONA B',700,395,8,'rgba(140,140,210,0.45)'));
 
     // Acceso / Escaleras
-    svg.appendChild(mkTxt('ACCESO',745,600,9,'rgba(140,140,210,0.4)','middle','bold'));
-    svg.appendChild(mkTxt('ESCALERAS',492,576,7.5,'#484858'));
+    svg.appendChild(mkTxt('ACCESO',790,440,8,'rgba(140,140,210,0.4)','middle','bold'));
+    svg.appendChild(mkTxt('ESCALERAS',460,600,7.5,'#484858'));
 
     // Lateral A etiquetas
-    svg.appendChild(mkTxt('LATERAL A',298,22,7.5,'#555'));
-    svg.appendChild(mkTxt('LATERAL A',183,657,7.5,'#555'));
+    svg.appendChild(mkTxt('LATERAL A',330,50,7.5,'#555'));
+    svg.appendChild(mkTxt('LATERAL A',200,662,7.5,'#555'));
 
   } else {
     // ══ MAMBO CAFÉ — PLANTA ALTA ══
     // Salida emergencia
-    svg.appendChild(mkTxt('SALIDA DE EMERGENCIA',450,13,6.5,'rgba(255,90,90,0.5)'));
+    svg.appendChild(mkTxt('SALIDA DE EMERGENCIA',520,20,6,'rgba(255,90,90,0.5)'));
 
-    // Escalera
-    svg.appendChild(mkRect(25,15,100,80,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
-    svg.appendChild(mkTxt('ESCALERA',75,55,8,'#555'));
+    // Escalera (top left)
+    svg.appendChild(mkRect(20,46,78,55,{fill:'#1c1c28',stroke:'#3d3d50','stroke-width':1.5,rx:2}));
+    svg.appendChild(mkTxt('ESCALERA',59,75,7,'#555','middle'));
 
     // Escenario
-    svg.appendChild(mkRect(0,108,200,315,{fill:'#181820',stroke:'#333340','stroke-width':1.5}));
-    svg.appendChild(mkTxt('ESCENARIO',100,272,10,'#404050','middle','bold'));
+    svg.appendChild(mkRect(13,126,112,280,{fill:'#181820',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('ESCENARIO',69,270,8,'#404050','middle','bold'));
 
     // Pista
-    svg.appendChild(mkRect(200,108,315,315,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
-    svg.appendChild(mkTxt('PISTA',358,272,10,'#404050','middle','bold'));
-    svg.appendChild(mkTxt('503',358,298,7,'#333340'));
+    svg.appendChild(mkRect(124,126,335,282,{fill:'#1a1a25',stroke:'#333340','stroke-width':1.5}));
+    svg.appendChild(mkTxt('PISTA DE BAILE',292,270,9,'#404050','middle','bold'));
 
     // Cabina DJ
-    svg.appendChild(mkRect(488,266,120,85,{fill:'#1c2030',stroke:'#4a4a66','stroke-width':1.5,rx:3}));
-    svg.appendChild(mkTxt('CABINA DJ',548,314,8.5,'#6666aa'));
+    svg.appendChild(mkRect(458,239,78,55,{fill:'#1c2030',stroke:'#4a4a66','stroke-width':1.5,rx:3}));
+    svg.appendChild(mkTxt('CABINA',497,268,7.5,'#6666aa','middle'));
 
     // Zona labels
-    svg.appendChild(mkTxt('ZONA PA',682,148,8,'rgba(140,140,210,0.5)'));
-    svg.appendChild(mkTxt('LATERAL PA',268,22,7.5,'#555'));
-    svg.appendChild(mkTxt('LATERAL PA',213,520,7.5,'#555'));
-    svg.appendChild(mkTxt('ESCALERAS',437,522,7.5,'#484858'));
+    svg.appendChild(mkTxt('ZONA PA',660,100,8,'rgba(140,140,210,0.5)'));
+    svg.appendChild(mkTxt('LATERAL PA',300,48,7.5,'#555'));
+    svg.appendChild(mkTxt('LATERAL PA',265,490,7.5,'#555'));
+    svg.appendChild(mkTxt('ESCALERAS',350,502,7.5,'#484858'));
   }
 
   // ── Mesas ──
@@ -1235,8 +1264,15 @@ function renderMap(){
       const s=t.r*2;
       g.appendChild(mkEl('rect',{x:t.cx-s/2,y:t.cy-s/2,width:s,height:s,rx:3,
         fill:col.fill,stroke:col.stroke,'stroke-width':1.5}));
+    } else if(t.dbl){
+      // Mesa doble — mismo radio que sencillas, separados apenas en el perímetro
+      const r2=t.r, off=t.r*1.05; // r2=r → igual tamaño que circulito sencillo
+      g.appendChild(mkEl('circle',{cx:t.cx-off,cy:t.cy,r:r2,
+        fill:col.fill,stroke:col.stroke,'stroke-width':1.5}));
+      g.appendChild(mkEl('circle',{cx:t.cx+off,cy:t.cy,r:r2,
+        fill:col.fill,stroke:col.stroke,'stroke-width':1.5}));
     } else {
-      // Mesa redonda
+      // Mesa redonda sencilla (4 personas)
       g.appendChild(mkEl('circle',{cx:t.cx,cy:t.cy,r:t.r,
         fill:col.fill,stroke:col.stroke,'stroke-width':1.5}));
     }
@@ -1249,7 +1285,9 @@ function renderMap(){
 
     // Badge de ocupación
     if(count>0){
-      const bx=t.cx+t.r*0.62, by=t.cy-t.r*0.62;
+      // badge: en mesa doble va sobre el círculo derecho
+      const bx = t.dbl ? t.cx+t.r*1.05+t.r*0.6 : t.cx+t.r*0.62;
+      const by = t.cy - (t.dbl ? t.r*0.7 : t.r*0.62);
       g.appendChild(mkEl('circle',{cx:bx,cy:by,r:7.5,fill:col.stroke}));
       g.appendChild(mkEl('text',{x:bx,y:by,'text-anchor':'middle','dominant-baseline':'middle',
         'font-size':6.5,'font-weight':'bold',fill:'#fff','font-family':'Arial,sans-serif',
@@ -1429,13 +1467,19 @@ async function buildTicketPDF(ev,attendee){
     ctx.fillText(value,x+3*mm,y+h-2*mm);  // baseline 8.5mm → cap top ~4.1mm ✓ sin encimado
   }
 
+  const isGeneral = (String(attendee.mesa||'').toUpperCase()==='GENERAL');
   drawField(fX,  fY0+0*(fH+fGap), fFullW, fH, 'NOMBRE ASISTENTE',  nombreAst,         6.0);
   drawField(fX,  fY0+1*(fH+fGap), fFullW, fH, 'NOMBRE DE RESERVA', nombreRes,         6.0);
   drawField(fX,  fY0+2*(fH+fGap), fFullW, fH, 'ACADEMIA',           attendee.academia, 6.0);
   drawField(fX,  fY0+3*(fH+fGap), fHalf,  fH, 'FOLIO',    '#'+attendee.folio, 5.8);
   drawField(fC2, fY0+3*(fH+fGap), fHalf,  fH, 'VENDEDOR', attendee.vendedor,  5.0);
-  drawField(fX,  fY0+4*(fH+fGap), fHalf,  fH, 'MESA',     attendee.mesa,      5.8);
-  drawField(fC2, fY0+4*(fH+fGap), fHalf,  fH, 'PLANTA',   attendee.planta,    5.8);
+  if(isGeneral){
+    // Boleto sin mesa → campo ancho "ACCESO GENERAL"
+    drawField(fX, fY0+4*(fH+fGap), fFullW, fH, 'TIPO DE ACCESO', 'ACCESO GENERAL', 5.5);
+  } else {
+    drawField(fX,  fY0+4*(fH+fGap), fHalf,  fH, 'MESA',     attendee.mesa,      5.8);
+    drawField(fC2, fY0+4*(fH+fGap), fHalf,  fH, 'PLANTA',   attendee.planta,    5.8);
+  }
 
   // ── Footer izquierdo (bajo los campos) ──
   // fyEnd = 31 + 5×10.5 + 4×1.5 = 89.5mm
