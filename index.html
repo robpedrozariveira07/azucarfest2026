@@ -169,17 +169,6 @@
   <span class="fb-txt" id="fb-txt">Conectando a la nube…</span>
 </div>
 
-<!-- Logo upload para boletos -->
-<div style="background:#1a0000;padding:6px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #3a0000;flex-wrap:wrap;">
-  <span style="color:#aaa;font-size:12px;">Logo boleto:</span>
-  <button id="logo-upload-btn" class="btn" style="font-size:12px;padding:4px 12px;background:#6b0000;"
-    onclick="document.getElementById('logo-file-input').click()">🖼️ Subir Logo (PNG)</button>
-  <input type="file" id="logo-file-input" accept="image/png,image/jpeg,image/webp"
-    onchange="loadLogoFile(this)" style="display:none">
-  <button id="logo-fix-btn" class="btn" style="font-size:12px;padding:4px 12px;background:#1a4a1a;display:none;"
-    onclick="fixLogoInHTML()">💾 Fijar logo en HTML</button>
-  <span style="color:#555;font-size:11px;">Sube el logo → haz clic en "Fijar logo en HTML" → guarda el nuevo archivo. El logo quedará permanente.</span>
-</div>
 
 <div class="tabs">
   <div class="tab active"  onclick="showTab('dia1')">🗓️ 1 Ago<br>Foro SR</div>
@@ -2114,11 +2103,12 @@ function loadTalleresExcel(input){
       pt.textContent=`Procesando ${i+1}/${rows.length}: ${nombre}`;
       pb.style.width=((i+1)/rows.length*100)+'%';
       saveTallerToFirebase(att);
-      if(!db){dataTalleres.push(att);}
+      // Siempre actualizar local inmediatamente (sin esperar listener Firebase)
+      if(!dataTalleres.find(x=>x.id===att.id)) dataTalleres.push(att);
       await new Promise(res=>setTimeout(res,20));
     }
     pw.style.display='none'; pb.style.width='0%';
-    if(!db){renderTalleres(); updateTalleresStats();}
+    renderTalleres(); updateTalleresStats();
     alert(`✅ ${nuevos.length} pases cargados.`);
     input.value='';
   };
@@ -2479,7 +2469,8 @@ function addManualTaller(){
   const id='TL'+Date.now()+'_M_'+Math.random().toString(36).slice(2,6).toUpperCase();
   const att={id, nombre, tipoPase:tipo, tallerNombre:taller, cargado:new Date().toISOString(), escaneado:{}, manual:true};
   saveTallerToFirebase(att);
-  if(!db){ dataTalleres.push(att); renderTalleres(); updateTalleresStats(); }
+  if(!dataTalleres.find(x=>x.id===att.id)) dataTalleres.push(att);
+  renderTalleres(); updateTalleresStats();
   if(msg){ msg.style.color='#5ec87a'; msg.textContent='✅ Pase registrado: '+nombre; }
   document.getElementById('tl-m-nombre').value='';
   setTimeout(()=>{ if(msg) msg.textContent=''; }, 3000);
