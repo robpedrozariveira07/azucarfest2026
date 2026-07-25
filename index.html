@@ -454,63 +454,31 @@
           <option value="DAYPASS-VIE">DAYPASS · Viernes</option>
           <option value="DAYPASS-SAB">DAYPASS · Sábado</option>
           <option value="DAYPASS-DOM">DAYPASS · Domingo</option>
-          <option value="WORKSHOP PASS">WORKSHOP PASS</option>
+          <option value="WORKSHOP PASS-VIE">WORKSHOP PASS · Viernes</option>
+          <option value="WORKSHOP PASS-SAB">WORKSHOP PASS · Sábado</option>
+          <option value="WORKSHOP PASS-DOM">WORKSHOP PASS · Domingo</option>
         </select>
       </div>
     </div>
-    <div class="field-row-1" id="tl-m-taller-wrap" style="display:none;">
+    <div class="field-row-1" id="tl-m-taller-wrap">
       <div class="field-group">
-        <label>Taller específico</label>
-        <select class="inp" id="tl-m-taller">
-          <optgroup label="Viernes 31 Jul">
-            <option>TIMBA CASINO — Rueda de Casino (18:00-19:00)</option>
-            <option>SERGIO UNDA — Figuras de casino en pareja (18:00-19:00)</option>
-            <option>ZAINÉ — Afro contemporáneo (19:00-20:00)</option>
-            <option>PAPI — ARARÁ (19:00-20:00)</option>
-            <option>DANIEL RUÍZ — Nudos Locos (19:00-20:00)</option>
-            <option>ADONIS Y ROYMA — Timba en pareja (20:00-21:00)</option>
-            <option>YUNNIER Y ANAYLEN — Son Cubano (20:00-21:00)</option>
-            <option>ETSON OROZCO — Reparto (20:00-21:00)</option>
-            <option>YOANNIS Y ANITA — Footwork Musicalidad (21:00-22:00)</option>
-            <option>YUNNIER Y ANAYLEN — Rumba Guaguancó (21:00-22:00)</option>
-            <option>LA TEAM BA — Timba dueto (21:00-22:00)</option>
-          </optgroup>
-          <optgroup label="Sábado 1 Ago">
-            <option>ZAINÉ — Reparto (10:00-11:00)</option>
-            <option>YUNIER — Abakuá (10:00-11:00)</option>
-            <option>ALINNE — Bachata Footwork (10:00-11:00)</option>
-            <option>ANAYLEN — Yemayá (11:00-12:00)</option>
-            <option>IVÁN VALDESPINO — Ochosi (11:00-12:00)</option>
-            <option>GERARDO Y MADIAN — Técnica de Giro Bachata (11:00-12:00)</option>
-            <option>IVÁN VALDESPINO — Palo (12:00-13:00)</option>
-            <option>ANAYLEN — Makuta (12:00-13:00)</option>
-            <option>GERARDO Y MADIAN — Partnerwork Bachata (12:00-13:00)</option>
-            <option>ADONIS Y ROYMA — Batallas (13:00-14:00)</option>
-            <option>PAPI — Shangó (13:00-14:00)</option>
-            <option>MADIAN — Bachata Ladies (13:00-14:00)</option>
-            <option>ADONIS Y ROYMA — Timba con Rumba (14:00-15:00)</option>
-            <option>YOANNIS Y ANITA — Son Cubano (14:00-15:00)</option>
-            <option>CARLOS Y MAITE — Partnerwork Bachata (14:00-15:00)</option>
-            <option>YOANNIS Y ANITA — Timba con Afro (15:00-16:00)</option>
-            <option>IBEYIS — Timba en Pareja (15:00-16:00)</option>
-            <option>CARLOS Y MAITE — Batallas Bachata (15:00-16:00)</option>
-          </optgroup>
-          <optgroup label="Domingo 2 Ago">
-            <option>IVÁN VALDESPINO — Franco haitiano (10:00-11:00)</option>
-            <option>MIKE Y OLGA — Casino Desplazamientos (10:00-11:00)</option>
-            <option>ALEX SÁNCHEZ — Pasos sueltos (10:00-11:00)</option>
-            <option>ANITA Y FER — Footwork Musicalidad (11:00-12:00)</option>
-            <option>MIGUEL DÍAZ — Rueda Timbasónica (11:00-12:00)</option>
-            <option>8Y — Timba con Reggaeton (11:00-12:00)</option>
-            <option>ROYMA — Lady Style (12:00-13:00)</option>
-            <option>ADONIS — Columbia (12:00-13:00)</option>
-            <option>YOANNIS Y ANITA — Improvisación (13:00-14:00)</option>
-            <option>LESLIE VÁZQUEZ — Lady Style (13:00-14:00)</option>
-            <option>VIJAY — Man Style (13:00-14:00)</option>
-            <option>YOANNIS Y ANITA — Tamayo Movement (14:00-15:00)</option>
-          </optgroup>
-        </select>
+        <label>Taller Suelto <span style="color:var(--muted);font-size:0.8em;">(opcional)</span></label>
+        <input type="text" class="inp" id="tl-m-taller" placeholder="Nombre del taller pagado">
       </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group"><label>Academia / Compañía <span style="color:var(--muted);font-size:0.8em;">(opcional)</span></label>
+        <input type="text" id="tl-m-academia" placeholder="Nombre de academia"></div>
+      <div class="field-group"><label>Profesor <span style="color:var(--muted);font-size:0.8em;">(opcional)</span></label>
+        <input type="text" id="tl-m-profesor" placeholder="Nombre del profesor"></div>
+    </div>
+    <div class="field-row">
+      <div class="field-group"><label>Correo <span style="color:var(--muted);font-size:0.8em;">(opcional)</span></label>
+        <input type="email" id="tl-m-correo" placeholder="correo@ejemplo.com"></div>
+      <div class="field-group"><label>Teléfono <span style="color:var(--muted);font-size:0.8em;">(opcional)</span></label>
+        <input type="text" id="tl-m-telefono" placeholder="55 1234 5678"></div>
+      <div class="field-group"><label>Ciudad <span style="color:var(--muted);font-size:0.8em;">(opcional)</span></label>
+        <input type="text" id="tl-m-ciudad" placeholder="CDMX"></div>
     </div>
     <button class="btn btn-red" onclick="addManualTaller()">➕ Agregar pase</button>
     <div id="tl-m-msg" style="margin-top:8px;font-size:0.8em;"></div>
@@ -584,7 +552,9 @@
             <option value="DAYPASS-VIE">DAYPASS · Viernes</option>
             <option value="DAYPASS-SAB">DAYPASS · Sábado</option>
             <option value="DAYPASS-DOM">DAYPASS · Domingo</option>
-            <option value="WORKSHOP PASS">WORKSHOP PASS</option>
+            <option value="WORKSHOP PASS-VIE">WORKSHOP PASS · Viernes</option>
+          <option value="WORKSHOP PASS-SAB">WORKSHOP PASS · Sábado</option>
+          <option value="WORKSHOP PASS-DOM">WORKSHOP PASS · Domingo</option>
           </select>
         </div>
         <div class="field-group" style="justify-content:flex-end;">
@@ -594,7 +564,22 @@
       </div>
     </div>
 
-    <div class="search-wrap"><input type="text" id="tl-search" placeholder="🔍 Buscar…" oninput="renderTalleres()"></div>
+    <div class="filter-row">
+      <select class="inp" id="tl-f-tipo" onchange="renderTalleres()">
+        <option value="">Todos los tipos</option>
+        <option value="FULLPASS">FULLPASS</option>
+        <option value="DANCERPASS">DANCERPASS</option>
+        <option value="DAYPASS-VIE">DAYPASS · Viernes</option>
+        <option value="DAYPASS-SAB">DAYPASS · Sábado</option>
+        <option value="DAYPASS-DOM">DAYPASS · Domingo</option>
+        <option value="WORKSHOP PASS">WORKSHOP PASS</option>
+      </select>
+      <select class="inp" id="tl-f-academia" onchange="renderTalleres()"><option value="">Todas las academias</option></select>
+    </div>
+    <div class="search-wrap"><input type="text" id="tl-search" placeholder="🔍 Buscar nombre, academia, ciudad…" oninput="renderTalleres()"></div>
+    <div style="text-align:right;margin-bottom:6px;">
+      <button class="btn btn-outline danger" style="font-size:0.72em;" onclick="clearTalleres()">🗑️ Limpiar todo</button>
+    </div>
     <div id="tl-list" class="attendee-list"></div>
   </div>
 </div>
@@ -1287,12 +1272,18 @@ function setMapDay(d){
   renderMap();
 }
 
+// Extrae el número de mesa aunque el campo tenga texto extra (ej: "LATERAL 26" → "26")
+function extractMesaNum(mesa){
+  const s=String(mesa||'').trim();
+  const match=s.match(/\d+/);
+  return match?match[0]:s;
+}
 function getTableCount(tableNum){
   const evs=mapDay==='all'?['dia1','dia2']:mapDay==='dia1'?['dia1']:['dia2'];
   let count=0;
   evs.forEach(ev=>{
     data[ev].forEach(a=>{
-      if(String(a.mesa||'').trim()===String(tableNum))count++;
+      if(extractMesaNum(a.mesa)===String(tableNum))count++;
     });
   });
   return count;
@@ -1302,7 +1293,7 @@ function getTableAttendees(tableNum){
   const list=[];
   evs.forEach(ev=>{
     data[ev].forEach(a=>{
-      if(String(a.mesa||'').trim()===String(tableNum))list.push({...a,ev});
+      if(extractMesaNum(a.mesa)===String(tableNum))list.push({...a,ev});
     });
   });
   return list;
@@ -2036,7 +2027,9 @@ const PASS_DAYS = {
   'DAYPASS-VIE':   ['VIE'],
   'DAYPASS-SAB':   ['SAB'],
   'DAYPASS-DOM':   ['DOM'],
-  'WORKSHOP PASS': 'specific'
+  'WORKSHOP PASS-VIE': ['VIE'],
+  'WORKSHOP PASS-SAB': ['SAB'],
+  'WORKSHOP PASS-DOM': ['DOM']
 };
 
 const PASS_COLOR = {
@@ -2045,7 +2038,9 @@ const PASS_COLOR = {
   'DAYPASS-VIE':   {bg:'#c0000a',fg:'#fff'},
   'DAYPASS-SAB':   {bg:'#c0000a',fg:'#fff'},
   'DAYPASS-DOM':   {bg:'#c0000a',fg:'#fff'},
-  'WORKSHOP PASS': {bg:'#4a22a8',fg:'#fff'}
+  'WORKSHOP PASS-VIE': {bg:'#4a22a8',fg:'#fff'},
+  'WORKSHOP PASS-SAB': {bg:'#4a22a8',fg:'#fff'},
+  'WORKSHOP PASS-DOM': {bg:'#4a22a8',fg:'#fff'}
 };
 
 let dataTalleres = [];
@@ -2087,9 +2082,14 @@ function loadTalleresExcel(input){
     const nuevos=[];
     for(let i=0;i<rows.length;i++){
       const row=rows[i];
-      const nombre=(row['NOMBRE DEL PARTICIPANTE']||row['NOMBRE']||'').toString().trim().toUpperCase();
+      const nombre=(row['NOMBRE DEL PARTICIPANTE']||row['NOMBRE DEL ALUMNO']||row['NOMBRE']||'').toString().trim().toUpperCase();
       let tipo=(row['TIPO DE PASE']||row['TIPO']||'').toString().trim().toUpperCase();
       const taller=(row['NOMBRE DE TALLER SUELTO']||row['TALLER']||row['NOMBRE DE TALLER']||'').toString().trim().toUpperCase();
+      const academia=(row['ACADEMIA / COMPAÑÍA']||row['ACADEMIA']||row['COMPAÑÍA']||row['ACADEMIA / COMPANIA']||'').toString().trim().toUpperCase();
+      const correo=(row['CORREO']||row['EMAIL']||'').toString().trim();
+      const telefono=(row['TELÉFONO']||row['TELEFONO']||row['TEL']||'').toString().trim();
+      const profesor=(row['PROFESOR']||'').toString().trim().toUpperCase();
+      const ciudad=(row['CIUDAD']||'').toString().trim().toUpperCase();
       if(!nombre) continue;
       // Normalize tipo
       if(tipo==='FULLPASS'||tipo==='FULL PASS'||tipo==='FULL') tipo='FULLPASS';
@@ -2097,9 +2097,12 @@ function loadTalleresExcel(input){
       else if(tipo.includes('VIE')) tipo='DAYPASS-VIE';
       else if(tipo.includes('SAB')||tipo.includes('SÁB')) tipo='DAYPASS-SAB';
       else if(tipo.includes('DOM')) tipo='DAYPASS-DOM';
-      else if(tipo.includes('WORKSHOP')||tipo.includes('TALLER')) tipo='WORKSHOP PASS';
+      else if(tipo.includes('WORKSHOP')&&tipo.includes('VIE')) tipo='WORKSHOP PASS-VIE';
+      else if(tipo.includes('WORKSHOP')&&tipo.includes('SAB')) tipo='WORKSHOP PASS-SAB';
+      else if(tipo.includes('WORKSHOP')&&tipo.includes('DOM')) tipo='WORKSHOP PASS-DOM';
+      else if(tipo.includes('WORKSHOP')||tipo.includes('TALLER')) tipo='WORKSHOP PASS-SAB'; // fallback
       const id='TL'+(Date.now()%1000000)+'_'+i+'_'+Math.random().toString(36).slice(2,6).toUpperCase();
-      const att={id,nombre,tipoPase:tipo,tallerNombre:taller,cargado:new Date().toISOString(),escaneado:{}};
+      const att={id,nombre,academia,correo,telefono,profesor,ciudad,tipoPase:tipo,tallerNombre:taller,cargado:new Date().toISOString(),escaneado:{}};
       nuevos.push(att);
       pt.textContent=`Procesando ${i+1}/${rows.length}: ${nombre}`;
       pb.style.width=((i+1)/rows.length*100)+'%';
@@ -2126,7 +2129,8 @@ const _TIPOS_PASE={"full_pass": {"nombre": "Full Pass", "pagina_plantilla": 1, "
 const _TIPO_MAP={
   'FULLPASS':'full_pass','DANCERPASS':'dancer_pass',
   'DAYPASS-VIE':'full_pass','DAYPASS-SAB':'day_pass_sabado',
-  'DAYPASS-DOM':'day_pass_domingo','WORKSHOP PASS':'dancer_pass'
+  'DAYPASS-DOM':'day_pass_domingo',
+  'WORKSHOP PASS-VIE':'dancer_pass','WORKSHOP PASS-SAB':'dancer_pass','WORKSHOP PASS-DOM':'dancer_pass'
 };
 let _passTplEls={},_passTplReady=false;
 async function _preloadPassTemplates(){
@@ -2233,6 +2237,48 @@ async function buildWorkshopPDF(att){
     ctx.fillText(academy,centerX-ctx.measureText(academy).width/2,px(216.41));
   }
 
+  function insertTallerSuelto(taller){
+    // Bloque entre FOLIO (185.04) y ACADEMY (207.51)
+    const rx=px(10.93), ry=px(187.5), rw=px(130.67-10.93), rh=px(204.0-187.5);
+    ctx.fillStyle='#0E0E0E';
+    ctx.fillRect(rx,ry,rw,rh);
+    // Etiqueta "TALLER:"
+    const label='TALLER:';
+    const centerX=px(PW/2);
+    ctx.font=`${6.2*Q}px TekoSemibold`; ctx.fillStyle='#AAAAAA';
+    const lw=ctx.measureText(label).width;
+    ctx.fillText(label, centerX - lw/2, ry + px(5.2));
+    // Nombre del taller — auto-shrink, max 2 líneas
+    const maxW=px(112);
+    let sz=6.4;
+    ctx.font=`${sz*Q}px RajdhaniSemibold`; ctx.fillStyle='#FFFFFF';
+    while(sz>4.2&&ctx.measureText(taller).width>maxW){sz-=0.15;ctx.font=`${sz*Q}px RajdhaniSemibold`;}
+    if(ctx.measureText(taller).width<=maxW){
+      ctx.fillText(taller, centerX-ctx.measureText(taller).width/2, ry+px(12.8));
+    } else {
+      // partir en 2 líneas
+      const words=taller.split(' ');
+      let bestSplit=null;
+      for(let s=1;s<words.length;s++){
+        const l1=words.slice(0,s).join(' '), l2=words.slice(s).join(' ');
+        let fs=5.5;
+        ctx.font=`${fs*Q}px RajdhaniSemibold`;
+        while(fs>3.8&&(ctx.measureText(l1).width>maxW||ctx.measureText(l2).width>maxW)){fs-=0.15;ctx.font=`${fs*Q}px RajdhaniSemibold`;}
+        if(ctx.measureText(l1).width<=maxW&&ctx.measureText(l2).width<=maxW){
+          const imb=Math.abs(ctx.measureText(l1).width-ctx.measureText(l2).width);
+          if(!bestSplit||fs>bestSplit.fs||(fs===bestSplit.fs&&imb<bestSplit.imb))bestSplit={fs,l1,l2};
+        }
+      }
+      if(bestSplit){
+        ctx.font=`${bestSplit.fs*Q}px RajdhaniSemibold`;
+        ctx.fillStyle='#FFFFFF';
+        [[bestSplit.l1,ry+px(9.0)],[bestSplit.l2,ry+px(14.8)]].forEach(([line,y])=>{
+          ctx.fillText(line,centerX-ctx.measureText(line).width/2,y);
+        });
+      }
+    }
+  }
+
   // 1. Template background
   ctx.drawImage(_passTplEls[tipoGen],0,0,cW,cH);
 
@@ -2254,6 +2300,11 @@ async function buildWorkshopPDF(att){
   ctx.fillRect(px(10.93),px(164.43),px(130.70-10.93),px(185.04-164.43));
   insertFolioRow(_displayPassFolio(att.folio),folioColor);
 
+  // 5b. TALLER SUELTO RECT — solo para WORKSHOP PASS
+  if((att.tipoPase||'').startsWith('WORKSHOP PASS') && att.tallerNombre){
+    insertTallerSuelto(att.tallerNombre.toUpperCase());
+  }
+
   // 5. ACADEMY RECT — pass_color fill + academy text + black border
   // ACADEMY_RECT: (10.93, 207.51, 130.67, 221.47)
   ctx.fillStyle=passColor;
@@ -2272,22 +2323,31 @@ async function buildWorkshopPDF(att){
 // ── Plantilla Excel ──
 function downloadTalleresTemplate(){
   const ws_data=[
-    ['NOMBRE DEL PARTICIPANTE','TIPO DE PASE','NOMBRE DE TALLER SUELTO'],
-    ['Juan Pérez','FULLPASS',''],
-    ['María García','DANCERPASS',''],
-    ['Carlos López','DAYPASS-VIE',''],
-    ['Ana Martínez','DAYPASS-SAB',''],
-    ['Luis Torres','DAYPASS-DOM',''],
-    ['Sofía Ramírez','WORKSHOP PASS','Bachata Sensual - Nivel Intermedio']
+    ['NOMBRE DEL ALUMNO','TIPO DE PASE','ACADEMIA / COMPAÑÍA','CORREO','TELÉFONO','PROFESOR','CIUDAD','NOMBRE DE TALLER SUELTO'],
+    ['Juan Pérez','FULLPASS','Estudio Salsa MX','juan@mail.com','55 1234 5678','Ana García','CDMX',''],
+    ['María García','DANCERPASS','Ritmo Caribe','','','Pedro López','GDL',''],
+    ['Carlos López','DAYPASS-VIE','','','','','',''],
+    ['Ana Martínez','DAYPASS-SAB','ADS','','','','CDMX',''],
+    ['Luis Torres','DAYPASS-DOM','','','','','',''],
+    ['Sofía Ramírez','WORKSHOP PASS-VIE','Compañía DanzAfro','sofia@mail.com','','','MTY','TIMBA CASINO — Rueda de Casino'],
+    ['Carlos Mendoza','WORKSHOP PASS-SAB','','','','','CDMX','ZAINÉ — Reparto'],
+    ['Laura Vega','WORKSHOP PASS-DOM','','','','','GDL','ROYMA — Lady Style']
   ];
   const wb=XLSX.utils.book_new();
   const ws=XLSX.utils.aoa_to_sheet(ws_data);
-  ws['!cols']=[{wch:30},{wch:18},{wch:40}];
+  ws['!cols']=[{wch:28},{wch:18},{wch:28},{wch:24},{wch:16},{wch:20},{wch:12},{wch:40}];
   XLSX.utils.book_append_sheet(wb,ws,'Plantilla Talleres');
   XLSX.writeFile(wb,'Plantilla_Talleres_AzucarFest.xlsx');
 }
 
 // ── Borrar pase ──
+function clearTalleres(){
+  if(!dataTalleres.length){alert('No hay pases para eliminar.');return;}
+  if(!confirm(`¿Eliminar los ${dataTalleres.length} pases de talleres? Esta acción no se puede deshacer.`))return;
+  if(db)db.ref(FB_ROOT+'/talleres').remove().catch(e=>console.error(e));
+  dataTalleres=[];
+  renderTalleres(); updateTalleresStats();
+}
 function deleteTallerPase(id,btn){
   const a=dataTalleres.find(x=>x.id===id);
   const nombre=a?a.nombre:'este pase';
@@ -2354,7 +2414,7 @@ function updateTalleresStats(){
   const total=dataTalleres.length;
   const full=dataTalleres.filter(x=>x.tipoPase==='FULLPASS'||x.tipoPase==='DANCERPASS').length;
   const day=dataTalleres.filter(x=>x.tipoPase&&x.tipoPase.startsWith('DAYPASS')).length;
-  const ws=dataTalleres.filter(x=>x.tipoPase==='WORKSHOP PASS').length;
+  const ws=dataTalleres.filter(x=>(x.tipoPase||'').startsWith('WORKSHOP PASS')).length;
   [['tl-total',total],['tl-full',full],['tl-day',day],['tl-ws',ws],
    ['tl-total2',total],['tl-full2',full],['tl-day2',day],['tl-ws2',ws]].forEach(([id,v])=>{
     const el=document.getElementById(id); if(el) el.textContent=v;
@@ -2364,24 +2424,41 @@ function updateTalleresStats(){
 
 function renderTalleres(){
   const q=(document.getElementById('tl-search')||{value:''}).value.toLowerCase();
+  const fTipo=(document.getElementById('tl-f-tipo')||{value:''}).value;
+  const fAcad=(document.getElementById('tl-f-academia')||{value:''}).value;
   const list=document.getElementById('tl-list');
   if(!list)return;
+  // Poblar filtro de academia
+  const acadSel=document.getElementById('tl-f-academia');
+  if(acadSel){
+    const cur=acadSel.value;
+    const acads=[...new Set(dataTalleres.map(a=>a.academia||'').filter(Boolean))].sort();
+    acadSel.innerHTML='<option value="">Todas las academias</option>'+acads.map(ac=>`<option value="${ac}">${ac}</option>`).join('');
+    acadSel.value=cur;
+  }
   const filtered=dataTalleres.filter(a=>{
+    if(fTipo&&a.tipoPase!==fTipo)return false;
+    if(fAcad&&(a.academia||'')!==fAcad)return false;
     if(!q)return true;
-    return (a.nombre||'').toLowerCase().includes(q)||(a.tipoPase||'').toLowerCase().includes(q)||(a.tallerNombre||'').toLowerCase().includes(q);
+    return (a.nombre||'').toLowerCase().includes(q)||(a.tipoPase||'').toLowerCase().includes(q)
+      ||(a.tallerNombre||'').toLowerCase().includes(q)||(a.academia||'').toLowerCase().includes(q)
+      ||(a.ciudad||'').toLowerCase().includes(q)||(a.correo||'').toLowerCase().includes(q);
   });
   if(!filtered.length){list.innerHTML='<div class="empty-msg">Sin registros.</div>';return;}
   list.innerHTML=filtered.map(a=>{
     const pc=PASS_COLOR[a.tipoPase]||{bg:'#555',fg:'#fff'};
     const escaneado=a.escaneado&&Object.keys(a.escaneado).length>0;
+    const extras=[a.academia,a.ciudad,a.correo,a.telefono].filter(Boolean).join(' · ');
     return `<div class="taller-card ${escaneado?'scanned':''}">
       <div class="a-info">
-        <div class="a-name">${a.nombre||'—'}</div>
+        <div class="a-name">${escH(a.nombre||'—')}</div>
         <div class="a-meta">
           <span style="background:${pc.bg};color:${pc.fg};padding:1px 7px;border-radius:10px;font-size:0.68em;font-weight:700;">${a.tipoPase||'—'}</span>
-          ${a.tallerNombre?`<span style="margin-left:5px;color:#9966ff;font-size:0.7em;">🎓 ${a.tallerNombre}</span>`:''}
+          ${a.academia?`<span style="margin-left:5px;font-size:0.7em;color:var(--muted);">${escH(a.academia)}</span>`:''}
+          ${a.tallerNombre?`<span style="margin-left:5px;color:#9966ff;font-size:0.7em;">🎓 ${escH(a.tallerNombre)}</span>`:''}
           ${escaneado?`<span style="margin-left:5px;color:#22763a;font-size:0.68em;">✅ ${Object.keys(a.escaneado).join(', ')}</span>`:''}
         </div>
+        ${extras?`<div class="a-meta" style="margin-top:2px;font-size:0.67em;color:var(--muted);">${escH(extras)}</div>`:''}
       </div>
       <div class="a-actions">
         <button class="btn btn-outline" style="font-size:0.7em;padding:4px 8px;" onclick="downloadWorkshopOne('${a.id}',this)">🎫</button>
@@ -2395,9 +2472,14 @@ function renderTalleres(){
 function exportTalleresExcel(){
   if(!dataTalleres.length){alert('Sin datos.');return;}
   const rows=dataTalleres.map(a=>({
-    'NOMBRE DEL PARTICIPANTE':a.nombre||'',
+    'NOMBRE DEL ALUMNO':a.nombre||'',
+    'ACADEMIA / COMPAÑÍA':a.academia||'',
     'TIPO DE PASE':a.tipoPase||'',
     'NOMBRE DE TALLER':a.tallerNombre||'',
+    'CORREO':a.correo||'',
+    'TELÉFONO':a.telefono||'',
+    'PROFESOR':a.profesor||'',
+    'CIUDAD':a.ciudad||'',
     'ESCANEADO VIE':a.escaneado&&a.escaneado.VIE?'SÍ':'',
     'ESCANEADO SAB':a.escaneado&&a.escaneado.SAB?'SÍ':'',
     'ESCANEADO DOM':a.escaneado&&a.escaneado.DOM?'SÍ':'',
@@ -2547,25 +2629,30 @@ function showTallerTab(tab){
 }
 
 function toggleTallerField(){
-  const tipo = document.getElementById('tl-m-tipo').value;
-  const wrap = document.getElementById('tl-m-taller-wrap');
-  if(wrap) wrap.style.display = tipo==='WORKSHOP PASS' ? '' : 'none';
+  // campo siempre visible para cualquier tipo de pase
 }
 
 function addManualTaller(){
   const nombre = (document.getElementById('tl-m-nombre').value||'').trim().toUpperCase();
   const tipo   = document.getElementById('tl-m-tipo').value;
   const tallerEl = document.getElementById('tl-m-taller');
-  const taller = tipo==='WORKSHOP PASS' && tallerEl ? tallerEl.value : '';
+  const taller = tallerEl ? tallerEl.value.trim().toUpperCase() : '';
+  const academia=(document.getElementById('tl-m-academia').value||'').trim().toUpperCase();
+  const correo=(document.getElementById('tl-m-correo').value||'').trim();
+  const telefono=(document.getElementById('tl-m-telefono').value||'').trim();
+  const profesor=(document.getElementById('tl-m-profesor').value||'').trim().toUpperCase();
+  const ciudad=(document.getElementById('tl-m-ciudad').value||'').trim().toUpperCase();
   const msg = document.getElementById('tl-m-msg');
   if(!nombre){ if(msg){msg.style.color='#e07070'; msg.textContent='⚠️ Ingresa el nombre.';} return; }
   const id='TL'+Date.now()+'_M_'+Math.random().toString(36).slice(2,6).toUpperCase();
-  const att={id, nombre, tipoPase:tipo, tallerNombre:taller, cargado:new Date().toISOString(), escaneado:{}, manual:true};
+  const att={id, nombre, academia, correo, telefono, profesor, ciudad, tipoPase:tipo, tallerNombre:taller, cargado:new Date().toISOString(), escaneado:{}, manual:true};
   saveTallerToFirebase(att);
   if(!dataTalleres.find(x=>x.id===att.id)) dataTalleres.push(att);
   renderTalleres(); updateTalleresStats();
   if(msg){ msg.style.color='#5ec87a'; msg.textContent='✅ Pase registrado: '+nombre; }
-  document.getElementById('tl-m-nombre').value='';
+  ['tl-m-nombre','tl-m-academia','tl-m-correo','tl-m-telefono','tl-m-profesor','tl-m-ciudad'].forEach(id=>{
+    const el=document.getElementById(id); if(el)el.value='';
+  });
   setTimeout(()=>{ if(msg) msg.textContent=''; }, 3000);
 }
 
@@ -2584,7 +2671,7 @@ function renderTalleresDashboard(){
   const total = dataTalleres.length;
   const fullCount = dataTalleres.filter(x=>x.tipoPase==='FULLPASS'||x.tipoPase==='DANCERPASS').length;
   const dayCount  = dataTalleres.filter(x=>x.tipoPase&&x.tipoPase.startsWith('DAYPASS')).length;
-  const wsCount   = dataTalleres.filter(x=>x.tipoPase==='WORKSHOP PASS').length;
+  const wsCount   = dataTalleres.filter(x=>(x.tipoPase||'').startsWith('WORKSHOP PASS')).length;
   ['tl-total','tl-full','tl-day','tl-ws'].forEach((id,i)=>{
     const el=document.getElementById(id); if(el) el.textContent=[total,fullCount,dayCount,wsCount][i];
   });
