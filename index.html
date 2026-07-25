@@ -2279,39 +2279,170 @@ async function buildWorkshopPDF(att){
     }
   }
 
-  // 1. Template background
-  ctx.drawImage(_passTplEls[tipoGen],0,0,cW,cH);
+  // ── RAMA: diseño custom para WORKSHOP PASS ──────────────────────────────
+  const isWorkshop=(att.tipoPase||'').startsWith('WORKSHOP PASS');
+  if(isWorkshop){
+    const daySuffix=(att.tipoPase||'').replace('WORKSHOP PASS-','');
+    const dayLabel={VIE:'VIERNES',SAB:'SÁBADO',DOM:'DOMINGO'}[daySuffix]||daySuffix;
+    const dayColor={VIE:'#d4921a',SAB:'#c0000a',DOM:'#1a6ebf'}[daySuffix]||'#4a22a8';
+    const WW=px(PW), HH=px(PH), cx2=WW/2;
 
-  // 2. NAME RECT — black fill + name text
-  // NAME_RECT: (33.53, 44.21, 130.69, 61.73)
-  ctx.fillStyle='#0E0E0E';
-  ctx.fillRect(px(33.53),px(44.21),px(130.69-33.53),px(61.73-44.21));
-  insertName((att.nombre||'—').toUpperCase());
+    // Fondo general oscuro
+    ctx.fillStyle='#0E0E0E'; ctx.fillRect(0,0,WW,HH);
 
-  // 3. QR RECT — white fill + QR image
-  // QR_RECT: (37.9784, 65.793, 126.0333, 153.8478)
-  ctx.fillStyle='#FFFFFF';
-  ctx.fillRect(px(37.9784),px(65.793),px(126.0333-37.9784),px(153.8478-65.793));
-  if(qrEl)ctx.drawImage(qrEl,px(37.9784),px(65.793),px(126.0333-37.9784),px(153.8478-65.793));
+    // ── HEADER BANNER (0 → 40pt): púrpura ────────────────────────────────
+    ctx.fillStyle='#4a22a8'; ctx.fillRect(0,0,WW,px(40));
+    // Texto "WORKSHOP" grande
+    ctx.font=`${14*Q}px TekoBold`; ctx.fillStyle='#FFFFFF';
+    const wtxt='WORKSHOP'; const ww=ctx.measureText(wtxt).width;
+    ctx.fillText(wtxt,cx2-ww/2,px(17));
+    // Texto "PASS" más pequeño debajo
+    ctx.font=`${9*Q}px TekoSemibold`; ctx.fillStyle='rgba(255,255,255,0.75)';
+    const ptxt='PASS'; const pw=ctx.measureText(ptxt).width;
+    ctx.fillText(ptxt,cx2-pw/2,px(30));
+    // Línea decorativa inferior del header
+    ctx.fillStyle='rgba(255,255,255,0.15)'; ctx.fillRect(0,px(38),WW,px(2));
 
-  // 4. FOLIO RECT — black fill + folio text
-  // FOLIO_RECT: (10.93, 164.43, 130.70, 185.04)
-  ctx.fillStyle='#0E0E0E';
-  ctx.fillRect(px(10.93),px(164.43),px(130.70-10.93),px(185.04-164.43));
-  insertFolioRow(_displayPassFolio(att.folio),folioColor);
+    // ── FRANJA DÍA (40 → 57pt) ───────────────────────────────────────────
+    ctx.fillStyle=dayColor; ctx.fillRect(0,px(40),WW,px(17));
+    ctx.font=`${9.5*Q}px TekoBold`; ctx.fillStyle='#FFFFFF';
+    const dlw=ctx.measureText(dayLabel).width;
+    ctx.fillText(dayLabel,cx2-dlw/2,px(52.5));
 
-  // 5b. TALLER SUELTO RECT — solo para WORKSHOP PASS
-  if((att.tipoPase||'').startsWith('WORKSHOP PASS') && att.tallerNombre){
-    insertTallerSuelto(att.tallerNombre.toUpperCase());
+    // ── BRANDING (59 → 66pt) ─────────────────────────────────────────────
+    ctx.font=`${4.5*Q}px RajdhaniSemibold`; ctx.fillStyle='rgba(255,255,255,0.4)';
+    const brand='AZÚCAR FEST 2026'; const bw=ctx.measureText(brand).width;
+    ctx.fillText(brand,cx2-bw/2,px(64));
+
+    // ── NOMBRE (67 → 82pt) ───────────────────────────────────────────────
+    ctx.fillStyle='#1C1C1C'; ctx.fillRect(px(8),px(67),WW-px(16),px(15));
+    ctx.strokeStyle='rgba(74,34,168,0.6)'; ctx.lineWidth=1.5*Q;
+    ctx.strokeRect(px(8),px(67),WW-px(16),px(15));
+    insertName((att.nombre||'—').toUpperCase()); // reutiliza helper (ajusta coords internos)
+    // Redibujamos nombre centrado en la nueva caja
+    const nameText=(att.nombre||'—').toUpperCase();
+    const nmaxW=WW-px(20); const ncx=cx2;
+    let nsz=9.5;
+    ctx.font=`${nsz*Q}px RajdhaniBold`; ctx.fillStyle='#FFFFFF';
+    while(nsz>5.5&&ctx.measureText(nameText).width>nmaxW){nsz-=0.15;ctx.font=`${nsz*Q}px RajdhaniBold`;}
+    if(ctx.measureText(nameText).width<=nmaxW){
+      ctx.fillText(nameText,ncx-ctx.measureText(nameText).width/2,px(77.5));
+    } else {
+      const words=nameText.split(' ');
+      let best=null;
+      for(let s=1;s<words.length;s++){
+        const l1=words.slice(0,s).join(' '),l2=words.slice(s).join(' ');
+        let fs=7.0; ctx.font=`${fs*Q}px RajdhaniBold`;
+        while(fs>4.5&&(ctx.measureText(l1).width>nmaxW||ctx.measureText(l2).width>nmaxW)){fs-=0.15;ctx.font=`${fs*Q}px RajdhaniBold`;}
+        if(ctx.measureText(l1).width<=nmaxW&&ctx.measureText(l2).width<=nmaxW){
+          const imb=Math.abs(ctx.measureText(l1).width-ctx.measureText(l2).width);
+          if(!best||fs>best.fs||(fs===best.fs&&imb<best.imb))best={fs,l1,l2};
+        }
+      }
+      if(best){
+        ctx.font=`${best.fs*Q}px RajdhaniBold`; ctx.fillStyle='#FFFFFF';
+        ctx.fillText(best.l1,ncx-ctx.measureText(best.l1).width/2,px(73));
+        ctx.fillText(best.l2,ncx-ctx.measureText(best.l2).width/2,px(80));
+      }
+    }
+
+    // ── TALLER (84 → 110pt) ──────────────────────────────────────────────
+    const tallerText=(att.tallerNombre||'').toUpperCase();
+    ctx.fillStyle='#181818'; ctx.fillRect(px(8),px(84),WW-px(16),px(26));
+    ctx.strokeStyle=dayColor; ctx.lineWidth=1.5*Q;
+    ctx.strokeRect(px(8),px(84),WW-px(16),px(26));
+    if(tallerText){
+      // Etiqueta
+      ctx.font=`${4.8*Q}px TekoSemibold`; ctx.fillStyle=dayColor;
+      const tlbl='TALLER SUELTO'; const tlw=ctx.measureText(tlbl).width;
+      ctx.fillText(tlbl,cx2-tlw/2,px(91));
+      // Nombre taller — auto-shrink, 2 líneas
+      const tmaxW=WW-px(20);
+      let tsz=7.2; ctx.font=`${tsz*Q}px RajdhaniSemibold`; ctx.fillStyle='#FFFFFF';
+      while(tsz>4.2&&ctx.measureText(tallerText).width>tmaxW){tsz-=0.15;ctx.font=`${tsz*Q}px RajdhaniSemibold`;}
+      if(ctx.measureText(tallerText).width<=tmaxW){
+        ctx.fillText(tallerText,cx2-ctx.measureText(tallerText).width/2,px(104));
+      } else {
+        const tw=tallerText.split(' '); let tbest=null;
+        for(let s=1;s<tw.length;s++){
+          const l1=tw.slice(0,s).join(' '),l2=tw.slice(s).join(' ');
+          let fs=5.8; ctx.font=`${fs*Q}px RajdhaniSemibold`;
+          while(fs>3.8&&(ctx.measureText(l1).width>tmaxW||ctx.measureText(l2).width>tmaxW)){fs-=0.15;ctx.font=`${fs*Q}px RajdhaniSemibold`;}
+          if(ctx.measureText(l1).width<=tmaxW&&ctx.measureText(l2).width<=tmaxW){
+            const imb=Math.abs(ctx.measureText(l1).width-ctx.measureText(l2).width);
+            if(!tbest||fs>tbest.fs||(fs===tbest.fs&&imb<tbest.imb))tbest={fs,l1,l2};
+          }
+        }
+        if(tbest){
+          ctx.font=`${tbest.fs*Q}px RajdhaniSemibold`; ctx.fillStyle='#FFFFFF';
+          ctx.fillText(tbest.l1,cx2-ctx.measureText(tbest.l1).width/2,px(99));
+          ctx.fillText(tbest.l2,cx2-ctx.measureText(tbest.l2).width/2,px(106.5));
+        }
+      }
+    } else {
+      ctx.font=`${5.5*Q}px RajdhaniRegular`; ctx.fillStyle='rgba(255,255,255,0.3)';
+      const na='SIN TALLER ASIGNADO'; ctx.fillText(na,cx2-ctx.measureText(na).width/2,px(99));
+    }
+
+    // ── QR (113 → 195pt) ─────────────────────────────────────────────────
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(px(22),px(113),WW-px(44),px(82));
+    if(qrEl)ctx.drawImage(qrEl,px(22),px(113),WW-px(44),px(82));
+
+    // ── FOLIO (197 → 213pt) ──────────────────────────────────────────────
+    ctx.fillStyle='#0E0E0E'; ctx.fillRect(px(8),px(197),WW-px(16),px(16));
+    const folioVal=_displayPassFolio(att.folio);
+    const fl='FOLIO:';
+    ctx.font=`${5.5*Q}px TekoSemibold`; const flw=ctx.measureText(fl).width;
+    ctx.font=`${8*Q}px RajdhaniBold`; const fvw=ctx.measureText(folioVal).width;
+    const gap2=px(2); const fsx=cx2-(flw+gap2+fvw)/2;
+    ctx.font=`${5.5*Q}px TekoSemibold`; ctx.fillStyle='#AAAAAA';
+    ctx.fillText(fl,fsx,px(209));
+    ctx.font=`${8*Q}px RajdhaniBold`; ctx.fillStyle=dayColor;
+    ctx.fillText(folioVal,fsx+flw+gap2,px(210));
+
+    // ── ACADEMIA (215 → 228pt) ───────────────────────────────────────────
+    ctx.fillStyle=dayColor; ctx.fillRect(px(8),px(215),WW-px(16),px(13));
+    const acadText=(att.academia||att.nombre||'—').toUpperCase();
+    const amaxW=WW-px(20);
+    let asz=6.5; ctx.font=`${asz*Q}px RajdhaniRegular`;
+    while(asz>4.0&&ctx.measureText(acadText).width>amaxW){asz-=0.15;ctx.font=`${asz*Q}px RajdhaniRegular`;}
+    ctx.fillStyle='#0E0E0E';
+    ctx.fillText(acadText,cx2-ctx.measureText(acadText).width/2,px(224));
+
+    // ── FOOTER decorativo (230 → 240.75pt) ───────────────────────────────
+    ctx.fillStyle='#4a22a8'; ctx.fillRect(0,px(230),WW,px(PH-230));
+    ctx.font=`${3.8*Q}px RajdhaniRegular`; ctx.fillStyle='rgba(255,255,255,0.5)';
+    const ft='AZÚCAR FEST 2026 · AZÚCAR DANCE STUDIO'; const ftw=ctx.measureText(ft).width;
+    ctx.fillText(ft,cx2-ftw/2,px(236.5));
+
+  } else {
+    // ── RAMA NORMAL: template PNG ────────────────────────────────────────
+
+    // 1. Template background
+    ctx.drawImage(_passTplEls[tipoGen],0,0,cW,cH);
+
+    // 2. NAME RECT — black fill + name text
+    ctx.fillStyle='#0E0E0E';
+    ctx.fillRect(px(33.53),px(44.21),px(130.69-33.53),px(61.73-44.21));
+    insertName((att.nombre||'—').toUpperCase());
+
+    // 3. QR RECT — white fill + QR image
+    ctx.fillStyle='#FFFFFF';
+    ctx.fillRect(px(37.9784),px(65.793),px(126.0333-37.9784),px(153.8478-65.793));
+    if(qrEl)ctx.drawImage(qrEl,px(37.9784),px(65.793),px(126.0333-37.9784),px(153.8478-65.793));
+
+    // 4. FOLIO RECT — black fill + folio text
+    ctx.fillStyle='#0E0E0E';
+    ctx.fillRect(px(10.93),px(164.43),px(130.70-10.93),px(185.04-164.43));
+    insertFolioRow(_displayPassFolio(att.folio),folioColor);
+
+    // 5. ACADEMY RECT — pass_color fill + academy text + black border
+    ctx.fillStyle=passColor;
+    ctx.fillRect(px(10.93),px(207.51),px(130.67-10.93),px(221.47-207.51));
+    insertAcademy((att.academia||att.nombre||'—').toUpperCase());
+    ctx.strokeStyle='#0E0E0E'; ctx.lineWidth=1.2*Q; ctx.setLineDash([]);
+    ctx.strokeRect(px(10.93),px(207.51),px(130.67-10.93),px(221.47-207.51));
   }
-
-  // 5. ACADEMY RECT — pass_color fill + academy text + black border
-  // ACADEMY_RECT: (10.93, 207.51, 130.67, 221.47)
-  ctx.fillStyle=passColor;
-  ctx.fillRect(px(10.93),px(207.51),px(130.67-10.93),px(221.47-207.51));
-  insertAcademy((att.academia||att.nombre||'—').toUpperCase());
-  ctx.strokeStyle='#0E0E0E'; ctx.lineWidth=1.2*Q; ctx.setLineDash([]);
-  ctx.strokeRect(px(10.93),px(207.51),px(130.67-10.93),px(221.47-207.51));
 
   // === PDF portrait 50×85mm ===
   const jsPDF=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
