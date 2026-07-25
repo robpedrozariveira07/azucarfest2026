@@ -2130,6 +2130,7 @@ const _TIPO_MAP={
   'FULLPASS':'full_pass','DANCERPASS':'dancer_pass',
   'DAYPASS-VIE':'full_pass','DAYPASS-SAB':'day_pass_sabado',
   'DAYPASS-DOM':'day_pass_domingo',
+  'WORKSHOP PASS':'dancer_pass',
   'WORKSHOP PASS-VIE':'dancer_pass','WORKSHOP PASS-SAB':'dancer_pass','WORKSHOP PASS-DOM':'dancer_pass'
 };
 let _passTplEls={},_passTplReady=false;
@@ -2282,8 +2283,8 @@ async function buildWorkshopPDF(att){
   // ── RAMA: diseño custom para WORKSHOP PASS ──────────────────────────────
   const isWorkshop=(att.tipoPase||'').startsWith('WORKSHOP PASS');
   if(isWorkshop){
-    const daySuffix=(att.tipoPase||'').replace('WORKSHOP PASS-','');
-    const dayLabel={VIE:'VIERNES',SAB:'SÁBADO',DOM:'DOMINGO'}[daySuffix]||daySuffix;
+    const daySuffix=((att.tipoPase||'').replace('WORKSHOP PASS','').replace('-','').trim())||'SAB';
+    const dayLabel={VIE:'VIERNES',SAB:'SÁBADO',DOM:'DOMINGO'}[daySuffix]||'TALLER SUELTO';
     const dayColor={VIE:'#d4921a',SAB:'#c0000a',DOM:'#1a6ebf'}[daySuffix]||'#4a22a8';
     const WW=px(PW), HH=px(PH), cx2=WW/2;
 
