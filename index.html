@@ -2229,6 +2229,16 @@ async function buildWorkshopPDF(att){
     ctx.fillText(folio,sx+lw+gap,px(177.72));
   }
 
+  function insertAcceso(accesoText,pColor){
+    const rx=px(10.93),ry=px(187.34),rw=px(130.69-10.93),rh=px(205.25-187.34);
+    ctx.fillStyle=pColor; ctx.fillRect(rx,ry,rw,rh);
+    const maxW=px(112),centerX=px(PW/2);
+    let sz=8.5; ctx.font=`${sz*Q}px TekoSemibold`;
+    while(sz>5.0&&ctx.measureText(accesoText).width>maxW){sz-=0.15;ctx.font=`${sz*Q}px TekoSemibold`;}
+    ctx.fillStyle='#0E0E0E';
+    ctx.fillText(accesoText,centerX-ctx.measureText(accesoText).width/2,ry+px(13.5));
+  }
+
   function insertAcademy(academy){
     const maxW=px(112), centerX=px(PW/2);
     let sz=7.4;
