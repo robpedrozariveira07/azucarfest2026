@@ -1926,10 +1926,10 @@ function handleScan(raw){
   if(db){
     if(att)db.ref(FB_ROOT+'/'+res.ev+'/attendees/'+att.id).update({checkedIn:true,checkInTime:entry.checkInTime});
     db.ref(FB_ROOT+'/checkins').push(entry);
-  }else{
-    if(att){att.checkedIn=true;att.checkInTime=entry.checkInTime;saveLocal(res.ev);}
-    history.unshift(entry);saveHistory();renderDashboard();renderRecent();
   }
+  // Siempre actualizar estado local y UI (con o sin Firebase)
+  if(att){att.checkedIn=true;att.checkInTime=entry.checkInTime;saveLocal(res.ev);}
+  history.unshift(entry);saveHistory();renderDashboard();renderRecent();
   rEl.classList.add('valid');icon.textContent='✅';sName.textContent=entry.nombreAsistente;
   sSub.textContent=evInfo.label+' · Mesa '+entry.mesa+' · Planta '+entry.planta;
   sMsg.textContent='¡Bienvenido/a! — Folio #'+entry.folio+' · Reserva: '+(entry.nombreReserva||'—');
