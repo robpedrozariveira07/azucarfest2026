@@ -912,7 +912,11 @@ function initFirebase(){
     });
   }catch(e){setFB('err','Error Firebase: '+e.message);}
 }
+let _listenersStarted=false;
 function startListeners(){
+  if(_listenersStarted)return;
+  _listenersStarted=true;
+
   ['dia1','dia2'].forEach(ev=>{
     db.ref(FB_ROOT+'/'+ev+'/attendees').on('value',snap=>{
       const d=snap.val();
@@ -920,11 +924,26 @@ function startListeners(){
       saveLocal(ev);renderList(ev);populateFilters(ev);
     });
   });
+
+  // Carga inicial completa de checkins
   db.ref(FB_ROOT+'/checkins').on('value',snap=>{
     const d=snap.val();
     history=d?Object.values(d).sort((a,b)=>b.checkInTime-a.checkInTime):[];
     saveHistory();renderDashboard();renderRecent();
   });
+
+  // Escucha en tiempo real cada nuevo checkin
+  db.ref(FB_ROOT+'/checkins').on('child_added',snap=>{
+    const entry=snap.val();
+    if(!entry)return;
+    const exists=history.some(h=>h.checkInTime===entry.checkInTime&&(h.id===entry.id));
+    if(!exists){
+      history.unshift(entry);
+      history.sort((a,b)=>b.checkInTime-a.checkInTime);
+      saveHistory();renderDashboard();renderRecent();
+    }
+  });
+
   // Talleres listener
   initTalleresFirebase();
 }
