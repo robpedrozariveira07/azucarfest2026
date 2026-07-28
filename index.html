@@ -920,7 +920,11 @@ function startListeners(){
   ['dia1','dia2'].forEach(ev=>{
     db.ref(FB_ROOT+'/'+ev+'/attendees').on('value',snap=>{
       const d=snap.val();
-      data[ev]=d?Object.values(d):[];
+      const fbArr=d?Object.values(d):[];
+      // Merge: conservar registros locales que Firebase aún no confirmó
+      const fbIds=new Set(fbArr.map(a=>a.id));
+      const localOnly=(data[ev]||[]).filter(a=>!fbIds.has(a.id));
+      data[ev]=[...fbArr,...localOnly];
       saveLocal(ev);renderList(ev);populateFilters(ev);
     });
   });
@@ -1028,7 +1032,10 @@ function handleFile(e,ev){
       rows=lines.map(l=>l.split(',').map(c=>c.replace(/["']/g,'').trim()));
     }else{
       const wb=XLSX.read(raw,{type:'array'});
-      rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      // Recortar filas vacías al final del rango declarado
+      while(rows.length>0&&!rows[rows.length-1].some(c=>String(c).trim())){rows.pop();}
     }
     const first=rows[0]?rows[0].map(c=>String(c).toLowerCase()):[];
     const hasHeader=first.some(c=>c.includes('nombre')||c.includes('vendedor')||c.includes('mesa')||c.includes('academia'));
