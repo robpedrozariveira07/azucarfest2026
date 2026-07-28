@@ -242,6 +242,7 @@
       <select class="inp" id="f1-planta" onchange="renderList('dia1')"><option value="">Todas las plantas</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
       <select class="inp" id="f1-academia" onchange="renderList('dia1')"><option value="">Todas las academias</option></select>
       <select class="inp" id="f1-vendedor" onchange="renderList('dia1')"><option value="">Todos los vendedores</option></select>
+      <select class="inp" id="f1-reserva" onchange="renderList('dia1')"><option value="">Todas las reservas</option></select>
       <input type="text" id="sb1" placeholder="🔍 Buscar asistente o reserva…" oninput="renderList('dia1')">
     </div>
     <div class="filter-row" style="margin-top:0">
@@ -311,6 +312,7 @@
       <select class="inp" id="f2-planta" onchange="renderList('dia2')"><option value="">Todas las plantas</option><option value="Alta">Alta</option><option value="Baja">Baja</option></select>
       <select class="inp" id="f2-academia" onchange="renderList('dia2')"><option value="">Todas las academias</option></select>
       <select class="inp" id="f2-vendedor" onchange="renderList('dia2')"><option value="">Todos los vendedores</option></select>
+      <select class="inp" id="f2-reserva" onchange="renderList('dia2')"><option value="">Todas las reservas</option></select>
       <input type="text" id="sb2" placeholder="🔍 Buscar asistente o reserva…" oninput="renderList('dia2')">
     </div>
     <div class="filter-row" style="margin-top:0">
@@ -1133,13 +1135,17 @@ function populateFilters(ev){
   const arr=data[ev];
   const academias=[...new Set(arr.map(a=>a.academia||'—').filter(a=>a&&a!=='—'))].sort();
   const vendedores=[...new Set(arr.map(a=>a.vendedor||'—').filter(v=>v&&v!=='—'))].sort();
+  const reservas=[...new Set(arr.map(a=>a.nombreReserva||'—').filter(r=>r&&r!=='—'))].sort();
   const selA=document.getElementById('f'+n+'-academia');
   const selV=document.getElementById('f'+n+'-vendedor');
-  const curA=selA.value, curV=selV.value;
+  const selR=document.getElementById('f'+n+'-reserva');
+  const curA=selA.value, curV=selV.value, curR=selR?selR.value:'';
   selA.innerHTML='<option value="">Todas las academias</option>'+academias.map(a=>`<option value="${escH(a)}">${escH(a)}</option>`).join('');
   selV.innerHTML='<option value="">Todos los vendedores</option>'+vendedores.map(v=>`<option value="${escH(v)}">${escH(v)}</option>`).join('');
+  if(selR)selR.innerHTML='<option value="">Todas las reservas</option>'+reservas.map(r=>`<option value="${escH(r)}">${escH(r)}</option>`).join('');
   if(curA)selA.value=curA;
   if(curV)selV.value=curV;
+  if(selR&&curR)selR.value=curR;
 }
 
 function getFilteredData(ev){
@@ -1148,12 +1154,14 @@ function getFilteredData(ev){
   const fPlanta=(document.getElementById('f'+n+'-planta')?.value||'');
   const fAcademia=(document.getElementById('f'+n+'-academia')?.value||'');
   const fVendedor=(document.getElementById('f'+n+'-vendedor')?.value||'');
+  const fReserva=(document.getElementById('f'+n+'-reserva')?.value||'');
   const fFechaD=(document.getElementById('f'+n+'-fecha-d')?.value||'');
   const fFechaH=(document.getElementById('f'+n+'-fecha-h')?.value||'');
   return data[ev].filter(a=>{
     if(fPlanta&&(a.planta||'')!==fPlanta)return false;
     if(fAcademia&&(a.academia||'—')!==fAcademia)return false;
     if(fVendedor&&(a.vendedor||'—')!==fVendedor)return false;
+    if(fReserva&&(a.nombreReserva||'—')!==fReserva)return false;
     if(fFechaD&&a.fechaCarga&&new Date(a.fechaCarga).toISOString().slice(0,10)<fFechaD)return false;
     if(fFechaH&&a.fechaCarga&&new Date(a.fechaCarga).toISOString().slice(0,10)>fFechaH)return false;
     const nom=(a.nombreAsistente||a.nombre||'').toLowerCase();
