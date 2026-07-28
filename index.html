@@ -1656,12 +1656,17 @@ async function buildTicketPDF(ev,attendee){
   // ── QR ──
   const qrStr=qrPayload(ev,attendee);
   const qrDataURL=await new Promise(res=>{
-    const d=document.createElement('div');
-    new QRCode(d,{text:qrStr,width:256,height:256,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-    setTimeout(()=>{const i=d.querySelector('img'),c=d.querySelector('canvas');res(i?i.src:c?c.toDataURL():null);},80);
+    try{
+      const d=document.createElement('div');
+      new QRCode(d,{text:qrStr||'QR',width:256,height:256,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+      setTimeout(()=>{
+        try{const i=d.querySelector('img'),c=d.querySelector('canvas');res(i?i.src:c?c.toDataURL():null);}
+        catch(e){res(null);}
+      },300);
+    }catch(e){res(null);}
   });
   let qrEl=null;
-  if(qrDataURL)qrEl=await new Promise(r=>{const img=new Image();img.onload=()=>r(img);img.src=qrDataURL;});
+  if(qrDataURL)qrEl=await new Promise(r=>{const img=new Image();img.onload=()=>r(img);img.onerror=()=>r(null);img.src=qrDataURL;});
 
   const canvas=document.createElement('canvas');
   canvas.width=cW; canvas.height=cH;
@@ -1814,16 +1819,30 @@ async function downloadZip(ev,arr,label){
   const pt=document.getElementById('pt'+n);
   pw.style.display='block';
   const zip=new JSZip();
+  const failedRecords=[];
   for(let i=0;i<arr.length;i++){
     const a=arr[i];
+    if(!a){console.warn('Registro vacío en posición',i);continue;}
     const nom=(a.nombreAsistente||a.nombre||'S');
     pt.textContent=`Generando ${i+1}/${arr.length}: ${nom}`;
     pb.style.width=((i+1)/arr.length*100)+'%';
-    try{
-      const pdf=await buildTicketPDF(ev,a);
-      zip.file(`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio}_${nom.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_')}.pdf`,pdf.output('blob'));
-    }catch(e){console.warn(a.nombre,e);}
-    await new Promise(r=>setTimeout(r,30));
+    let added=false;
+    for(let attempt=0;attempt<3&&!added;attempt++){
+      try{
+        if(attempt>0) await new Promise(r=>setTimeout(r,200));
+        const pdf=await buildTicketPDF(ev,a);
+        const safeName=nom.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_');
+        const safeFile=`AF_${ev==='dia1'?'Dia1':'Dia2'}_${a.folio||('???'+i)}_${safeName}.pdf`;
+        zip.file(safeFile,pdf.output('blob'));
+        added=true;
+      }catch(e){console.warn(`Intento ${attempt+1} fallido para ${nom}:`,e);}
+    }
+    if(!added) failedRecords.push(`${a.folio||'???'} – ${nom}`);
+    await new Promise(r=>setTimeout(r,80));
+  }
+  if(failedRecords.length){
+    console.error('Registros no incluidos en el ZIP:',failedRecords);
+    alert(`⚠️ ${failedRecords.length} boleto(s) no se pudieron generar y no están en el ZIP:\n\n${failedRecords.join('\n')}\n\nRevisa la consola del navegador para más detalles.`);
   }
   pt.textContent='Creando ZIP…';
   const blob=await zip.generateAsync({type:'blob'});
@@ -2203,12 +2222,14 @@ async function buildWorkshopPDF(att){
   // QR — mantiene formato compatible con escáner existente
   const qrStr='TL:'+att.id+':'+tipoApp;
   const qrDataURL=await new Promise(res=>{
-    const d=document.createElement('div');
-    new QRCode(d,{text:qrStr,width:512,height:512,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-    setTimeout(()=>{const i=d.querySelector('img'),c=d.querySelector('canvas');res(i?i.src:c?c.toDataURL():null);},80);
+    try{
+      const d=document.createElement('div');
+      new QRCode(d,{text:qrStr||'QR',width:512,height:512,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+      setTimeout(()=>{try{const i=d.querySelector('img'),c=d.querySelector('canvas');res(i?i.src:c?c.toDataURL():null);}catch(e){res(null);}},300);
+    }catch(e){res(null);}
   });
   let qrEl=null;
-  if(qrDataURL)qrEl=await new Promise(r=>{const img=new Image();img.onload=()=>r(img);img.src=qrDataURL;});
+  if(qrDataURL)qrEl=await new Promise(r=>{const img=new Image();img.onload=()=>r(img);img.onerror=()=>r(null);img.src=qrDataURL;});
 
   const canvas=document.createElement('canvas');
   canvas.width=cW; canvas.height=cH;
@@ -2345,11 +2366,13 @@ async function buildWorkshopPDF(att){
   let qrElFinal=qrEl;
   if(isWorkshop){
     const qrDataURL2=await new Promise(res=>{
-      const d=document.createElement('div');
-      new QRCode(d,{text:qrFinal,width:512,height:512,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-      setTimeout(()=>{const i=d.querySelector('img'),c=d.querySelector('canvas');res(i?i.src:c?c.toDataURL():null);},80);
+      try{
+        const d=document.createElement('div');
+        new QRCode(d,{text:qrFinal||'QR',width:512,height:512,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+        setTimeout(()=>{try{const i=d.querySelector('img'),c=d.querySelector('canvas');res(i?i.src:c?c.toDataURL():null);}catch(e){res(null);}},300);
+      }catch(e){res(null);}
     });
-    if(qrDataURL2)qrElFinal=await new Promise(r=>{const img=new Image();img.onload=()=>r(img);img.src=qrDataURL2;});
+    if(qrDataURL2)qrElFinal=await new Promise(r=>{const img=new Image();img.onload=()=>r(img);img.onerror=()=>r(null);img.src=qrDataURL2;});
   }
 
   // 1. Template background (todos los tipos usan su PNG)
@@ -2461,15 +2484,28 @@ async function downloadZipTalleres(arr, zipName){
   const pt=document.getElementById('pt-talleres');
   pw.style.display='block';
   const zip=new JSZip();
+  const failedTalleres=[];
   for(let i=0;i<arr.length;i++){
     const a=arr[i];
+    if(!a){continue;}
     pt.textContent=`Generando ${i+1}/${arr.length}: ${a.nombre}`;
     pb.style.width=((i+1)/arr.length*100)+'%';
-    try{
-      const pdf=await buildWorkshopPDF(a);
-      zip.file('AF_Taller_'+a.id+'_'+a.nombre.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_')+'.pdf',pdf.output('blob'));
-    }catch(e){console.warn(a.nombre,e);}
-    await new Promise(r=>setTimeout(r,30));
+    let added=false;
+    for(let attempt=0;attempt<3&&!added;attempt++){
+      try{
+        if(attempt>0) await new Promise(r=>setTimeout(r,200));
+        const pdf=await buildWorkshopPDF(a);
+        const safeName=(a.nombre||'SN').replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g,'').replace(/\s+/g,'_');
+        zip.file('AF_Taller_'+(a.folio||a.id)+'_'+safeName+'.pdf',pdf.output('blob'));
+        added=true;
+      }catch(e){console.warn(`Intento ${attempt+1} fallido para ${a.nombre}:`,e);}
+    }
+    if(!added) failedTalleres.push(`${a.folio||a.id} – ${a.nombre}`);
+    await new Promise(r=>setTimeout(r,80));
+  }
+  if(failedTalleres.length){
+    console.error('Pases no incluidos en el ZIP:',failedTalleres);
+    alert(`⚠️ ${failedTalleres.length} pase(s) no se pudieron generar:\n\n${failedTalleres.join('\n')}\n\nRevisa la consola para más detalles.`);
   }
   pt.textContent='Creando ZIP…';
   const blob=await zip.generateAsync({type:'blob'});
