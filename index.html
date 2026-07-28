@@ -972,7 +972,8 @@ function loadLocal(){
 // UTILS
 // ══════════════════════════════════════════════
 function genId(){
-  return (Date.now().toString(36)+Math.random().toString(36).slice(2,5)).toUpperCase().slice(0,9);
+  if(!genId._c)genId._c=0;
+  return (Date.now().toString(36)+(++genId._c).toString(36).padStart(3,'0')+Math.random().toString(36).slice(2,4)).toUpperCase().slice(0,12);
 }
 function qrPayload(ev,a){return EVENT_KEY+'|'+ev+'|'+a.id+'|'+(a.nombreAsistente||a.nombre||'');}
 function parseQR(txt){
