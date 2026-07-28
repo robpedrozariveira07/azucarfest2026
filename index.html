@@ -977,7 +977,11 @@ function genId(){
   if(!genId._c)genId._c=0;
   return (Date.now().toString(36)+(++genId._c).toString(36).padStart(3,'0')+Math.random().toString(36).slice(2,4)).toUpperCase().slice(0,12);
 }
-function qrPayload(ev,a){return EVENT_KEY+'|'+ev+'|'+a.id+'|'+(a.nombreAsistente||a.nombre||'');}
+function stripAccents(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function qrPayload(ev,a){
+  const nombre=stripAccents(a.nombreAsistente||a.nombre||'');
+  return EVENT_KEY+'|'+ev+'|'+a.id+'|'+nombre;
+}
 function parseQR(txt){
   const p=txt.split('|');
   if(p.length>=4&&p[0]===EVENT_KEY&&(p[1]==='dia1'||p[1]==='dia2'))
