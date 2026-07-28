@@ -1132,41 +1132,57 @@ function processRecords(ev,records){
 // ══════════════════════════════════════════════
 function populateFilters(ev){
   const n=ev.slice(-1);
-  const arr=data[ev];
-  const academias=[...new Set(arr.map(a=>a.academia||'—').filter(a=>a&&a!=='—'))].sort();
-  const vendedores=[...new Set(arr.map(a=>a.vendedor||'—').filter(v=>v&&v!=='—'))].sort();
-  const reservas=[...new Set(arr.map(a=>a.nombreReserva||'—').filter(r=>r&&r!=='—'))].sort();
+  const arr=Array.isArray(data[ev])?data[ev]:[];
+  const clean=v=>String(v||'').trim();
+  const academias=[...new Set(arr.map(a=>clean(a.academia)).filter(v=>v&&v!=='—'))].sort();
+  const vendedores=[...new Set(arr.map(a=>clean(a.vendedor)).filter(v=>v&&v!=='—'))].sort();
+  const reservas=[...new Set(arr.map(a=>clean(a.nombreReserva)).filter(v=>v&&v!=='—'))].sort();
   const selA=document.getElementById('f'+n+'-academia');
   const selV=document.getElementById('f'+n+'-vendedor');
   const selR=document.getElementById('f'+n+'-reserva');
-  const curA=selA.value, curV=selV.value, curR=selR?selR.value:'';
-  selA.innerHTML='<option value="">Todas las academias</option>'+academias.map(a=>`<option value="${escH(a)}">${escH(a)}</option>`).join('');
-  selV.innerHTML='<option value="">Todos los vendedores</option>'+vendedores.map(v=>`<option value="${escH(v)}">${escH(v)}</option>`).join('');
-  if(selR)selR.innerHTML='<option value="">Todas las reservas</option>'+reservas.map(r=>`<option value="${escH(r)}">${escH(r)}</option>`).join('');
-  if(curA)selA.value=curA;
-  if(curV)selV.value=curV;
-  if(selR&&curR)selR.value=curR;
+  const curA=selA?selA.value:'', curV=selV?selV.value:'', curR=selR?selR.value:'';
+  const mkOpt=v=>`<option value="${escH(v)}">${escH(v)}</option>`;
+  if(selA)selA.innerHTML='<option value="">Todas las academias</option>'+academias.map(mkOpt).join('');
+  if(selV)selV.innerHTML='<option value="">Todos los vendedores</option>'+vendedores.map(mkOpt).join('');
+  if(selR)selR.innerHTML='<option value="">Todas las reservas</option>'+reservas.map(mkOpt).join('');
+  // restore previous selection if it still exists in the new options
+  if(selA&&curA){selA.value=curA;if(selA.value!==curA)selA.value='';}
+  if(selV&&curV){selV.value=curV;if(selV.value!==curV)selV.value='';}
+  if(selR&&curR){selR.value=curR;if(selR.value!==curR)selR.value='';}
 }
 
+function norm(s){return String(s||'').trim().toLowerCase();}
 function getFilteredData(ev){
+  if(!Array.isArray(data[ev]))return[];
   const n=ev.slice(-1);
-  const q=(document.getElementById('sb'+n)?.value||'').toLowerCase();
-  const fPlanta=(document.getElementById('f'+n+'-planta')?.value||'');
-  const fAcademia=(document.getElementById('f'+n+'-academia')?.value||'');
-  const fVendedor=(document.getElementById('f'+n+'-vendedor')?.value||'');
-  const fReserva=(document.getElementById('f'+n+'-reserva')?.value||'');
+  const q=norm(document.getElementById('sb'+n)?.value||'');
+  const fPlanta=norm(document.getElementById('f'+n+'-planta')?.value||'');
+  const fAcademia=norm(document.getElementById('f'+n+'-academia')?.value||'');
+  const fVendedor=norm(document.getElementById('f'+n+'-vendedor')?.value||'');
+  const fReserva=norm(document.getElementById('f'+n+'-reserva')?.value||'');
   const fFechaD=(document.getElementById('f'+n+'-fecha-d')?.value||'');
   const fFechaH=(document.getElementById('f'+n+'-fecha-h')?.value||'');
   return data[ev].filter(a=>{
-    if(fPlanta&&(a.planta||'')!==fPlanta)return false;
-    if(fAcademia&&(a.academia||'—')!==fAcademia)return false;
-    if(fVendedor&&(a.vendedor||'—')!==fVendedor)return false;
-    if(fReserva&&(a.nombreReserva||'—')!==fReserva)return false;
-    if(fFechaD&&a.fechaCarga&&new Date(a.fechaCarga).toISOString().slice(0,10)<fFechaD)return false;
-    if(fFechaH&&a.fechaCarga&&new Date(a.fechaCarga).toISOString().slice(0,10)>fFechaH)return false;
-    const nom=(a.nombreAsistente||a.nombre||'').toLowerCase();
-    const res=(a.nombreReserva||'').toLowerCase();
-    if(q&&!nom.includes(q)&&!res.includes(q)&&!(a.vendedor||'').toLowerCase().includes(q)&&!(a.mesa||'').toLowerCase().includes(q))return false;
+    if(!a)return false;
+    if(fPlanta&&!norm(a.planta).includes(fPlanta))return false;
+    if(fAcademia&&norm(a.academia)!==fAcademia)return false;
+    if(fVendedor&&norm(a.vendedor)!==fVendedor)return false;
+    if(fReserva&&norm(a.nombreReserva)!==fReserva)return false;
+    if(fFechaD||fFechaH){
+      try{
+        const d=a.fechaCarga?new Date(a.fechaCarga).toISOString().slice(0,10):'';
+        if(fFechaD&&d&&d<fFechaD)return false;
+        if(fFechaH&&d&&d>fFechaH)return false;
+      }catch(e){}
+    }
+    if(q){
+      const nom=norm(a.nombreAsistente||a.nombre||'');
+      const res=norm(a.nombreReserva||'');
+      const vend=norm(a.vendedor||'');
+      const mesa=norm(a.mesa||'');
+      const fol=norm(a.folio||'');
+      if(!nom.includes(q)&&!res.includes(q)&&!vend.includes(q)&&!mesa.includes(q)&&!fol.includes(q))return false;
+    }
     return true;
   });
 }
